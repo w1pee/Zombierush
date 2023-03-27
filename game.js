@@ -2,8 +2,6 @@ var config = {
   type: Phaser.AUTO,
   width: 1280,
   height: 800,
-  canvas:game,
-  parent:game,
   scene: {
       preload: preload,
       create: create,
@@ -33,17 +31,17 @@ var config = {
       let x = rand(3,this.s-3);
       let y = rand(3,this.s-3);
 
-      this.lvl[x][y] = 11;
+      this.lvl[x][y] = 1;
       if (rand(0,1) == 2) {
-        this.lvl[x + des()][y] = 11;
+        this.lvl[x + des()][y] = 1;
         if (rand(0,3) == 2) {
-          this.lvl[x][y + des()] = 11;
+          this.lvl[x][y + des()] = 1;
         }
       }
       else if (rand(0,1) == 1) {
-        this.lvl[x][y + des()] = 11;
+        this.lvl[x][y + des()] = 1;
         if (rand(0,3) == 2) {
-          this.lvl[x + des()][y] = 11;
+          this.lvl[x + des()][y] = 1;
         }
       }
     }
@@ -51,7 +49,7 @@ var config = {
     arrange(){
       for (let i = 0; i < this.s; i++) {
         for (let j = 0; j < this.s; j++) {
-          this.lvl[i][j] = 10;
+          this.lvl[i][j] = 0;
         }
       }
       for (let i = 1; i < this.s-1; i++) {
@@ -86,21 +84,14 @@ var config = {
           if (this.lvl[i+1][j] == 1) {
             filled[3] = true;
           }
-          this.lvl[i][j] = this.tiledata(this.decoder(filled));
+          this.lvl[i][j] = this.decoder(filled);
         }
       }
     }
     decoder(array){
-      let number = 0;
-      for (let i = 0; i < array.length; i++) {
-        if (array[i] == true) {
-          number += this.quad(2,i);
-        }
+      if (array[0] == false && array[1] == false && array[2] == false && array[3] == false) {
+        return 11;
       }
-      return number;
-    }
-    tiledata(data){
-      return 5;
     }
     quad(num1,num2){
       num3 = 1;
@@ -116,11 +107,7 @@ var config = {
     const game = new gamemap(10);
     game.arrange();
     game.gen();
-
-    game.gen();
-    game.gen();
-    game.gen();
-    
+    game.connect();
 
     const map = this.make.tilemap({data:game.lvl, tileWidth: 64, tileHeight: 64, width:1600, height: 1600});
     const tiles = map.addTilesetImage('line');
