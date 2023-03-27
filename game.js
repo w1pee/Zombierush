@@ -51,7 +51,7 @@ var config = {
     arrange(){
       for (let i = 0; i < this.s; i++) {
         for (let j = 0; j < this.s; j++) {
-          this.lvl[i][j] = 11;
+          this.lvl[i][j] = 10;
         }
       }
       for (let i = 1; i < this.s-1; i++) {
@@ -90,7 +90,7 @@ var config = {
       }
     }
     tiledata(data){
-      return 11;
+      return 9;
     }
   }
 
