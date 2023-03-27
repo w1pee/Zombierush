@@ -33,17 +33,17 @@ var config = {
       let x = rand(0,this.s);
       let y = rand(0,this.s);
 
-      this.lvl[x][y] = 1;
+      this.lvl[x][y] = 11;
       if (rand(0,1) == 2) {
-        this.lvl[x + des()][y] = 1;
+        this.lvl[x + des()][y] = 11;
         if (rand(0,3) == 2) {
-          this.lvl[x][y + des()] = 1;
+          this.lvl[x][y + des()] = 11;
         }
       }
       else if (rand(0,1) == 1) {
-        this.lvl[x][y + des()] = 1;
+        this.lvl[x][y + des()] = 11;
         if (rand(0,3) == 2) {
-          this.lvl[x + des()][y] = 1;
+          this.lvl[x + des()][y] = 11;
         }
       }
     }
@@ -51,7 +51,7 @@ var config = {
     arrange(){
       for (let i = 0; i < this.s; i++) {
         for (let j = 0; j < this.s; j++) {
-          this.lvl[i][j] = 10;
+          this.lvl[i][j] = 11;
         }
       }
       for (let i = 1; i < this.s-1; i++) {
@@ -89,13 +89,8 @@ var config = {
         }
       }
     }
-    decode(array){
-      for (let i = 0; i < array.length; i++) {
-        
-      }
-    }
     tiledata(data){
-      return 10;
+      return 11;
     }
   }
 
@@ -105,7 +100,6 @@ var config = {
 
     game.arrange();
     game.gen();
-    game.connect();
 
     const map = this.make.tilemap({data:game.lvl, tileWidth: 64, tileHeight: 64, width:1600, height: 1600});
     const tiles = map.addTilesetImage('line');
