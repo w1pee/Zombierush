@@ -30,8 +30,8 @@ var config = {
     //generating 1 random house structure
     //doesnt check yet if there is something already, need to add that later!
     gen(){
-      let x = rand(0,this.s);
-      let y = rand(0,this.s);
+      let x = rand(3,this.s-3);
+      let y = rand(3,this.s-3);
 
       this.lvl[x][y] = 11;
       if (rand(0,1) == 2) {
@@ -67,6 +67,7 @@ var config = {
       this.lvl[this.s-1][0] = 7;
       this.lvl[this.s-1][this.s-1] = 6;
     }
+    //connects the generated spaces, so it dosnt look rubbish
     connect(){
       let filled = [false,false,false,false];
 
@@ -85,21 +86,41 @@ var config = {
           if (this.lvl[i+1][j] == 1) {
             filled[3] = true;
           }
-          this.lvl[i][j] = this.tiledata(filled);
+          this.lvl[i][j] = this.tiledata(this.decoder(filled));
         }
       }
     }
+    decoder(array){
+      let number = 0;
+      for (let i = 0; i < array.length; i++) {
+        if (array[i] == true) {
+          number += this.quad(2,i);
+        }
+      }
+      return number;
+    }
     tiledata(data){
-      return 9;
+      return 5;
+    }
+    quad(num1,num2){
+      num3 = 1;
+      for (let i = 0; i < num2; i++) {
+          num3 *= num1;
+      }
+      return num3;
     }
   }
 
   function create() {
     
     const game = new gamemap(10);
-
     game.arrange();
     game.gen();
+
+    game.gen();
+    game.gen();
+    game.gen();
+    
 
     const map = this.make.tilemap({data:game.lvl, tileWidth: 64, tileHeight: 64, width:1600, height: 1600});
     const tiles = map.addTilesetImage('line');
