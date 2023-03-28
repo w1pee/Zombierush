@@ -1,7 +1,8 @@
 var config = {
-  type: Phaser.AUTO,
+  type: Phaser.CANVAS,
   width: 1280,
   height: 800,
+  parent: "thegame",
   scene: {
       preload: preload,
       create: create,
@@ -14,6 +15,7 @@ var config = {
   function preload() {
     this.load.image('player', 'assets/player.png');
     this.load.image('line', 'assets/lines.png')
+    this.load.image('tileset', 'assets/tileset2.png')
   }
 
   class gamemap{
@@ -53,38 +55,40 @@ var config = {
         }
       }
       for (let i = 1; i < this.s-1; i++) {
-        this.lvl[i][0] = 4;
-        this.lvl[i][this.s-1] = 4;
+        this.lvl[i][0] = 5;
+        this.lvl[i][this.s-1] = 5;
       }
       for (let i = 1; i < this.s-1; i++) {
-        this.lvl[0][i] = 5;
-        this.lvl[this.s-1][i] = 5;
+        this.lvl[0][i] = 8;
+        this.lvl[this.s-1][i] = 8;
       }
-      this.lvl[0][0] = 8;
-      this.lvl[0][this.s-1] = 9;
-      this.lvl[this.s-1][0] = 7;
-      this.lvl[this.s-1][this.s-1] = 6;
+      this.lvl[0][0] = 9;
+      this.lvl[0][this.s-1] =10;
+      this.lvl[this.s-1][0] = 6;
+      this.lvl[this.s-1][this.s-1] = 7;
     }
     //connects the generated spaces, so it dosnt look rubbish
     connect(){
-      let filled = [false,false,false,false];
-
       for (let i = 1; i < this.s-1; i++) {
         for(let j = 1; j < this.s-1; j++){
 
-          if (this.lvl[i][j+1] == 1) {
-            filled[0] = true;
-          }
-          if (this.lvl[i-1][j] == 1) {
-            filled[1] = true;
-          }
-          if (this.lvl[i][j-1] == 1) {
-            filled[2] = true;
-          }
-          if (this.lvl[i+1][j] == 1) {
-            filled[3] = true;
-          }
-          this.lvl[i][j] = this.decoder(filled);
+          if(this.lvl[i][j] != 0){
+            let filled = [false,false,false,false];
+            if (this.lvl[i+1][j] != 0) {
+              filled[0] = true;
+            }
+            if (this.lvl[i][j+1] != 0) {
+              filled[1] = true;
+            }
+            if (this.lvl[i-1][j] != 0) {
+              filled[2] = true;
+            }
+            if (this.lvl[i][j-1] != 0) {
+              filled[3] = true;
+            }
+            this.lvl[i][j] = this.decoder(filled);
+            }
+
         }
       }
     }
@@ -92,6 +96,37 @@ var config = {
       if (array[0] == false && array[1] == false && array[2] == false && array[3] == false) {
         return 11;
       }
+      else if (array[0] == true && array[1] == false && array[2] == false && array[3] == false) {
+        return 1;
+      }
+      else if (array[0] == false && array[1] == true && array[2] == false && array[3] == false) {
+        return 4;
+      }
+      else if (array[0] == false && array[1] == false && array[2] == true && array[3] == false) {
+        return 3;
+      }
+      else if (array[0] == false && array[1] == false && array[2] == false && array[3] == true) {
+        return 2;
+      }
+      else if (array[0] == true && array[1] == true && array[2] == false && array[3] == false) {
+        return 9;
+      }
+      else if (array[0] == true && array[1] == false && array[2] == true && array[3] == false) {
+        return 5;
+      }
+      else if (array[0] == true && array[1] == false && array[2] == false && array[3] == true) {
+        return 10;
+      }
+      else if (array[0] == false && array[1] == true && array[2] == true && array[3] == false) {
+        return 6;
+      }
+      else if (array[0] == false && array[1] == true && array[2] == false && array[3] == true) {
+        return 8;
+      }
+      else if (array[0] == false && array[1] == false && array[2] == true && array[3] == true) {
+        return 7;
+      }
+
     }
     quad(num1,num2){
       num3 = 1;
@@ -104,14 +139,18 @@ var config = {
 
   function create() {
     
-    const game = new gamemap(10);
+    const game = new gamemap(50);
     game.arrange();
-    game.gen();
+    for (let i = 0; i < 100; i++) {
+      game.gen(); 
+    }
     game.connect();
 
-    const map = this.make.tilemap({data:game.lvl, tileWidth: 64, tileHeight: 64, width:1600, height: 1600});
-    const tiles = map.addTilesetImage('line');
+    const map = this.make.tilemap({data:game.lvl, tileWidth: 16, tileHeight: 16, width:1600, height: 1600});
+    const tiles = map.addTilesetImage('tileset');
     const layer = map.createLayer(0,tiles,0,0)
+    
+
 
     player = this.physics.add.image(100,450,'player');
     cursors = this.input.keyboard.createCursorKeys();
