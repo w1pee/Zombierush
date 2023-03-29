@@ -130,9 +130,7 @@ var config = {
     }
     quad(num1,num2){
       num3 = 1;
-      for (let i = 0; i < num2; i++) {
-          num3 *= num1;
-      }
+      for (let i = 0; i < num2; i++) {num3 *= num1;}
       return num3;
     }
   }
@@ -141,7 +139,7 @@ var config = {
     
     const game = new gamemap(50);
     game.arrange();
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 1; i++) {
       game.gen(); 
     }
     game.connect();
