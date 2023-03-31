@@ -13,7 +13,7 @@
     <br>
     <input type="text" name="last" placeholder="Lastname">
     <br>
-    <input type="text" name="email" placeholder="E-Mail">
+    <input type="email" name="email" placeholder="E-Mail">
     <br>
     <input type="text" name="uid" placeholder="Username">
     <br>
@@ -21,6 +21,6 @@
     <br>
     <button type="submit" name="submit">Sign up</button>
 </form>
-   
+
 </body>
 </html>
