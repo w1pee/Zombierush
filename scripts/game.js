@@ -18,6 +18,7 @@ var config = {
     this.load.image('tileset', 'assets/tileset2.png')
   }
 
+  //class of the map
   class gamemap{
     constructor(size) {
       this.s = size;
@@ -29,25 +30,52 @@ var config = {
     }
     //generating 1 random house structure
     //doesnt check yet if there is something already, need to add that later!
-    gen(){
-      let x = rand(3,this.s-3);
-      let y = rand(3,this.s-3);
+    gen(max){
+      let occupied = [[1, 2]];
+      for (let i = 0; i < max; i++) {
+        occupied[i] = new Array(2);
+      } // initialize with one element
+      occupied[0] = [20,23];
+      this.lvl[occupied[0][0]][occupied[0][1]] = 1;
 
-      this.lvl[x][y] = 1;
-      if (rand(0,1) == 2) {
-        this.lvl[x + des()][y] = 1;
-        if (rand(0,3) == 2) {
-          this.lvl[x][y + des()] = 1;
-        }
-      }
-      else if (rand(0,1) == 1) {
-        this.lvl[x][y + des()] = 1;
-        if (rand(0,3) == 2) {
-          this.lvl[x + des()][y] = 1;
-        }
+      let x = 0;
+      let y = 0;
+      let z = 0;
+
+      let xnew = 0;
+      let ynew = 0;
+
+      for (let i = 0; i < max; i++) {
+        
+        x = occupied[i][0];
+        y = occupied[i][1];
+        z = rand(0,3);
+        xnew = this.cedgex(x,z);
+        ynew = this.cedgey(y,z);
+        this.lvl[xnew][ynew] = 1;
+
+        this.lvl[occupied[0][0]][occupied[0][1]] = 1;
+        occupied[i+1] = new Array(2);
       }
     }
-    //function for filling the empty array
+    cedgex(x,i){
+      switch (i) {
+        case 0: return x + 1;
+        case 1: return x;
+        case 2: return x - 1;
+        case 3: return x;
+        default: return 0;
+      }
+    }
+    cedgey(y,i){
+      switch (i) {
+        case 0: return y;
+        case 1: return y + 1;
+        case 2: return y;
+        case 3: return y - 1;
+      }
+    }
+    //function for filling the empty array with 0 + borders
     arrange(){
       for (let i = 0; i < this.s; i++) {
         for (let j = 0; j < this.s; j++) {
@@ -87,8 +115,7 @@ var config = {
               filled[3] = true;
             }
             this.lvl[i][j] = this.decoder(filled);
-            }
-
+          }
         }
       }
     }
@@ -140,9 +167,8 @@ var config = {
     const game = new gamemap(50);
     game.arrange();
     for (let i = 0; i < 1; i++) {
-      game.gen(); 
+      game.gen(5);
     }
-    game.connect();
 
     const map = this.make.tilemap({data:game.lvl, tileWidth: 16, tileHeight: 16, width:1600, height: 1600});
     const tiles = map.addTilesetImage('tileset');
