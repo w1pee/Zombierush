@@ -13,9 +13,7 @@ var config = {
   var game  = new Phaser.Game(config,'game-area');
 
   function preload() {
-    this.load.image('player', 'assets/player.png');
-    this.load.image('line', 'assets/lines.png')
-    this.load.image('tileset', 'assets/tileset2.png')
+    this.load.image('tileset', 'assets/tileset4.png')
   }
 
   //class of the map
@@ -31,7 +29,6 @@ var config = {
     //generating 1 random house structure
     //doesnt check yet if there is something already, need to add that later!
     gen(max){
-      console.log("startet");
       let occupied = [[1, 2]];
       for (let i = 0; i < max+1; i++) {
         occupied[i] = new Array(2);
@@ -52,15 +49,12 @@ var config = {
         occupied[i+1][0] = this.cedgex(x,z);
         occupied[i+1][1] = this.cedgey(y,z);
       }
-      console.log("stat");
-
-      console.log(occupied);
 
       for (let i = 0; i < occupied.length-1; i++) {
         const element1 = occupied[i][0];
         const element2 = occupied[i][1];
         
-        this.lvl[element1][element2] = 1;
+        this.lvl[element1][element2] = 11;
       }
     }
     cedgex(x,i){
@@ -126,43 +120,20 @@ var config = {
       }
     }
     decoder(array){
-      if (array[0] == false && array[1] == false && array[2] == false && array[3] == false) {
-        return 11;
+      let newarr = array;
+      let number = 0;
+      let backcounter = array.length;
+      for (let i = 0; i < array.length; i++) {
+        newarr[backcounter] = array;
+        backcounter--;
       }
-      else if (array[0] == true && array[1] == false && array[2] == false && array[3] == false) {
-        return 1;
+      for (let i = 0; i < newarr.length; i++) {
+        number += newarr[i] * this.quad(2,i);
       }
-      else if (array[0] == false && array[1] == true && array[2] == false && array[3] == false) {
-        return 4;
-      }
-      else if (array[0] == false && array[1] == false && array[2] == true && array[3] == false) {
-        return 3;
-      }
-      else if (array[0] == false && array[1] == false && array[2] == false && array[3] == true) {
-        return 2;
-      }
-      else if (array[0] == true && array[1] == true && array[2] == false && array[3] == false) {
-        return 9;
-      }
-      else if (array[0] == true && array[1] == false && array[2] == true && array[3] == false) {
-        return 5;
-      }
-      else if (array[0] == true && array[1] == false && array[2] == false && array[3] == true) {
-        return 10;
-      }
-      else if (array[0] == false && array[1] == true && array[2] == true && array[3] == false) {
-        return 6;
-      }
-      else if (array[0] == false && array[1] == true && array[2] == false && array[3] == true) {
-        return 8;
-      }
-      else if (array[0] == false && array[1] == false && array[2] == true && array[3] == true) {
-        return 7;
-      }
-
+      return number;
     }
     quad(num1,num2){
-      num3 = 1;
+      let num3 = 1;
       for (let i = 0; i < num2; i++) {num3 *= num1;}
       return num3;
     }
@@ -172,43 +143,20 @@ var config = {
     
     const game = new gamemap(50);
     game.arrange();
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 50; i++) {
       game.gen(5);
     }
+    game.connect();
 
     const map = this.make.tilemap({data:game.lvl, tileWidth: 16, tileHeight: 16, width:1600, height: 1600});
     const tiles = map.addTilesetImage('tileset');
     const layer = map.createLayer(0,tiles,0,0)
-    
-
-
-    player = this.physics.add.image(100,450,'player');
-    cursors = this.input.keyboard.createCursorKeys();
   }
 
   function update() {
-    if (cursors.left.isDown)
-    {
-      player.setVelocityX(-160);
-    }
-    else if (cursors.right.isDown)
-    {
-      player.setVelocityX(160);
-    }
-    else{
-      player.setVelocityX(0);
-    }
 
-    if (cursors.up.isDown) {
-      player.setVelocityY(-160);
-    }
-    else if (cursors.down.isDown){
-      player.setVelocityY(160);
-    }
-    else{
-      player.setVelocityY(0);
-    } 
   }
+
   //function for generating random number with min and max value
   function rand(min, max) {
     return Math.round(Math.random() * (max - min) + min);
