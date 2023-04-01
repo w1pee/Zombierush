@@ -31,38 +31,43 @@ var config = {
     //generating 1 random house structure
     //doesnt check yet if there is something already, need to add that later!
     gen(max){
+      console.log("startet");
       let occupied = [[1, 2]];
-      for (let i = 0; i < max; i++) {
+      for (let i = 0; i < max+1; i++) {
         occupied[i] = new Array(2);
       } // initialize with one element
-      occupied[0] = [20,23];
-      this.lvl[occupied[0][0]][occupied[0][1]] = 1;
+      occupied[0][0] = rand(3, this.s-3);
+      occupied[0][1] = rand(3, this.s-3);
 
-      let x = 0;
-      let y = 0;
-      let z = 0;
+      let x;
+      let y;
+      let z;
 
-      let xnew = 0;
-      let ynew = 0;
-
-      for (let i = 0; i < max; i++) {
+      for (let i = 0; i < 5; i++) {
         
         x = occupied[i][0];
         y = occupied[i][1];
         z = rand(0,3);
-        xnew = this.cedgex(x,z);
-        ynew = this.cedgey(y,z);
-        this.lvl[xnew][ynew] = 1;
 
-        this.lvl[occupied[0][0]][occupied[0][1]] = 1;
-        occupied[i+1] = new Array(2);
+        occupied[i+1][0] = this.cedgex(x,z);
+        occupied[i+1][1] = this.cedgey(y,z);
+      }
+      console.log("stat");
+
+      console.log(occupied);
+
+      for (let i = 0; i < occupied.length-1; i++) {
+        const element1 = occupied[i][0];
+        const element2 = occupied[i][1];
+        
+        this.lvl[element1][element2] = 1;
       }
     }
     cedgex(x,i){
       switch (i) {
-        case 0: return x + 1;
+        case 0: return x+1;
         case 1: return x;
-        case 2: return x - 1;
+        case 2: return x-1;
         case 3: return x;
         default: return 0;
       }
@@ -70,9 +75,10 @@ var config = {
     cedgey(y,i){
       switch (i) {
         case 0: return y;
-        case 1: return y + 1;
+        case 1: return y+1;
         case 2: return y;
-        case 3: return y - 1;
+        case 3: return y-1;
+        default: return 0;
       }
     }
     //function for filling the empty array with 0 + borders
@@ -166,7 +172,7 @@ var config = {
     
     const game = new gamemap(50);
     game.arrange();
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 20; i++) {
       game.gen(5);
     }
 
