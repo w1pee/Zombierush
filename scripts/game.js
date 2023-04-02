@@ -24,7 +24,6 @@ var config = {
       for (let i = 0; i < this.lvl.length; i++) {
         this.lvl[i] = new Array(size);
       }
-      console.log(this.lvl)
     }
     //generating 1 random house structure
     //doesnt check yet if there is something already, need to add that later!
@@ -40,7 +39,7 @@ var config = {
       let y;
       let z;
 
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < max; i++) {
         
         x = occupied[i][0];
         y = occupied[i][1];
@@ -51,10 +50,10 @@ var config = {
       }
 
       for (let i = 0; i < occupied.length-1; i++) {
-        const element1 = occupied[i][0];
-        const element2 = occupied[i][1];
+        let element1 = occupied[i][0];
+        let element2 = occupied[i][1];
         
-        this.lvl[element1][element2] = 11;
+        this.lvl[element1][element2] = 1;
       }
     }
     cedgex(x,i){
@@ -83,55 +82,89 @@ var config = {
         }
       }
       for (let i = 1; i < this.s-1; i++) {
-        this.lvl[i][0] = 5;
-        this.lvl[i][this.s-1] = 5;
+        this.lvl[i][0] = 10;
+        this.lvl[i][this.s-1] = 10;
       }
       for (let i = 1; i < this.s-1; i++) {
-        this.lvl[0][i] = 8;
-        this.lvl[this.s-1][i] = 8;
+        this.lvl[0][i] = 5;
+        this.lvl[this.s-1][i] = 5;
       }
-      this.lvl[0][0] = 9;
-      this.lvl[0][this.s-1] =10;
-      this.lvl[this.s-1][0] = 6;
-      this.lvl[this.s-1][this.s-1] = 7;
+      this.lvl[0][0] = 6;
+      this.lvl[0][this.s-1] = 3;
+      this.lvl[this.s-1][0] = 12;
+      this.lvl[this.s-1][this.s-1] = 9;
     }
     //connects the generated spaces, so it dosnt look rubbish
     connect(){
-      for (let i = 1; i < this.s-1; i++) {
-        for(let j = 1; j < this.s-1; j++){
+      let fill = [false, false, false, false];
 
-          if(this.lvl[i][j] != 0){
-            let filled = [false,false,false,false];
-            if (this.lvl[i+1][j] != 0) {
-              filled[0] = true;
-            }
-            if (this.lvl[i][j+1] != 0) {
-              filled[1] = true;
-            }
-            if (this.lvl[i-1][j] != 0) {
-              filled[2] = true;
-            }
-            if (this.lvl[i][j-1] != 0) {
-              filled[3] = true;
-            }
-            this.lvl[i][j] = this.decoder(filled);
+      let countof1s = 0;
+
+      for (let i = 0; i < this.lvl.length; i++) {
+        for (let j = 0; j < this.lvl.length; j++) {
+          if (this.lvl[i][j] == 1) {
+            countof1s++;
           }
         }
       }
-    }
-    decoder(array){
-      let newarr = array;
-      let number = 0;
-      let backcounter = array.length;
-      for (let i = 0; i < array.length; i++) {
-        newarr[backcounter] = array;
-        backcounter--;
+      console.log(countof1s);
+      let tobefilled = new Array(countof1s);
+
+      let c = 0;
+      for (let y = 2; y < this.s - 2; y++) {
+
+        for (let x = 2; x < this.s - 2; x++) {
+
+          if (this.lvl[y][x] == 1) {
+            
+            if (this.lvl[y-1][x] == 1){
+              fill[3] = true;
+            }
+            if (this.lvl[y][x+1] == 1){
+              fill[2] = true;
+            }
+            if (this.lvl[y+1][x] == 1){
+              fill[1] = true;
+            }
+            if (this.lvl[y][x-1] == 1){
+              fill[0] = true;
+            }
+            tobefilled[c] = new Array(3);
+            console.log(fill);
+            tobefilled[c][0] = y;
+            tobefilled[c][1] = x;
+            tobefilled[c][2] = this.decoder(fill);
+            fill = [false, false, false, false];
+            c++;
+          }
+        }
       }
-      for (let i = 0; i < newarr.length; i++) {
-        number += newarr[i] * this.quad(2,i);
+      console.log(tobefilled);
+
+      let el1 = 0;
+      let el2 = 0;
+      let el3 = 0;
+
+      for (let i = 0; i < tobefilled.length; i++) {
+       
+        el1 = tobefilled[i][0];
+        el2 = tobefilled[i][1];
+        el3 = tobefilled[i][2];
+
+        this.lvl[el1][el2] = el3;
+      }
+
+    }
+    //decodes an array of 0s and 1s into a number
+    decoder(array){
+      let number = 0;
+      for (let i = 0; i < array.length; i++) {
+        number += array[i] * this.quad(2,i);
       }
       return number;
     }
+    //just a function that calculates square number, num1^num2
+    //unnecesary, but cool
     quad(num1,num2){
       let num3 = 1;
       for (let i = 0; i < num2; i++) {num3 *= num1;}
@@ -143,9 +176,10 @@ var config = {
     
     const game = new gamemap(50);
     game.arrange();
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 10; i++) {
       game.gen(5);
     }
+
     game.connect();
 
     const map = this.make.tilemap({data:game.lvl, tileWidth: 16, tileHeight: 16, width:1600, height: 1600});
