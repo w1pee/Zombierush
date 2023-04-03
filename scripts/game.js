@@ -28,25 +28,39 @@ var config = {
     //generating 1 random house structure
     //doesnt check yet if there is something already, need to add that later!
     gen(max){
-      let occupied = [[1, 2]];
-      for (let i = 0; i < max+1; i++) {
-        occupied[i] = new Array(2);
-      } // initialize with one element
-      occupied[0][0] = rand(3, this.s-3);
-      occupied[0][1] = rand(3, this.s-3);
+      let occupied = [];
+    
+      occupied[0] = new Array(2);
+    
+
+      let hspoint1;
+      let hspoint2;
+
+      do{
+        hspoint1 = rand(3, this.s-3);
+        hspoint2 = rand(3, this.s-3);
+      }
+      while(this.lvl[hspoint1][hspoint2] != 0)
+
+      occupied[0][0] = hspoint1;
+      occupied[0][1] = hspoint2; 
 
       let x;
       let y;
       let z;
 
-      for (let i = 0; i < max; i++) {
+      for (let i = 1; i < max; i++) {
         
-        x = occupied[i][0];
-        y = occupied[i][1];
-        z = rand(0,3);
+        do{
+          x = occupied[rand(0,occupied.length-1)][0];
+          y = occupied[rand(0,occupied.length-1)][1];
+          z = rand(0,3);
+        }
+        while(this.lvl[this.cedgex(x,z)][this.cedgey(y,z)]!= 0)
 
-        occupied[i+1][0] = this.cedgex(x,z);
-        occupied[i+1][1] = this.cedgey(y,z);
+        occupied[i] = new Array(2);
+        occupied[i][0] = this.cedgex(x,z);
+        occupied[i][1] = this.cedgey(y,z);
       }
 
       for (let i = 0; i < occupied.length-1; i++) {
@@ -57,30 +71,56 @@ var config = {
       }
     }
     cedgex(x,i){
-      switch (i) {
-        case 0: return x+1;
-        case 1: return x;
-        case 2: return x-1;
-        case 3: return x;
-        default: return 0;
-      }
+      let dx = [1, 0, -1, 0];
+      return x + dx[i];
     }
     cedgey(y,i){
-      switch (i) {
-        case 0: return y;
-        case 1: return y+1;
-        case 2: return y;
-        case 3: return y-1;
-        default: return 0;
+      let dy = [0, 1, 0, -1];
+      return y + dy[i];
+    }
+    //function for adding a layer of 2s to the house structures
+    fillgaps(){
+      let fill2 = new Array(8);
+      for (let i = 3; i < this.lvl.length-3; i++) {
+
+        for (let j = 3; j < this.lvl.length-3; j++) {
+
+          if (this.lvl[i][j] == 1) {
+
+            for (let c = 0; c < 8; c++) {
+              fill2[c] = new Array(2);
+              fill2[c] = this.gaps(i,j,c)
+            }
+            let x;
+            let y;
+            for (let i = 0; i < 8; i++) {
+              x = fill2[i][0];
+              y = fill2[i][1];
+              this.lvl[x][y] = 2;
+            }
+            }
+        }
       }
     }
-    //function for filling the empty array with 0 + borders
+    gaps(x,y,c){
+      let dx = [-1,-1,0,1,1,1,0,-1];
+      let dy = [0,1,1,1,0,-1,-1,-1];
+      if (this.lvl[x+dx[c]][y+dy[c]] == 1){
+        return [0,0];
+      }
+      return [x+dx[c],y+dy[c]];
+    }
+    //function for filling the empty array with 0
     arrange(){
       for (let i = 0; i < this.s; i++) {
         for (let j = 0; j < this.s; j++) {
           this.lvl[i][j] = 0;
         }
       }
+      
+    }
+    //generates walls around the playfield
+    walls(){
       for (let i = 1; i < this.s-1; i++) {
         this.lvl[i][0] = 10;
         this.lvl[i][this.s-1] = 10;
@@ -95,6 +135,7 @@ var config = {
       this.lvl[this.s-1][this.s-1] = 9;
     }
     //connects the generated spaces, so it dosnt look rubbish
+    //also it removes any 2s that are just there to keep the houses apart
     connect(){
       let fill = [false, false, false, false];
 
@@ -107,13 +148,17 @@ var config = {
           }
         }
       }
-      console.log(countof1s);
       let tobefilled = new Array(countof1s);
 
+      //loops through the array and looks for 1s around the choosen place
       let c = 0;
       for (let y = 2; y < this.s - 2; y++) {
 
         for (let x = 2; x < this.s - 2; x++) {
+
+          if(this.lvl[x][y] == 2){
+            this.lvl[x][y] = 0;
+          }
 
           if (this.lvl[y][x] == 1) {
             
@@ -130,7 +175,6 @@ var config = {
               fill[0] = true;
             }
             tobefilled[c] = new Array(3);
-            console.log(fill);
             tobefilled[c][0] = y;
             tobefilled[c][1] = x;
             tobefilled[c][2] = this.decoder(fill);
@@ -139,7 +183,6 @@ var config = {
           }
         }
       }
-      console.log(tobefilled);
 
       let el1 = 0;
       let el2 = 0;
@@ -178,10 +221,11 @@ var config = {
     game.arrange();
     for (let i = 0; i < 10; i++) {
       game.gen(5);
+      game.fillgaps();
     }
-
+    game.walls();
     game.connect();
-
+    
     const map = this.make.tilemap({data:game.lvl, tileWidth: 16, tileHeight: 16, width:1600, height: 1600});
     const tiles = map.addTilesetImage('tileset');
     const layer = map.createLayer(0,tiles,0,0)
