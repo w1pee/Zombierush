@@ -13,11 +13,13 @@ var config = {
   var game  = new Phaser.Game(config,'game-area');
 
   function preload() {
-    this.load.image('tileset', 'assets/tileset4.png')
+    this.load.image('roof1', 'assets/roof1.png')
+    this.load.image('floor', 'assets/floor.png')
+    this.load.image('trees', 'assets/trees.png')
   }
 
   //class of the map
-  class gamemap{
+  class buildings{
     constructor(size) {
       this.s = size;
       this.lvl = new Array(size);
@@ -122,17 +124,17 @@ var config = {
     //generates walls around the playfield
     walls(){
       for (let i = 1; i < this.s-1; i++) {
-        this.lvl[i][0] = 10;
-        this.lvl[i][this.s-1] = 10;
+        this.lvl[i][0] = 17;
+        this.lvl[i][this.s-1] = 17;
       }
       for (let i = 1; i < this.s-1; i++) {
-        this.lvl[0][i] = 5;
-        this.lvl[this.s-1][i] = 5;
+        this.lvl[0][i] = 16;
+        this.lvl[this.s-1][i] = 16;
       }
-      this.lvl[0][0] = 6;
-      this.lvl[0][this.s-1] = 3;
-      this.lvl[this.s-1][0] = 12;
-      this.lvl[this.s-1][this.s-1] = 9;
+      this.lvl[0][0] = 21;
+      this.lvl[0][this.s-1] = 20;
+      this.lvl[this.s-1][0] = 18;
+      this.lvl[this.s-1][this.s-1] = 19;
     }
     //connects the generated spaces, so it dosnt look rubbish
     //also it removes any 2s that are just there to keep the houses apart
@@ -214,10 +216,30 @@ var config = {
       return num3;
     }
   }
+//this is the class for the background
+//only do it when finished with the more important stuff
+
+  class back{
+    constructor(size) {
+      this.s = size;
+      this.lvl = new Array(size);
+      for (let i = 0; i < this.lvl.length; i++) {
+        this.lvl[i] = new Array(size);
+      }
+    }
+    generate(){
+      for (let i = 0; i < this.lvl.length; i++) {
+
+        for (let j = 0; j < this.lvl.length; j++) {
+          this.lvl[i][j] = rand(0,1);
+        }
+      }
+    }
+  }
 
   function create() {
     
-    const game = new gamemap(50);
+    const game = new buildings(50);
     game.arrange();
     for (let i = 0; i < 10; i++) {
       game.gen(5);
@@ -225,10 +247,23 @@ var config = {
     }
     game.walls();
     game.connect();
+
+    const br = new back(50);
+
+    br.generate();
     
-    const map = this.make.tilemap({data:game.lvl, tileWidth: 16, tileHeight: 16, width:1600, height: 1600});
-    const tiles = map.addTilesetImage('tileset');
-    const layer = map.createLayer(0,tiles,0,0)
+    const mapwithcol = this.make.tilemap({data:game.lvl, tileWidth: 16, tileHeight: 16, width:1600, height: 1600});
+    const tiles = mapwithcol.addTilesetImage('roof1');
+
+
+    const background = this.make.tilemap({data:br.lvl, tileWidth: 16, tileHeight: 16, width:1600, height: 1600})
+    const tiles2 = background.addTilesetImage('floor');
+
+
+    const layer2 = background.createLayer(0,tiles2,0,0)
+
+    const layer = mapwithcol.createLayer(0,tiles,0,0)
+    
   }
 
   function update() {
