@@ -154,9 +154,9 @@ var config = {
 
       //loops through the array and looks for 1s around the choosen place
       let c = 0;
-      for (let y = 2; y < this.s - 2; y++) {
+      for (let y = 0; y < this.s; y++) {
 
-        for (let x = 2; x < this.s - 2; x++) {
+        for (let x = 0; x < this.s; x++) {
 
           if(this.lvl[x][y] == 2){
             this.lvl[x][y] = 0;
@@ -241,7 +241,7 @@ var config = {
     
     const game = new buildings(50);
     game.arrange();
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 50; i++) {
       game.gen(5);
       game.fillgaps();
     }
