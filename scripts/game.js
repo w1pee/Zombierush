@@ -21,12 +21,9 @@ var config = {
   var game  = new Phaser.Game(config,'game-area');
 
   function preload() {
-    this.load.image('zombie', 'assets/zombie.png');
     this.load.image('player', 'assets/player.png');
-    this.load.image('roof1', 'assets/roof1.png')
-    this.load.image('roof2', 'assets/roof2.png')
+    this.load.image('roof', 'assets/roof3.png')
     this.load.image('floor', 'assets/floor.png')
-    this.load.image('trees', 'assets/trees.png')
   }
 
   //class of the map
@@ -227,29 +224,10 @@ var config = {
       return num3;
     }
   }
-//this is the class for the background
-//only do it when finished with the more important stuff
-
-  class back{
-    constructor(size) {
-      this.s = size;
-      this.lvl = new Array(size);
-      for (let i = 0; i < this.lvl.length; i++) {
-        this.lvl[i] = new Array(size);
-      }
-    }
-    generate(){
-      for (let i = 0; i < this.lvl.length; i++) {
-
-        for (let j = 0; j < this.lvl.length; j++) {
-          this.lvl[i][j] = rand(0,1);
-        }
-      }
-    }
-  }
 
   class gamemap{
     constructor(size) {
+      this.size = size;
       this.foreground = new Array(size);
       this.background = new Array(size);
 
@@ -262,27 +240,41 @@ var config = {
         }     
       }
     }
-    generatehouses(){
-      
-      let checkviable;
-      do{
-        let randx = rand(2,this.foreground.length-3);
-        let randy = rand(2,this.foreground.length-3);
+    generatehouse(){
 
-        checkviable = false;
+      let checkviable;
+      let randx;
+      let randy;
+      
+      do{
+        randx = rand(2,this.foreground.length-3);
+        randy = rand(2,this.foreground.length-3);
+
+        checkviable = 0;
         for (let i = 0; i < 8; i++) {
           
-          if (this.surroundingblocks(randx,randy,i) == 0) {
-            checkviable = true
-          }
-          else{
-            checkviable = false;
-            break;
+          let filled = this.surroundingblocks(randx,randy,i);
+
+          if (this.foreground[filled[0]][filled[1]] == 0) {
+            checkviable++;
           }
         }
-        
       }
-      while (checkviable == false);
+      while (checkviable != 8);
+      this.foreground[randx][randy] = 1;
+      this.structure(randx,randy,0)
+    }
+    structure(x,y,num){
+      switch(num){
+        case 0:
+          this.foreground[x-1][y] = 1;
+          this.foreground[x-1][y+1] = 1;
+          this.foreground[x][y+1] = 1;
+          this.foreground[x][y-1] = 1;
+          this.foreground[x+1][y] = 1;
+          this.foreground[x+1][y+1] = 1;
+          this.foreground[x+1][y-1] = 1;
+      }
     }
     surroundingblocks(x,y,c){
       let dx = [-1,-1,0,1,1,1,0,-1];
@@ -292,18 +284,42 @@ var config = {
       }
       return [x+dx[c],y+dy[c]];
     }
+
+    fillfloor(){
+      for(let i = 0; i < this.size-1; i++){
+        for (let j = 0; j < this.size-1; j++) {
+          if (this.foreground[i][j] != 0) {
+            this.background[i][j] = 7;
+
+            
+          }
+        }
+      }
+    }
+    connectfloor(){
+      for (let i = 0; i < this.size-1; i++) {
+        
+        for (let j = 0; j < this.size-1; j++) {
+          
+          
+        }
+        
+      }
+    }
   }
 
   function create() {
     
-    const map = new gamemap(50);
+    const map = new gamemap(30);
     
-    map.generatehouses();
+    for (let i = 0; i < 2; i++) {
+      map.generatehouse();
+    }
+    map.fillfloor();
 
     console.log(map.foreground)
     const mapwithcol = this.make.tilemap({data:map.foreground, tileWidth: 128, tileHeight: 128});
-    const tiles = mapwithcol.addTilesetImage('roof2');
-
+    const tiles = mapwithcol.addTilesetImage('roof');
 
     const background = this.make.tilemap({data:map.background, tileWidth: 128, tileHeight: 128})
     const tiles2 = background.addTilesetImage('floor');
@@ -317,12 +333,10 @@ var config = {
     //cursor
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    // Set up the camera to follow the player and have a zoom of 5
-    // this.cameras.main.startFollow(this.player);
+    // Set up the camera to follow the player and have a zoom
+    this.cameras.main.startFollow(this.player);
     this.cameras.main.setZoom(0.2);
     this.cameras.main.setBounds(0, 0, mapwithcol.widthInPixels, mapwithcol.heightInPixels);
-    
-    
   }
 
   function update() {
