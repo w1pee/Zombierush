@@ -248,26 +248,64 @@ var config = {
     }
   }
 
+  class gamemap{
+    constructor(size) {
+      this.foreground = new Array(size);
+      this.background = new Array(size);
+
+      for (let i = 0; i < size; i++) {
+        this.foreground[i] = new Array(size);
+        this.background[i] = new Array(size);
+        for (let j = 0; j < size; j++) {
+          this.foreground[i][j] = 0;
+          this.background[i][j] = 0;
+        }     
+      }
+    }
+    generatehouses(){
+      
+      let checkviable;
+      do{
+        let randx = rand(2,this.foreground.length-3);
+        let randy = rand(2,this.foreground.length-3);
+
+        checkviable = false;
+        for (let i = 0; i < 8; i++) {
+          
+          if (this.surroundingblocks(randx,randy,i) == 0) {
+            checkviable = true
+          }
+          else{
+            checkviable = false;
+            break;
+          }
+        }
+        
+      }
+      while (checkviable == false);
+    }
+    surroundingblocks(x,y,c){
+      let dx = [-1,-1,0,1,1,1,0,-1];
+      let dy = [0,1,1,1,0,-1,-1,-1];
+      if (this.foreground[x+dx[c]][y+dy[c]] == 1){
+        return [0,0];
+      }
+      return [x+dx[c],y+dy[c]];
+    }
+  }
+
   function create() {
     
-    const fr = new buildings(50);
-    fr.arrange();
-    for (let i = 0; i < 80; i++) {
-      fr.gen(4);
-      fr.fillgaps();
-    }
-    fr.walls();
-    fr.connect();
-
-    const br = new back(50);
-
-    br.generate();
+    const map = new gamemap(50);
     
-    const mapwithcol = this.make.tilemap({data:fr.lvl, tileWidth: 128, tileHeight: 128});
+    map.generatehouses();
+
+    console.log(map.foreground)
+    const mapwithcol = this.make.tilemap({data:map.foreground, tileWidth: 128, tileHeight: 128});
     const tiles = mapwithcol.addTilesetImage('roof2');
 
 
-    const background = this.make.tilemap({data:br.lvl, tileWidth: 128, tileHeight: 128})
+    const background = this.make.tilemap({data:map.background, tileWidth: 128, tileHeight: 128})
     const tiles2 = background.addTilesetImage('floor');
 
     const layer2 = background.createLayer(0,tiles2,0,0)
@@ -280,15 +318,15 @@ var config = {
     this.cursors = this.input.keyboard.createCursorKeys();
 
     // Set up the camera to follow the player and have a zoom of 5
-    this.cameras.main.startFollow(this.player);
-    this.cameras.main.setZoom(1);
+    // this.cameras.main.startFollow(this.player);
+    this.cameras.main.setZoom(0.2);
+    this.cameras.main.setBounds(0, 0, mapwithcol.widthInPixels, mapwithcol.heightInPixels);
     
     
   }
 
   function update() {
     
-
     var speed = 500;
     var directioncheckX = 0;
     var directioncheckY = 0;
