@@ -252,8 +252,8 @@ var config = {
     
     const fr = new buildings(50);
     fr.arrange();
-    for (let i = 0; i < 20; i++) {
-      fr.gen(50);
+    for (let i = 0; i < 80; i++) {
+      fr.gen(4);
       fr.fillgaps();
     }
     fr.walls();
@@ -263,30 +263,33 @@ var config = {
 
     br.generate();
     
-    const mapwithcol = this.make.tilemap({data:fr.lvl, tileWidth: 32, tileHeight: 32});
+    const mapwithcol = this.make.tilemap({data:fr.lvl, tileWidth: 128, tileHeight: 128});
     const tiles = mapwithcol.addTilesetImage('roof2');
 
 
-    const background = this.make.tilemap({data:br.lvl, tileWidth: 32, tileHeight: 32})
+    const background = this.make.tilemap({data:br.lvl, tileWidth: 128, tileHeight: 128})
     const tiles2 = background.addTilesetImage('floor');
 
     const layer2 = background.createLayer(0,tiles2,0,0)
     const layer = mapwithcol.createLayer(0,tiles,0,0)
     
     //player
-    this.player = this.physics.add.sprite(400, 300, 'player');
+    this.player = this.physics.add.sprite(0, 0, 'player');
     this.player.setCollideWorldBounds(true);
     //cursor
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    //camera
-
-
+    // Set up the camera to follow the player and have a zoom of 5
+    this.cameras.main.startFollow(this.player);
+    this.cameras.main.setZoom(1);
+    
+    
   }
 
   function update() {
     
-    var speed = 50;
+
+    var speed = 500;
     var directioncheckX = 0;
     var directioncheckY = 0;
 
