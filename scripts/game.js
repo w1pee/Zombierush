@@ -6,14 +6,25 @@ var config = {
   scene: {
       preload: preload,
       create: create,
-      update: update
+      update: update,
+      render: render 
+  },
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 0 },
+      debug: false
+    }
   }
 };
 
   var game  = new Phaser.Game(config,'game-area');
 
   function preload() {
+    this.load.image('zombie', 'assets/zombie.png');
+    this.load.image('player', 'assets/player.png');
     this.load.image('roof1', 'assets/roof1.png')
+    this.load.image('roof2', 'assets/roof2.png')
     this.load.image('floor', 'assets/floor.png')
     this.load.image('trees', 'assets/trees.png')
   }
@@ -39,8 +50,8 @@ var config = {
       let hspoint2;
 
       do{
-        hspoint1 = rand(3, this.s-3);
-        hspoint2 = rand(3, this.s-3);
+        hspoint1 = rand(5, this.s-5);
+        hspoint2 = rand(5, this.s-5);
       }
       while(this.lvl[hspoint1][hspoint2] != 0)
 
@@ -239,35 +250,61 @@ var config = {
 
   function create() {
     
-    const game = new buildings(50);
-    game.arrange();
-    for (let i = 0; i < 50; i++) {
-      game.gen(5);
-      game.fillgaps();
+    const fr = new buildings(50);
+    fr.arrange();
+    for (let i = 0; i < 20; i++) {
+      fr.gen(50);
+      fr.fillgaps();
     }
-    game.walls();
-    game.connect();
+    fr.walls();
+    fr.connect();
 
     const br = new back(50);
 
     br.generate();
     
-    const mapwithcol = this.make.tilemap({data:game.lvl, tileWidth: 16, tileHeight: 16, width:1600, height: 1600});
-    const tiles = mapwithcol.addTilesetImage('roof1');
+    const mapwithcol = this.make.tilemap({data:fr.lvl, tileWidth: 32, tileHeight: 32});
+    const tiles = mapwithcol.addTilesetImage('roof2');
 
 
-    const background = this.make.tilemap({data:br.lvl, tileWidth: 16, tileHeight: 16, width:1600, height: 1600})
+    const background = this.make.tilemap({data:br.lvl, tileWidth: 32, tileHeight: 32})
     const tiles2 = background.addTilesetImage('floor');
 
-
     const layer2 = background.createLayer(0,tiles2,0,0)
-
     const layer = mapwithcol.createLayer(0,tiles,0,0)
     
+    //player
+    this.player = this.physics.add.sprite(400, 300, 'player');
+    this.player.setCollideWorldBounds(true);
+    //cursor
+    this.cursors = this.input.keyboard.createCursorKeys();
+
+    //camera
+
+
   }
 
   function update() {
+    
+    var speed = 50;
+    var directioncheckX = 0;
+    var directioncheckY = 0;
 
+    if (this.cursors.left.isDown) {
+      directioncheckX--;
+    }
+    if (this.cursors.right.isDown) {
+      directioncheckX++;
+    }
+    this.player.setVelocityX(speed * directioncheckX);
+
+    if (this.cursors.up.isDown) {
+      directioncheckY--;
+    } 
+    if (this.cursors.down.isDown) {
+      directioncheckY++;
+    } 
+    this.player.setVelocityY(speed * directioncheckY);
   }
 
   //function for generating random number with min and max value
@@ -281,3 +318,9 @@ var config = {
       case 1:return 1;
     }
   }
+
+  function render() {
+    game.debug.cameraInfo(game.camera, 32, 32);
+    game.debug.spriteCoords(player, 32, 500);
+
+}
