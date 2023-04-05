@@ -312,7 +312,7 @@ var config = {
     
     const map = new gamemap(30);
     
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 5; i++) {
       map.generatehouse();
     }
     map.fillfloor();
