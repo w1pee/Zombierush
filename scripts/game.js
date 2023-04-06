@@ -2,12 +2,11 @@ var config = {
   type: Phaser.CANVAS,
   width: 1280,
   height: 800,
-  parent: "thegame",
+  parent: "game-container",
   scene: {
       preload: preload,
       create: create,
       update: update,
-      render: render 
   },
   physics: {
     default: 'arcade',
@@ -26,204 +25,204 @@ var config = {
     this.load.image('floor', 'assets/floor.png')
   }
 
-  //class of the map
-  class buildings{
-    constructor(size) {
-      this.s = size;
-      this.lvl = new Array(size);
-      for (let i = 0; i < this.lvl.length; i++) {
-        this.lvl[i] = new Array(size);
-      }
-    }
-    //generating 1 random house structure
-    //doesnt check yet if there is something already, need to add that later!
-    gen(max){
-      let occupied = [];
+  // //class of the map
+  // class buildings{
+  //   constructor(size) {
+  //     this.s = size;
+  //     this.lvl = new Array(size);
+  //     for (let i = 0; i < this.lvl.length; i++) {
+  //       this.lvl[i] = new Array(size);
+  //     }
+  //   }
+  //   //generating 1 random house structure
+  //   //doesnt check yet if there is something already, need to add that later!
+  //   gen(max){
+  //     let occupied = [];
     
-      occupied[0] = new Array(2);
+  //     occupied[0] = new Array(2);
     
 
-      let hspoint1;
-      let hspoint2;
+  //     let hspoint1;
+  //     let hspoint2;
 
-      do{
-        hspoint1 = rand(5, this.s-5);
-        hspoint2 = rand(5, this.s-5);
-      }
-      while(this.lvl[hspoint1][hspoint2] != 0)
+  //     do{
+  //       hspoint1 = rand(5, this.s-5);
+  //       hspoint2 = rand(5, this.s-5);
+  //     }
+  //     while(this.lvl[hspoint1][hspoint2] != 0)
 
-      occupied[0][0] = hspoint1;
-      occupied[0][1] = hspoint2; 
+  //     occupied[0][0] = hspoint1;
+  //     occupied[0][1] = hspoint2; 
 
-      let x;
-      let y;
-      let z;
+  //     let x;
+  //     let y;
+  //     let z;
 
-      for (let i = 1; i < max; i++) {
+  //     for (let i = 1; i < max; i++) {
         
-        do{
-          x = occupied[rand(0,occupied.length-1)][0];
-          y = occupied[rand(0,occupied.length-1)][1];
-          z = rand(0,3);
-        }
-        while(this.lvl[this.cedgex(x,z)][this.cedgey(y,z)]!= 0)
+  //       do{
+  //         x = occupied[rand(0,occupied.length-1)][0];
+  //         y = occupied[rand(0,occupied.length-1)][1];
+  //         z = rand(0,3);
+  //       }
+  //       while(this.lvl[this.cedgex(x,z)][this.cedgey(y,z)]!= 0)
 
-        occupied[i] = new Array(2);
-        occupied[i][0] = this.cedgex(x,z);
-        occupied[i][1] = this.cedgey(y,z);
-      }
+  //       occupied[i] = new Array(2);
+  //       occupied[i][0] = this.cedgex(x,z);
+  //       occupied[i][1] = this.cedgey(y,z);
+  //     }
 
-      for (let i = 0; i < occupied.length-1; i++) {
-        let element1 = occupied[i][0];
-        let element2 = occupied[i][1];
+  //     for (let i = 0; i < occupied.length-1; i++) {
+  //       let element1 = occupied[i][0];
+  //       let element2 = occupied[i][1];
         
-        this.lvl[element1][element2] = 1;
-      }
-    }
-    cedgex(x,i){
-      let dx = [1, 0, -1, 0];
-      return x + dx[i];
-    }
-    cedgey(y,i){
-      let dy = [0, 1, 0, -1];
-      return y + dy[i];
-    }
-    //function for adding a layer of 2s to the house structures
-    fillgaps(){
-      let fill2 = new Array(8);
-      for (let i = 3; i < this.lvl.length-3; i++) {
+  //       this.lvl[element1][element2] = 1;
+  //     }
+  //   }
+  //   cedgex(x,i){
+  //     let dx = [1, 0, -1, 0];
+  //     return x + dx[i];
+  //   }
+  //   cedgey(y,i){
+  //     let dy = [0, 1, 0, -1];
+  //     return y + dy[i];
+  //   }
+  //   //function for adding a layer of 2s to the house structures
+  //   fillgaps(){
+  //     let fill2 = new Array(8);
+  //     for (let i = 3; i < this.lvl.length-3; i++) {
 
-        for (let j = 3; j < this.lvl.length-3; j++) {
+  //       for (let j = 3; j < this.lvl.length-3; j++) {
 
-          if (this.lvl[i][j] == 1) {
+  //         if (this.lvl[i][j] == 1) {
 
-            for (let c = 0; c < 8; c++) {
-              fill2[c] = new Array(2);
-              fill2[c] = this.gaps(i,j,c)
-            }
-            let x;
-            let y;
-            for (let i = 0; i < 8; i++) {
-              x = fill2[i][0];
-              y = fill2[i][1];
-              this.lvl[x][y] = 2;
-            }
-            }
-        }
-      }
-    }
-    gaps(x,y,c){
-      let dx = [-1,-1,0,1,1,1,0,-1];
-      let dy = [0,1,1,1,0,-1,-1,-1];
-      if (this.lvl[x+dx[c]][y+dy[c]] == 1){
-        return [0,0];
-      }
-      return [x+dx[c],y+dy[c]];
-    }
-    //function for filling the empty array with 0
-    arrange(){
-      for (let i = 0; i < this.s; i++) {
-        for (let j = 0; j < this.s; j++) {
-          this.lvl[i][j] = 0;
-        }
-      }
+  //           for (let c = 0; c < 8; c++) {
+  //             fill2[c] = new Array(2);
+  //             fill2[c] = this.gaps(i,j,c)
+  //           }
+  //           let x;
+  //           let y;
+  //           for (let i = 0; i < 8; i++) {
+  //             x = fill2[i][0];
+  //             y = fill2[i][1];
+  //             this.lvl[x][y] = 2;
+  //           }
+  //           }
+  //       }
+  //     }
+  //   }
+  //   gaps(x,y,c){
+  //     let dx = [-1,-1,0,1,1,1,0,-1];
+  //     let dy = [0,1,1,1,0,-1,-1,-1];
+  //     if (this.lvl[x+dx[c]][y+dy[c]] == 1){
+  //       return [0,0];
+  //     }
+  //     return [x+dx[c],y+dy[c]];
+  //   }
+  //   //function for filling the empty array with 0
+  //   arrange(){
+  //     for (let i = 0; i < this.s; i++) {
+  //       for (let j = 0; j < this.s; j++) {
+  //         this.lvl[i][j] = 0;
+  //       }
+  //     }
       
-    }
-    //generates walls around the playfield
-    walls(){
-      for (let i = 1; i < this.s-1; i++) {
-        this.lvl[i][0] = 17;
-        this.lvl[i][this.s-1] = 17;
-      }
-      for (let i = 1; i < this.s-1; i++) {
-        this.lvl[0][i] = 16;
-        this.lvl[this.s-1][i] = 16;
-      }
-      this.lvl[0][0] = 21;
-      this.lvl[0][this.s-1] = 20;
-      this.lvl[this.s-1][0] = 18;
-      this.lvl[this.s-1][this.s-1] = 19;
-    }
-    //connects the generated spaces, so it dosnt look rubbish
-    //also it removes any 2s that are just there to keep the houses apart
-    connect(){
-      let fill = [false, false, false, false];
+  //   }
+  //   //generates walls around the playfield
+  //   walls(){
+  //     for (let i = 1; i < this.s-1; i++) {
+  //       this.lvl[i][0] = 17;
+  //       this.lvl[i][this.s-1] = 17;
+  //     }
+  //     for (let i = 1; i < this.s-1; i++) {
+  //       this.lvl[0][i] = 16;
+  //       this.lvl[this.s-1][i] = 16;
+  //     }
+  //     this.lvl[0][0] = 21;
+  //     this.lvl[0][this.s-1] = 20;
+  //     this.lvl[this.s-1][0] = 18;
+  //     this.lvl[this.s-1][this.s-1] = 19;
+  //   }
+  //   //connects the generated spaces, so it dosnt look rubbish
+  //   //also it removes any 2s that are just there to keep the houses apart
+  //   connect(){
+  //     let fill = [false, false, false, false];
 
-      let countof1s = 0;
+  //     let countof1s = 0;
 
-      for (let i = 0; i < this.lvl.length; i++) {
-        for (let j = 0; j < this.lvl.length; j++) {
-          if (this.lvl[i][j] == 1) {
-            countof1s++;
-          }
-        }
-      }
-      let tobefilled = new Array(countof1s);
+  //     for (let i = 0; i < this.lvl.length; i++) {
+  //       for (let j = 0; j < this.lvl.length; j++) {
+  //         if (this.lvl[i][j] == 1) {
+  //           countof1s++;
+  //         }
+  //       }
+  //     }
+  //     let tobefilled = new Array(countof1s);
 
-      //loops through the array and looks for 1s around the choosen place
-      let c = 0;
-      for (let y = 0; y < this.s; y++) {
+  //     //loops through the array and looks for 1s around the choosen place
+  //     let c = 0;
+  //     for (let y = 0; y < this.s; y++) {
 
-        for (let x = 0; x < this.s; x++) {
+  //       for (let x = 0; x < this.s; x++) {
 
-          if(this.lvl[x][y] == 2){
-            this.lvl[x][y] = 0;
-          }
+  //         if(this.lvl[x][y] == 2){
+  //           this.lvl[x][y] = 0;
+  //         }
 
-          if (this.lvl[y][x] == 1) {
+  //         if (this.lvl[y][x] == 1) {
             
-            if (this.lvl[y-1][x] == 1){
-              fill[3] = true;
-            }
-            if (this.lvl[y][x+1] == 1){
-              fill[2] = true;
-            }
-            if (this.lvl[y+1][x] == 1){
-              fill[1] = true;
-            }
-            if (this.lvl[y][x-1] == 1){
-              fill[0] = true;
-            }
-            tobefilled[c] = new Array(3);
-            tobefilled[c][0] = y;
-            tobefilled[c][1] = x;
-            tobefilled[c][2] = this.decoder(fill);
-            fill = [false, false, false, false];
-            c++;
-          }
-        }
-      }
+  //           if (this.lvl[y-1][x] == 1){
+  //             fill[3] = true;
+  //           }
+  //           if (this.lvl[y][x+1] == 1){
+  //             fill[2] = true;
+  //           }
+  //           if (this.lvl[y+1][x] == 1){
+  //             fill[1] = true;
+  //           }
+  //           if (this.lvl[y][x-1] == 1){
+  //             fill[0] = true;
+  //           }
+  //           tobefilled[c] = new Array(3);
+  //           tobefilled[c][0] = y;
+  //           tobefilled[c][1] = x;
+  //           tobefilled[c][2] = this.decoder(fill);
+  //           fill = [false, false, false, false];
+  //           c++;
+  //         }
+  //       }
+  //     }
 
-      let el1 = 0;
-      let el2 = 0;
-      let el3 = 0;
+  //     let el1 = 0;
+  //     let el2 = 0;
+  //     let el3 = 0;
 
-      for (let i = 0; i < tobefilled.length; i++) {
+  //     for (let i = 0; i < tobefilled.length; i++) {
        
-        el1 = tobefilled[i][0];
-        el2 = tobefilled[i][1];
-        el3 = tobefilled[i][2];
+  //       el1 = tobefilled[i][0];
+  //       el2 = tobefilled[i][1];
+  //       el3 = tobefilled[i][2];
 
-        this.lvl[el1][el2] = el3;
-      }
+  //       this.lvl[el1][el2] = el3;
+  //     }
 
-    }
-    //decodes an array of 0s and 1s into a number
-    decoder(array){
-      let number = 0;
-      for (let i = 0; i < array.length; i++) {
-        number += array[i] * this.quad(2,i);
-      }
-      return number;
-    }
-    //just a function that calculates square number, num1^num2
-    //unnecesary, but cool
-    quad(num1,num2){
-      let num3 = 1;
-      for (let i = 0; i < num2; i++) {num3 *= num1;}
-      return num3;
-    }
-  }
+  //   }
+  //   //decodes an array of 0s and 1s into a number
+  //   decoder(array){
+  //     let number = 0;
+  //     for (let i = 0; i < array.length; i++) {
+  //       number += array[i] * this.quad(2,i);
+  //     }
+  //     return number;
+  //   }
+  //   //just a function that calculates square number, num1^num2
+  //   //unnecesary, but cool
+  //   quad(num1,num2){
+  //     let num3 = 1;
+  //     for (let i = 0; i < num2; i++) {num3 *= num1;}
+  //     return num3;
+  //   }
+  // }
 
   class gamemap{
     constructor(size) {
@@ -262,8 +261,9 @@ var config = {
       }
       while (checkviable != 8);
       this.foreground[randx][randy] = 1;
-      this.structure(randx,randy,0)
+      this.structure(randx,randy,rand(0,2));
     }
+    //here the structures are saved + generated when called upon
     structure(x,y,num){
       switch(num){
         case 0:
@@ -274,6 +274,24 @@ var config = {
           this.foreground[x+1][y] = 1;
           this.foreground[x+1][y+1] = 1;
           this.foreground[x+1][y-1] = 1;
+          break;
+        case 1:
+          this.foreground[x-1][y] = 1;
+          this.foreground[x-1][y+1] = 1;
+          this.foreground[x][y+1] = 1;
+          this.foreground[x][y-1] = 1;
+          this.foreground[x-1][y-1] = 1;
+          break;
+        case 2:
+          this.foreground[x-1][y] = 1;
+          this.foreground[x-2][y] = 1; 
+          this.foreground[x][y+1] = 1;
+          this.foreground[x-1][y+1] = 1;
+          this.foreground[x-2][y+1] = 1;
+          this.foreground[x+1][y+1] = 1;
+          this.foreground[x+1][y] = 1;
+          this.foreground[x][y-1] = 1;
+          this.foreground[x-1][y-1] = 1;
       }
     }
     surroundingblocks(x,y,c){
@@ -291,28 +309,61 @@ var config = {
           if (this.foreground[i][j] != 0) {
             this.background[i][j] = 7;
 
-            
+            for (let n = 0; n < 8; n++) {
+              let el = this.surroundingblocks(i,j,n);
+              let x = el[0];
+              let y = el[1];
+              console.log(x,y);
+              this.background[x][y] = 1;
+            }
           }
         }
       }
     }
+    cedge(y,x,i){
+      let dx = [1, 0, -1, 0];
+      let dy = [0, 1, 0, -1];
+      return [y + dy[i],x + dx[i]];
+    }
     connectfloor(){
+
+      const tbl = [0,0,0,3,0,0,1,2,13];
+
       for (let i = 0; i < this.size-1; i++) {
         
         for (let j = 0; j < this.size-1; j++) {
           
-          
+          let fill = [false, false, false, false, false, false, false, false];
+
+          if (this.foreground[i-1][j] == 1) {
+            fill[0] = true;
+          }
+          if (this.foreground[i][j+1] == 1) {
+            fill[1] = true;
+          }
+          if (this.foreground[i+1][j] == 1) {
+            fill[2] = true;
+          }
+          if (this.foreground[i][j-1] == 1) {
+            fill[3] = true;
+          }
+          this.foreground[i][j] = this.floordata(tbl[this.decoder(fill)]);
         }
-        
       }
     }
+    decoder(array){
+      let number = 0;
+      for (let i = 0; i < array.length; i++) {
+        number += array[i] * this.quad(2,i);
+      }
+      return number;
+    }
   }
-
   function create() {
     
     const map = new gamemap(30);
     
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 2; i++) {
       map.generatehouse();
     }
     map.fillfloor();
@@ -326,6 +377,8 @@ var config = {
 
     const layer2 = background.createLayer(0,tiles2,0,0)
     const layer = mapwithcol.createLayer(0,tiles,0,0)
+
+    layer.setCollisionBetween(1,10)
     
     //player
     this.player = this.physics.add.sprite(0, 0, 'player');
@@ -333,33 +386,25 @@ var config = {
     //cursor
     this.cursors = this.input.keyboard.createCursorKeys();
 
+    const camera = this.cameras.main;
     // Set up the camera to follow the player and have a zoom
-    this.cameras.main.startFollow(this.player);
-    this.cameras.main.setZoom(0.2);
-    this.cameras.main.setBounds(0, 0, mapwithcol.widthInPixels, mapwithcol.heightInPixels);
+    const cursors = this.input.keyboard.createCursorKeys();
+      controls = new Phaser.Cameras.Controls.FixedKeyControl({
+      camera: camera,
+      left: cursors.left,
+      right: cursors.right,
+      up: cursors.up,
+      down: cursors.down,
+      speed: 0.5,
+    });
+    camera.setZoom(0.2);
+    camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
   }
 
-  function update() {
+  
+  function update(time, delta) {
+    // Apply the controls to the camera each update tick of the game
     
-    var speed = 500;
-    var directioncheckX = 0;
-    var directioncheckY = 0;
-
-    if (this.cursors.left.isDown) {
-      directioncheckX--;
-    }
-    if (this.cursors.right.isDown) {
-      directioncheckX++;
-    }
-    this.player.setVelocityX(speed * directioncheckX);
-
-    if (this.cursors.up.isDown) {
-      directioncheckY--;
-    } 
-    if (this.cursors.down.isDown) {
-      directioncheckY++;
-    } 
-    this.player.setVelocityY(speed * directioncheckY);
   }
 
   //function for generating random number with min and max value
@@ -367,15 +412,3 @@ var config = {
     return Math.round(Math.random() * (max - min) + min);
   }
   //function that returns -1 or 1 randomly
-  function des(){
-    switch(rand(0,1)){
-      case 0:return -1;
-      case 1:return 1;
-    }
-  }
-
-  function render() {
-    game.debug.cameraInfo(game.camera, 32, 32);
-    game.debug.spriteCoords(player, 32, 500);
-
-}
