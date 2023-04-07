@@ -1,0 +1,28 @@
+{
+    "anims": [
+        {
+            "key": "walk",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 4,
+            "frames": [
+                {
+                    "key": "mainplayer",
+                    "frame": "walk_1"
+                },
+                {
+                    "key": "mainplayer",
+                    "frame": "walk_2"
+                },
+                {
+                    "key": "mainplayer",
+                    "frame": "walk_3"
+                },
+                {
+                    "key": "mainplayer",
+                    "frame": "walk_4"
+                }
+            ]
+        }
+    ]
+}
