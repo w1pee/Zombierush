@@ -1,0 +1,7 @@
+CREATE TABLE users (
+idUsers int AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    usnUsers tinytext not null,
+    emailUsers text not null,
+    pwdUsers longtext not null,
+    dateUsers datetime not null
+);

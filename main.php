@@ -1,4 +1,6 @@
-
+<?php
+  session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,8 +29,20 @@
            
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            <div>
+              <?php
+                if(isset($_SESSION['userid'])){
+                  echo '<form action="includes/logout.inc.php" method="post">
+                  <button type="submit" name="logout-submit">Logout</button>
+                  </form>';
+                  echo($_SESSION['userusn']);
+                }
+                else{
+                  echo ' <li><a href="signup.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                  <li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>';
+                }
+              ?>
+            </div>
           </ul>
         </div>
       </nav>

@@ -12,22 +12,22 @@
 <body>
     <div class="login-box">
         <h2>Login</h2>
-        <form>
+        <form action="includes/login.inc.php" method="POST">
           <div class="user-box">
-            <input type="text" name="" required="">
+            <input type="text" name="usn">
             <label>Username</label>
           </div>
           <div class="user-box">
-            <input type="password" name="" required="">
+            <input type="password" name="pwd">
             <label>Password</label>
           </div>
-          <a href="game.html">
+          <button type="submit" name="login-submit">
             <span></span>
             <span></span>
             <span></span>
             <span></span>
             Submit
-          </a>
+          </button>
         </form>
       </div>
 </body>
