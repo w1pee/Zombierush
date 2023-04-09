@@ -48,6 +48,6 @@
         </div>
       </nav>
       <div class="game" id="container"></div>
-      <script type="module" src="scripts/game2.js"></script>
+      <script type="module" src="scripts/game.js"></script>
 </body>
 </html>

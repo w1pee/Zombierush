@@ -1,22 +1,27 @@
+import Player from "./Player.js";
+
 export default class MainScene extends Phaser.Scene {
     constructor() {
         super("MainScene");
     }
     preload(){
-    
-        this.load.atlas('player', 'assets/MainPlayer/mainplayer.png', 'assets/MainPlayer/mainplayer_atlas.json');
-        this.load.animation('player_walk', 'assets/MainPl')
+        
+        Player.preload(this);
 
         this.load.image('tileset', 'assets/tileset7.png');
-        this.load.tilemapCSV('roofcol', 'assets/tilemap_roofcollision.csv');
-        this.load.tilemapCSV('roof', 'assets/tilemap_roof.csv');
-        this.load.tilemapCSV('ground', 'assets/tilemap_ground.csv');
+
+        //tilemap number 1
+        this.load.tilemapCSV('ground', 'assets/TileMaps/tilemap1_ground.csv');
+        this.load.tilemapCSV('roofCol', 'assets/TileMaps/tilemap1_roof.csv');
+        this.load.tilemapCSV('roof', 'assets/TileMaps/tilemap1_roof2.csv');
     }
     create(){
         console.log('create');
 
+
+        //tilemaps
         const map = this.make.tilemap({ key: "ground", tileWidth: 16, tileHeight: 16 });
-        const map2 = this.make.tilemap({ key: "roofcol", tileWidth: 16, tileHeight: 16 });
+        const map2 = this.make.tilemap({ key: "roofCol", tileWidth: 16, tileHeight: 16 });
         const map3 = this.make.tilemap({ key: "roof", tileWidth: 16, tileHeight: 16 });
 
         const tileset = map.addTilesetImage("tileset");
@@ -29,10 +34,21 @@ export default class MainScene extends Phaser.Scene {
         roof1.setCollisionByExclusion([ -1 ]);
 
 
-        this.player = new Phaser.Physics.Matter.Sprite(this.matter.world,0,0, 'player', 'walk_2');
-        this.add.existing(this.player);
+        this.player = new Player({scene:this,x:640,y:640,texture:'player',frame:'walk_2'});
+        
+        let tstplayer = new Player({scene:this,x:200,y:50,texture:'player',frame:'walk_2'});
 
         var roof2 = map3.createLayer(0, tileset);
+
+        //inputs from the player
+        this.player.inputkeys = this.input.keyboard.addKeys({
+            up: Phaser.Input.Keyboard.KeyCodes.W,
+            down: Phaser.Input.Keyboard.KeyCodes.S,
+            left: Phaser.Input.Keyboard.KeyCodes.A,
+            right: Phaser.Input.Keyboard.KeyCodes.D,
+            out: Phaser.Input.Keyboard.KeyCodes.F,
+            in: Phaser.Input.Keyboard.KeyCodes.R,
+        });
 
         this.inputkeys = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -42,20 +58,29 @@ export default class MainScene extends Phaser.Scene {
             out: Phaser.Input.Keyboard.KeyCodes.F,
             in: Phaser.Input.Keyboard.KeyCodes.R,
         });
-
+        //camera setup
         this.camera = this.cameras.main;
 
         this.camera.startFollow(this.player);
-        this.camera.setZoom(3);
+        this.camera.setZoom(4);
+        this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.zoom = 3;
+
+        //text
+        var text = this.add.text(0, 0, 'wut?');
+
+        text.active = false;
+
+        this.player.say('hi');
     }
 
     
     update(){
+        this.player.update();
 
         const zoomspeed = 0.1;
         const ZoomMax = 9;
-        const ZoomMin = 2.5;
+        const ZoomMin = 1;
 
         if (this.inputkeys.out.isDown) {
             if (this.zoom > ZoomMin) {
@@ -69,28 +94,7 @@ export default class MainScene extends Phaser.Scene {
         }
 
         this.camera.setZoom(this.zoom);
-
-        this.player.anims.play('walk', true);
-
-        const speed = 1.8;
-        let playerVelocity = new Phaser.Math.Vector2();
-        if(this.inputkeys.left.isDown){
-            playerVelocity.x = -1;
-        }
-        else if(this.inputkeys.right.isDown){
-            playerVelocity.x = 1;
-        }
-
-        if(this.inputkeys.up.isDown){
-            playerVelocity.y = -1;
-        }
-        else if(this.inputkeys.down.isDown){
-            playerVelocity.y = 1;
-        }
-        playerVelocity.normalize();
-        playerVelocity.scale(speed);
-        this.player.setVelocity(playerVelocity.x, playerVelocity.y);
-    }
+    } 
 } 
 
  //function for generating random number with min and max value
