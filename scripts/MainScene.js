@@ -1,4 +1,5 @@
 import Player from "./Player.js";
+import Zombie from "./Zombie.js";
 
 export default class MainScene extends Phaser.Scene {
     constructor() {
@@ -7,6 +8,7 @@ export default class MainScene extends Phaser.Scene {
     preload(){
         
         Player.preload(this);
+        Zombie.preload(this);
 
         this.load.image('tileset', 'assets/tileset7.png');
 
@@ -27,18 +29,17 @@ export default class MainScene extends Phaser.Scene {
         const tileset = map.addTilesetImage("tileset");
 
         var grnd = map.createLayer(0, tileset);
-        var roof1 = map2.createLayer(0, tileset);
-
-        var roof2 = map3.createLayer(0, tileset);
-
-        roof1.setCollisionByExclusion([ -1 ]);
-
 
         this.player = new Player({scene:this,x:640,y:640,texture:'player',frame:'walk_2'});
-        
-        let tstplayer = new Player({scene:this,x:200,y:50,texture:'player',frame:'walk_2'});
+
+        this.tstZombie = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
 
         var roof2 = map3.createLayer(0, tileset);
+        var roof1 = map2.createLayer(0, tileset);
+
+        roof1.setCollisionByExclusion([ -1 ]);
+        this.matter.world.convertTilemapLayer(roof1);
+
 
         //inputs from the player
         this.player.inputkeys = this.input.keyboard.addKeys({
@@ -66,12 +67,6 @@ export default class MainScene extends Phaser.Scene {
         this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.zoom = 3;
 
-        //text
-        var text = this.add.text(0, 0, 'wut?');
-
-        text.active = false;
-
-        this.player.say('hi');
     }
 
     

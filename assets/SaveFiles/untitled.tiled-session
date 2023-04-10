@@ -3,10 +3,21 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "untitled.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
+        "untitled.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 651,
+                "y": 624
+            }
+        },
+        "untitled.tmx#tileset7": {
+            "scaleInDock": 2
+        }
     },
     "last.exportedFilePath": "C:/xampp/htdocs/Zombierush/assets/TileMaps",
     "last.imagePath": "C:/xampp/htdocs/Zombierush/assets",
@@ -17,9 +28,11 @@
     "map.tileWidth": 16,
     "map.width": 80,
     "openFiles": [
+        "untitled.tmx"
     ],
     "project": "untitled.tiled-project",
     "recentFiles": [
+        "untitled.tmx"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {

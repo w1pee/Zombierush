@@ -5,7 +5,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.scene.add.existing(this);
 
         const {Body,Bodies} = Phaser.Physics.Matter.Matter;
-        var playerCollider = Bodies.circle(this.x,this.y,9,{isSensor:false,label:'playerCollider'});
+        var playerCollider = Bodies.circle(this.x,this.y,7,{isSensor:false,label:'playerCollider'});
         var DmgSensor = Bodies.circle(this.x,this.y,20,{isSensor:true,label:'DmgSensor'});
         const compundBody = Body.create({
             parts:[playerCollider,DmgSensor],
@@ -13,14 +13,19 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         });
         this.setExistingBody(compundBody);
         this.setFixedRotation();
+
+        this.Health = 100;
+        this.HealthTxt = scene.add.text(x, y, this.Health);
     }
 
     static preload(scene){
         scene.load.atlas('player', 'assets/MainPlayer/mainplayer.png', 'assets/MainPlayer/mainplayer_atlas.json');
     }
 
-
     update(){
+
+        this.HealthTxt.text = 'health: ' + this.Health;
+        this.Health += 1;
 
         const speed = 1.8;
         let playerVelocity = new Phaser.Math.Vector2();
@@ -40,7 +45,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         playerVelocity.normalize();
         playerVelocity.scale(speed);
         this.setVelocity(playerVelocity.x, playerVelocity.y);
-        
     }
     
     say(txt){
