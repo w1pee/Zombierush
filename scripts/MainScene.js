@@ -32,7 +32,13 @@ export default class MainScene extends Phaser.Scene {
 
         this.player = new Player({scene:this,x:640,y:640,texture:'player',frame:'walk_2'});
 
-        this.tstZombie = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
+        this.Zombies = new Array(100);
+        
+        for (let i = 0; i < this.Zombies.length; i++) {
+            this.Zombies[i] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});; 
+        }
+
+        console.log(this.Zombies);
 
         var roof2 = map3.createLayer(0, tileset);
         var roof1 = map2.createLayer(0, tileset);
@@ -71,11 +77,16 @@ export default class MainScene extends Phaser.Scene {
 
     
     update(){
+
         this.player.update();
 
+        for (let i = 0; i < this.Zombies.length; i++) {
+            this.Zombies[i].update(this.player);
+        }
+
         const zoomspeed = 0.1;
-        const ZoomMax = 9;
-        const ZoomMin = 1;
+        const ZoomMax = 8;
+        const ZoomMin = 3;
 
         if (this.inputkeys.out.isDown) {
             if (this.zoom > ZoomMin) {
@@ -89,6 +100,9 @@ export default class MainScene extends Phaser.Scene {
         }
 
         this.camera.setZoom(this.zoom);
+
+        // this.input.mousePointer.x
+        // this.input.mousePointer.y
     } 
 } 
 

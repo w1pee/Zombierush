@@ -18,4 +18,30 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         scene.load.image('zombie', 'assets/Zombies/images/Zombies.png');
         console.log('called');
     }
+    update(Player){
+
+        let Velocity = new Phaser.Math.Vector2();
+        const speed =  rand(0.1,1.3);
+        //simple system for Following Player
+        if (this.x > Player.x) {
+            Velocity.x = -1;
+        }
+        else if (this.x < Player.x){
+            Velocity.x = 1;
+        }
+
+        if (this.y > Player.y) {
+            Velocity.y = -1;
+        }
+        else if (this.y < Player.y){
+            Velocity.y = 1;
+        }
+
+        Velocity.normalize();
+        Velocity.scale(speed);
+        this.setVelocity(Velocity.x, Velocity.y);
+    }
+}
+function rand(min, max) {
+    return Math.round(Math.random() * (max - min) + min);
 }
