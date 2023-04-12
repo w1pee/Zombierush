@@ -1,4 +1,5 @@
 import Player from "./Player.js";
+import UIScene from "./UI.js";
 import Zombie from "./Zombie.js";
 
 export default class MainScene extends Phaser.Scene {
@@ -6,11 +7,12 @@ export default class MainScene extends Phaser.Scene {
         super("MainScene");
     }
     preload(){
-        
+    
         Player.preload(this);
         Zombie.preload(this);
 
         this.load.image('tileset', 'assets/tileset7.png');
+        this.load.image('cursor', 'assets/cursor.png');
 
         //tilemap number 1
         this.load.tilemapCSV('ground', 'assets/TileMaps/tilemap1_ground.csv');
@@ -18,9 +20,7 @@ export default class MainScene extends Phaser.Scene {
         this.load.tilemapCSV('roof', 'assets/TileMaps/tilemap1_roof2.csv');
     }
     create(){
-        console.log('create');
-
-
+        
         //tilemaps
         const map = this.make.tilemap({ key: "ground", tileWidth: 16, tileHeight: 16 });
         const map2 = this.make.tilemap({ key: "roofCol", tileWidth: 16, tileHeight: 16 });
@@ -32,13 +32,11 @@ export default class MainScene extends Phaser.Scene {
 
         this.player = new Player({scene:this,x:640,y:640,texture:'player',frame:'walk_2'});
 
-        this.Zombies = new Array(100);
+        this.Zombies = new Array(2);
         
         for (let i = 0; i < this.Zombies.length; i++) {
             this.Zombies[i] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});; 
         }
-
-        console.log(this.Zombies);
 
         var roof2 = map3.createLayer(0, tileset);
         var roof1 = map2.createLayer(0, tileset);
@@ -53,15 +51,9 @@ export default class MainScene extends Phaser.Scene {
             down: Phaser.Input.Keyboard.KeyCodes.S,
             left: Phaser.Input.Keyboard.KeyCodes.A,
             right: Phaser.Input.Keyboard.KeyCodes.D,
-            out: Phaser.Input.Keyboard.KeyCodes.F,
-            in: Phaser.Input.Keyboard.KeyCodes.R,
         });
 
         this.inputkeys = this.input.keyboard.addKeys({
-            up: Phaser.Input.Keyboard.KeyCodes.W,
-            down: Phaser.Input.Keyboard.KeyCodes.S,
-            left: Phaser.Input.Keyboard.KeyCodes.A,
-            right: Phaser.Input.Keyboard.KeyCodes.D,
             out: Phaser.Input.Keyboard.KeyCodes.F,
             in: Phaser.Input.Keyboard.KeyCodes.R,
         });
@@ -70,9 +62,12 @@ export default class MainScene extends Phaser.Scene {
 
         this.camera.startFollow(this.player);
         this.camera.setZoom(4);
-        this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixeawls);
         this.zoom = 3;
 
+        this.wave = 1;
+
+        this.UI = new UIScene();
     }
 
     
@@ -80,13 +75,18 @@ export default class MainScene extends Phaser.Scene {
 
         this.player.update();
 
+        this.player.on('collisionstart', function (event) {
+            console.log('col');
+            
+        });
+
         for (let i = 0; i < this.Zombies.length; i++) {
             this.Zombies[i].update(this.player);
         }
 
         const zoomspeed = 0.1;
         const ZoomMax = 8;
-        const ZoomMin = 3;
+        const ZoomMin = 1;
 
         if (this.inputkeys.out.isDown) {
             if (this.zoom > ZoomMin) {
