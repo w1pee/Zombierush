@@ -32,12 +32,6 @@ export default class MainScene extends Phaser.Scene {
 
         this.player = new Player({scene:this,x:640,y:640,texture:'player',frame:'walk_2'});
 
-        this.Zombies = new Array(2);
-        
-        for (let i = 0; i < this.Zombies.length; i++) {
-            this.Zombies[i] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});; 
-        }
-
         var roof2 = map3.createLayer(0, tileset);
         var roof1 = map2.createLayer(0, tileset);
 
@@ -56,7 +50,9 @@ export default class MainScene extends Phaser.Scene {
         this.inputkeys = this.input.keyboard.addKeys({
             out: Phaser.Input.Keyboard.KeyCodes.F,
             in: Phaser.Input.Keyboard.KeyCodes.R,
+            kill: Phaser.Input.Keyboard.KeyCodes.E
         });
+
         //camera setup
         this.camera = this.cameras.main;
 
@@ -65,32 +61,31 @@ export default class MainScene extends Phaser.Scene {
         this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixeawls);
         this.zoom = 3;
 
-        this.wave = 1;
+        //UI
+        this.ui = new UIScene();
 
-        this.UI = new UIScene();
+        this.Wave = 1;
+        this.WaveOver = false;
+
+        this.Zombies = new Array(10);
+
+        for(let i = 0; i < this.Zombies.length; i++){
+            this.Zombies[i] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
+        }
     }
 
     
     update(){
+        this.player.update(this);
 
-        this.player.update();
-
-        this.player.on('collisionstart', function (event) {
-            console.log('col');
-            
-        });
-
-        for (let i = 0; i < this.Zombies.length; i++) {
-            this.Zombies[i].update(this.player);
-        }
-
+        //Camera Zoom out/in
         const zoomspeed = 0.1;
         const ZoomMax = 8;
         const ZoomMin = 1;
 
         if (this.inputkeys.out.isDown) {
             if (this.zoom > ZoomMin) {
-                this.zoom -= zoomspeed;;
+                this.zoom -= zoomspeed;
             }
         }
         else if(this.inputkeys.in.isDown) {
@@ -98,11 +93,25 @@ export default class MainScene extends Phaser.Scene {
                 this.zoom += zoomspeed;
             }
         }
-
         this.camera.setZoom(this.zoom);
 
         // this.input.mousePointer.x
         // this.input.mousePointer.y
+
+        //Zombies:
+        if (this.WaveOver == true) {
+            this.Zombies = new Array(this.Wave * 10);
+            for(let i = 0; i < this.Zombies.length; i++){
+                this.Zombies[i] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
+            }
+            this.WaveOver = false;
+        }
+        
+        if (this.Zombies.length == 0){
+            this.WaveOver = true;
+        }
+
+
     } 
 } 
 
