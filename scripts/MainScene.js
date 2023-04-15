@@ -7,7 +7,7 @@ export default class MainScene extends Phaser.Scene {
         super("MainScene");
     }
     preload(){
-    
+        //preload of player + zombie class
         Player.preload(this);
         Zombie.preload(this);
 
@@ -50,7 +50,8 @@ export default class MainScene extends Phaser.Scene {
         this.inputkeys = this.input.keyboard.addKeys({
             out: Phaser.Input.Keyboard.KeyCodes.F,
             in: Phaser.Input.Keyboard.KeyCodes.R,
-            kill: Phaser.Input.Keyboard.KeyCodes.E
+            kill: Phaser.Input.Keyboard.KeyCodes.E,
+            respawn: Phaser.Input.Keyboard.KeyCodes.Q
         });
 
         //camera setup
@@ -61,22 +62,24 @@ export default class MainScene extends Phaser.Scene {
         this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixeawls);
         this.zoom = 3;
 
-        //UI
-        this.ui = new UIScene();
+        //waves
+        this.Wave = 0;
 
-        this.Wave = 1;
-        this.WaveOver = false;
+        this.Zombienum = 3;
 
-        this.Zombies = new Array(10);
+        this.Zombies = new Array(3);
 
         for(let i = 0; i < this.Zombies.length; i++){
             this.Zombies[i] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
         }
-    }
 
-    
+        console.log(this.Zombies);
+    }
     update(){
-        this.player.update(this);
+
+        this.player.update();
+
+        this.events.emit('setValues',this.player.Health, this.Zombienum);
 
         //Camera Zoom out/in
         const zoomspeed = 0.1;
@@ -95,22 +98,45 @@ export default class MainScene extends Phaser.Scene {
         }
         this.camera.setZoom(this.zoom);
 
+        if(this.inputkeys.respawn.isDown) {
+            for(let i = 0; i < this.Zombies.length; i++){
+                if (this.Zombies[i] != undefined) {
+                    this.Zombies[i].destroy();
+                }
+                this.Zombies[i] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
+            }
+        }
+
+        if(this.inputkeys.kill.isDown){
+            if (this.Zombies[1] != undefined) {
+                this.Zombies[1].destroy();
+                this.Zombies[1] = undefined;
+            }
+        }
+        this.Zombienum = 0;
+
+        for (let i = 0; i < this.Zombies.length; i++) {
+            if (this.Zombies[i] != undefined) {
+                this.Zombienum++;
+            }
+        }
+        console.log(this.Zombienum);
+
         // this.input.mousePointer.x
         // this.input.mousePointer.y
 
-        //Zombies:
-        if (this.WaveOver == true) {
-            this.Zombies = new Array(this.Wave * 10);
-            for(let i = 0; i < this.Zombies.length; i++){
-                this.Zombies[i] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
-            }
-            this.WaveOver = false;
-        }
+        // //Zombies:
+        // if (this.WaveOver == true) {
+        //     this.Zombies = new Array(this.Wave * 10);
+        //     for(let i = 0; i < this.Zombies.length; i++){
+        //         this.Zombies[i] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
+        //     }
+        //     this.WaveOver = false;
+        // }
         
-        if (this.Zombies.length == 0){
-            this.WaveOver = true;
-        }
-
+        // if (this.Zombies.length == 0){
+        //     this.WaveOver = true;
+        // }
 
     } 
 } 
