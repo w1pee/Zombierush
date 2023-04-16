@@ -78,6 +78,12 @@ export default class MainScene extends Phaser.Scene {
     update(){
 
         this.player.update();
+        
+        for(let i = 0; i < this.Zombies.length; i++){
+            if (this.Zombies[i] != undefined) {
+                this.Zombies[i].update();
+            }
+        }
 
         this.events.emit('setValues',this.player.Health, this.Zombienum);
 
@@ -98,21 +104,7 @@ export default class MainScene extends Phaser.Scene {
         }
         this.camera.setZoom(this.zoom);
 
-        if(this.inputkeys.respawn.isDown) {
-            for(let i = 0; i < this.Zombies.length; i++){
-                if (this.Zombies[i] != undefined) {
-                    this.Zombies[i].destroy();
-                }
-                this.Zombies[i] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
-            }
-        }
-
-        if(this.inputkeys.kill.isDown){
-            if (this.Zombies[1] != undefined) {
-                this.Zombies[1].destroy();
-                this.Zombies[1] = undefined;
-            }
-        }
+        //counts the number of zombies
         this.Zombienum = 0;
 
         for (let i = 0; i < this.Zombies.length; i++) {
@@ -120,7 +112,38 @@ export default class MainScene extends Phaser.Scene {
                 this.Zombienum++;
             }
         }
-        console.log(this.Zombienum);
+
+        //kills one zombie
+        let zmbtokil = this.Zombienum -1;
+        if(this.inputkeys.kill.isDown){
+            if (this.Zombies[zmbtokil] != undefined) {
+                this.Zombies[zmbtokil].destroy();
+                this.Zombies[zmbtokil] = undefined;
+            }
+        }
+
+
+        //spawns zombie
+        if(this.inputkeys.respawn.isDown) {
+
+            //this is the system for spawing zombies
+            // it first checks if an undefined spot is avaible and fills that in
+            //if not it creates a new spot
+            let loop = true;
+            let n = 0;
+            do{
+                if (this.Zombies[n] == undefined) {
+                    loop = false;
+                    this.Zombies[n] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
+                }
+                n++;
+                if(n == this.Zombies.length){
+                    loop = false;
+                    this.Zombies[n] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
+                }
+            }
+            while(loop == true)
+        }
 
         // this.input.mousePointer.x
         // this.input.mousePointer.y
@@ -144,4 +167,8 @@ export default class MainScene extends Phaser.Scene {
  //function for generating random number with min and max value
  function rand(min, max) {
   return Math.round(Math.random() * (max - min) + min);
+}
+
+function tst(){
+    console.log('success!');
 }
