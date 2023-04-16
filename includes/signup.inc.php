@@ -6,6 +6,34 @@ if(isset($_POST['signup-submit'])){
         $password = $_POST['pwd'];
         $passwordrepeat = $_POST['pwd-rep'];
         $date = date('Y-m-d H:i:s');
+        $uppercase = preg_match('@[A-Z]@', $password);
+        $number    = preg_match('@[0-9]@', $password);
+
+        //Errorhandlers
+        if (empty($username) || empty($email) || empty($password) || empty($passwordrepeat))   {
+                header("Location: ../signup.php?error=emptyfields&usn=".$username."&mail=".$email);
+                exit();
+        }
+        elseif(!filter_var($email, FILTER_VALIDATE_EMAIL) && !preg_match("/^[a-zA-Z0-9]*$/", $username)){
+                header("Location: ../signup.php?error=invalidmailusn");
+                exit();
+        }
+        elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                header("Location: ../signup.php?error=invalidmail&usn=".$username);
+                exit();
+        }
+        elseif(!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
+                header("Location: ../signup.php?error=invalidusn&mail=".$email);
+                exit();
+        }
+        elseif ($password !== $passwordrepeat){
+                header("Location: ../signup.php?error=passwordcheck&usn=".$username."&mail=".$email);
+                exit();
+        }
+        elseif(!$uppercase || !$number || strlen($password) < 4) {
+                header("Location: ../signup.php?error=weakpwd&usn=".$username."&mail=".$email);
+                exit();
+        }
 
         $sql = "SELECT usnUsers FROM users WHERE usnUsers=?;";
         $stmt = mysqli_stmt_init($conn);
