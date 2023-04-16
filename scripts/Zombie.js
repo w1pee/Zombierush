@@ -27,32 +27,32 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         this.healthTxt.x = this.x;
         this.healthTxt.y = this.y+12;
 
-        let Velocity = new Phaser.Math.Vector2();
-        const speed =  rand(0.1,1);
-        //simple system for Following Player
-        if (this.x > Player.x + 5) {
-            Velocity.x = -1;
-        }
-        else if (this.x < Player.x - 5){
-            Velocity.x = 1;
-        }
-        else {
-            Velocity.x = 0;
-        }
+        // let Velocity = new Phaser.Math.Vector2();
+        // const speed =  rand(0.1,1);
+        // //simple system for Following Player
+        // if (this.x > Player.x + 5) {
+        //     Velocity.x = -1;
+        // }
+        // else if (this.x < Player.x - 5){
+        //     Velocity.x = 1;
+        // }
+        // else {
+        //     Velocity.x = 0;
+        // }
 
-        if (this.y > Player.y + 5) {
-            Velocity.y = -1;
-        }
-        else if (this.y < Player.y - 5){
-            Velocity.y = 1;
-        }
-        else {
-            Velocity.y = 0;
-        }
+        // if (this.y > Player.y + 5) {
+        //     Velocity.y = -1;
+        // }
+        // else if (this.y < Player.y - 5){
+        //     Velocity.y = 1;
+        // }
+        // else {
+        //     Velocity.y = 0;
+        // }
 
-        Velocity.normalize();
-        Velocity.scale(speed);
-        this.setVelocity(Velocity.x, Velocity.y);
+        // Velocity.normalize();
+        // Velocity.scale(speed);
+        // this.setVelocity(Velocity.x, Velocity.y);
     }
 }
 function rand(min, max) {
