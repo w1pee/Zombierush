@@ -1,5 +1,4 @@
 import Player from "./Player.js";
-import UIScene from "./UI.js";
 import Zombie from "./Zombie.js";
 
 export default class MainScene extends Phaser.Scene {
@@ -65,32 +64,32 @@ export default class MainScene extends Phaser.Scene {
         //waves
         this.Wave = 0;
 
-        this.Zombienum = 3;
+        this.Zombienum;
 
-        this.Zombies = new Array(3);
+        this.Zombies = new Array();
 
-        for(let i = 0; i < this.Zombies.length; i++){
-            this.Zombies[i] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
-        }
+        this.ui = this.scene.get('UI');
 
-        console.log(this.Zombies);
+        
     }
+
     update(){
 
+        //update of Player + Zombies + UI
         this.player.update();
         
         for(let i = 0; i < this.Zombies.length; i++){
             if (this.Zombies[i] != undefined) {
-                this.Zombies[i].update();
+                this.Zombies[i].update(this.player);
             }
         }
-
         this.events.emit('setValues',this.player.Health, this.Zombienum);
+        //----------------------------------------------------------------
 
         //Camera Zoom out/in
         const zoomspeed = 0.1;
         const ZoomMax = 8;
-        const ZoomMin = 1;
+        const ZoomMin = 2;
 
         if (this.inputkeys.out.isDown) {
             if (this.zoom > ZoomMin) {
@@ -103,6 +102,7 @@ export default class MainScene extends Phaser.Scene {
             }
         }
         this.camera.setZoom(this.zoom);
+        //----------------------------------------------------------------
 
         //counts the number of zombies
         this.Zombienum = 0;
@@ -112,63 +112,86 @@ export default class MainScene extends Phaser.Scene {
                 this.Zombienum++;
             }
         }
+        //----------------------------------------------------------------
 
-        //kills one zombie
-        let zmbtokil = this.Zombienum -1;
+        //kills all zombies
         if(this.inputkeys.kill.isDown){
-            if (this.Zombies[zmbtokil] != undefined) {
-                this.Zombies[zmbtokil].destroy();
-                this.Zombies[zmbtokil] = undefined;
-            }
-        }
-
-
-        //spawns zombie
-        if(this.inputkeys.respawn.isDown) {
-
-            //this is the system for spawing zombies
-            // it first checks if an undefined spot is avaible and fills that in
-            //if not it creates a new spot
-            let loop = true;
-            let n = 0;
-            do{
-                if (this.Zombies[n] == undefined) {
-                    loop = false;
-                    this.Zombies[n] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
-                }
-                n++;
-                if(n == this.Zombies.length){
-                    loop = false;
-                    this.Zombies[n] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
+            for(let i = 0; i < this.Zombies.length; i++){
+                if(this.Zombies[i] != undefined){
+                    this.Zombies[i].healthTxt.destroy();
+                    this.Zombies[i].destroy();
+                    this.Zombies[i] = undefined;
                 }
             }
-            while(loop == true)
         }
+        //----------------------------------------------------------------
 
+        
         // this.input.mousePointer.x
         // this.input.mousePointer.y
-
-        // //Zombies:
-        // if (this.WaveOver == true) {
-        //     this.Zombies = new Array(this.Wave * 10);
-        //     for(let i = 0; i < this.Zombies.length; i++){
-        //         this.Zombies[i] = new Zombie({scene:this,x:640,y:640,texture:'zombie'});
-        //     }
-        //     this.WaveOver = false;
-        // }
         
-        // if (this.Zombies.length == 0){
-        //     this.WaveOver = true;
-        // }
-
+        //Wave
+        //calculates based on the current Wave the amounts of zombies to spawn
+        //then spawns them
+        if(this.Zombienum == 0){
+            for(let i = 0; i < (5*(this.Wave+1))-1; i++){
+                this.spawn();
+            }
+            this.Wave += 1;
+        }
+        //----------------------------------------------------------------
     } 
-} 
+    //spawns zombie
+    spawn(){
+        //generates random number for spawn location of the zombie
+        let xspawn;
+        let yspawn;
+        let check;
 
- //function for generating random number with min and max value
- function rand(min, max) {
-  return Math.round(Math.random() * (max - min) + min);
+        do{
+            xspawn = rand(0,1280);
+            yspawn = rand(0,1280);
+        
+            //check x
+            if(xspawn > this.player.x-300 && xspawn < this.player.x+300){
+                //check y
+                if(yspawn > this.player.y-300 && yspawn < this.player.y+300){
+                check = true;
+                }
+                else{
+                    check = false;
+                }
+            }
+            else{
+                check = false;
+            }
+
+        }
+        while(check == true);
+        //----------------------------------------------------------------
+
+        //this is the system for spawing zombies
+        //it first checks if an undefined spot is avaible and fills that in
+        //if not it creates a new spot
+        let loop = true;
+        let n = 0;
+        do{
+            if (this.Zombies[n] == undefined) {
+                loop = false;
+                this.Zombies[n] = new Zombie({scene:this,x:xspawn,y:yspawn,texture:'zombie'});
+            }
+            n++;
+            if(n == this.Zombies.length){
+                loop = false;
+                this.Zombies[n] = new Zombie({scene:this,x:xspawn,y:yspawn,texture:'zombie'});
+            }
+        }
+        while(loop == true)
+        //----------------------------------------------------------------
+    }
 }
 
-function tst(){
-    console.log('success!');
+ //function for generating random number with min and max value
+function rand(min, max) {
+    return Math.round(Math.random() * (max - min) + min);
 }

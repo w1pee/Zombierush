@@ -26,14 +26,20 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
         const speed = 1.8;
         let playerVelocity = new Phaser.Math.Vector2();
-        if(this.inputkeys.left.isDown){
+        if(this.inputkeys.left.isDown && this.inputkeys.right.isDown){
+            playerVelocity.x = 0;
+        }
+        else if(this.inputkeys.left.isDown){
             playerVelocity.x = -1;
         }
         else if(this.inputkeys.right.isDown){
             playerVelocity.x = 1;
         }
 
-        if(this.inputkeys.up.isDown){
+        if(this.inputkeys.up.isDown && this.inputkeys.down.isDown){
+            playerVelocity.y = 0;
+        }
+        else if(this.inputkeys.up.isDown){
             playerVelocity.y = -1;
         }
         else if(this.inputkeys.down.isDown){

@@ -27,6 +27,11 @@ export default class UIScene extends Phaser.Scene{
             this.ZombieText.text = 'Zombies: ' + zmb;
         },this);
 
+        myGame.events.on('announce', function(n)
+        {
+            let announce = this.add.text(640,400,'Wave ' + n);
+            
+        },this);
     }
 
     update(){
