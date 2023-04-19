@@ -65,12 +65,12 @@ export default class MainScene extends Phaser.Scene {
         this.Wave = 0;
 
         this.Zombienum;
+        this.Spawnnum = 5;
 
         this.Zombies = new Array();
 
-        this.ui = this.scene.get('UI');
-
-        
+        //cursor
+        this.input.setDefaultCursor('url(assets/cursor.png), pointer');
     }
 
     update(){
@@ -126,7 +126,6 @@ export default class MainScene extends Phaser.Scene {
         }
         //----------------------------------------------------------------
 
-        
         // this.input.mousePointer.x
         // this.input.mousePointer.y
         
@@ -134,16 +133,23 @@ export default class MainScene extends Phaser.Scene {
         //calculates based on the current Wave the amounts of zombies to spawn
         //then spawns them
         if(this.Zombienum == 0){
-            for(let i = 0; i < (5*(this.Wave+1))-1; i++){
-                this.spawn();
-            }
+            this.Spawnnum =  (5*(this.Wave+1))-1;
             this.Wave += 1;
+            this.events.emit('announce', this.Wave)
+        }
+        //----------------------------------------------------------------
+        //it seperatly spawns the zombies, so it doesnt spawn every zombie in one frame
+        //this drastically improves performence, as the game does not have to wait for every zombie to spawn to start the next frame
+        if(this.Spawnnum > 0){
+            this.spawn();
+            this.Spawnnum--;
         }
         //----------------------------------------------------------------
     } 
     //spawns zombie
     spawn(){
         //generates random number for spawn location of the zombie
+        //need to improve later
         let xspawn;
         let yspawn;
         let check;
@@ -190,8 +196,7 @@ export default class MainScene extends Phaser.Scene {
         //----------------------------------------------------------------
     }
 }
-
- //function for generating random number with min and max value
+//function for generating random number with min and max value
 function rand(min, max) {
     return Math.round(Math.random() * (max - min) + min);
 }

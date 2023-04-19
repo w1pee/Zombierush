@@ -51,23 +51,23 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
         // this.on('pointerdown', this.shootBullet, this)
     }
-    // shootBullet(scene) {
-    //     console.log('working bullet');
-    //     // Create a new bullet sprite at the player's position
-    //     const bullet = scene.add.sprite(this.x, this.y, 'bullet');
+    shootBullet(scene) {
+        console.log('working bullet');
+        // Create a new bullet sprite at the player's position
+        const bullet = scene.add.sprite(this.x, this.y, 'bullet');
         
-    //     // // Add the bullet to the physics engine
-    //     // this.scene.physics.add.existing(bullet);
+        // // Add the bullet to the physics engine
+        // this.scene.physics.add.existing(bullet);
       
-    //     // // Set the bullet's velocity in the direction the player is facing
-    //     // const velocity = new Phaser.Math.Vector2();
-    //     // velocity.x = Math.cos(this.rotation) * 1000;
-    //     // velocity.y = Math.sin(this.rotation) * 1000;
-    //     // bullet.body.setVelocity(velocity.x, velocity.y);
+        // // Set the bullet's velocity in the direction the player is facing
+        // const velocity = new Phaser.Math.Vector2();
+        // velocity.x = Math.cos(this.rotation) * 1000;
+        // velocity.y = Math.sin(this.rotation) * 1000;
+        // bullet.body.setVelocity(velocity.x, velocity.y);
       
-    //     // Destroy the bullet after 2 seconds
-    //     this.scene.time.delayedCall(2000, () => {
-    //       bullet.destroy();
-    //     });
-    //   }
+        // Destroy the bullet after 2 seconds
+        this.scene.time.delayedCall(2000, () => {
+          bullet.destroy();
+        });
+      }
 }
