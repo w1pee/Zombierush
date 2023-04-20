@@ -14,7 +14,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         this.setFixedRotation();
 
         this.health = 20;
-        this.speed = rand(0.1,2);
+        this.speed = rand(0.1,1.4);
         this.healthTxt = scene.add.text(this.x,this.y,this.health ,{ font: '10px Arial', fill: '#000000' });
         this.healthTxt.setOrigin(0.5,0.5)
     }
@@ -22,7 +22,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
     static preload(scene){
         scene.load.image('zombie', 'assets/Zombies/images/Zombies.png');
     }
-    update(Player){
+    update(Player,mousex,mousey){
         
         this.healthTxt.x = this.x;
         this.healthTxt.y = this.y+12;

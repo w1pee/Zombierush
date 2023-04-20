@@ -10,11 +10,18 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         const compundBody = Body.create({
             parts:[playerCollider,DmgSensor],
             frictionAir:0.5,
+            collisionFilter: {
+                // Set the category and mask bits for the bullet's collision filter
+                category: 0x0001, // category 0x0001
+            }
         });
         this.setExistingBody(compundBody);
         this.setFixedRotation();
 
         this.Health = 100;
+        this.speed = 2.5;
+        this.bulletspeed = 10;
+        this.firerate = 2;
     }
 
     static preload(scene){
@@ -22,9 +29,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         scene.load.image('bullet', 'assets/MainPlayer/bullet.png')
     }
 
-    update(){
-
-        const speed = 1.8;
+    update(scene){
+        //movement system
+        //X
         let playerVelocity = new Phaser.Math.Vector2();
         if(this.inputkeys.left.isDown && this.inputkeys.right.isDown){
             playerVelocity.x = 0;
@@ -35,7 +42,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         else if(this.inputkeys.right.isDown){
             playerVelocity.x = 1;
         }
-
+        //Y
         if(this.inputkeys.up.isDown && this.inputkeys.down.isDown){
             playerVelocity.y = 0;
         }
@@ -46,17 +53,69 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
             playerVelocity.y = 1;
         }
         playerVelocity.normalize();
-        playerVelocity.scale(speed);
+        playerVelocity.scale(this.speed);
         this.setVelocity(playerVelocity.x, playerVelocity.y);
+        //----------------------------------------------------------------
 
-        // this.on('pointerdown', this.shootBullet, this)
+        // boolean flag to track if shoot button has been pressed
+        this.shootPressed = false;
+        //----------------------------------------------------------------
+
+        // listen for mouse input to shoot
+        scene.input.on('pointerdown', function(pointer) {
+            if (pointer.leftButtonDown() && !this.shootPressed) {
+                this.shootBullet(scene);
+                this.shootPressed = true;
+            }
+        }, this);
+        //----------------------------------------------------------------
+
+        // reset shootPressed flag when left mouse button is released
+        scene.input.on('pointerup', function(pointer) {
+            if (pointer.leftButtonReleased()) {
+                this.shootPressed = false;
+            }
+        }, this);
+        //----------------------------------------------------------------
     }
     shootBullet(scene) {
-        console.log('working bullet');
-        // Create a new bullet sprite at the player's position
-        const bullet = scene.add.sprite(this.x, this.y, 'bullet');
         
-        // // Add the bullet to the physics engine
+        //vector for the bullet
+        let BulletVector = new Phaser.Math.Vector2();
+        //----------------------------------------------------------------
+
+        //x & y position of the cursor(where the bullet is supposed to go)
+        let x = scene.input.mousePointer.x;
+        let y = scene.input.mousePointer.y;
+        //----------------------------------------------------------------
+        console.log([x,y]);
+        // Create a new bullet sprite at the player's position
+        const bullet = scene.matter.add.sprite(x, y, 'bullet');
+        //----------------------------------------------------------------
+
+        //Custom collider for bullet
+        const {Body,Bodies} = Phaser.Physics.Matter.Matter;
+        var newcollider = Bodies.circle(x,y,2,{label:'BulletCollider'})
+        const BulletBody = Body.create({
+            parts:[newcollider],
+            collisionFilter: {
+                // Set the category and mask bits for the bullet's collision filter
+                category: 0x0002, // category 0x0002
+                mask: 0x0001 // mask 0x0001 (collide with category 0x0001)
+            }
+        });
+        bullet.setExistingBody(BulletBody);
+        //----------------------------------------------------------------
+
+        // Destroy the bullet after 2 seconds
+        this.scene.time.delayedCall(2000, () => {
+            bullet.destroy();
+        });
+        //----------------------------------------------------------------
+    }
+}
+
+ // // Add the bullet to the physics engine
         // this.scene.physics.add.existing(bullet);
       
         // // Set the bullet's velocity in the direction the player is facing
@@ -65,9 +124,3 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         // velocity.y = Math.sin(this.rotation) * 1000;
         // bullet.body.setVelocity(velocity.x, velocity.y);
       
-        // Destroy the bullet after 2 seconds
-        this.scene.time.delayedCall(2000, () => {
-          bullet.destroy();
-        });
-      }
-}

@@ -1,5 +1,6 @@
 import Player from "./Player.js";
 import Zombie from "./Zombie.js";
+import MyCamera from "./MyCamera.js";
 
 export default class MainScene extends Phaser.Scene {
     constructor() {
@@ -54,30 +55,38 @@ export default class MainScene extends Phaser.Scene {
         });
 
         //camera setup
-        this.camera = this.cameras.main;
+        this.cam = new MyCamera(this,0,0,1280,800);
+        this.cameras.addExisting(this.cam);
+        this.cameras.main = this.cam;
 
-        this.camera.startFollow(this.player);
-        this.camera.setZoom(4);
-        this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixeawls);
-        this.zoom = 3;
+        //Camera follow
+        this.cameras.main.follow(this.player)
+        //----------------------------------------------------------------
+        
+        // this.camera.startFollow(this.player);
+        // this.camera.setZoom(4);
+        // this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixeawls);
+        // this.zoom = 3;
 
         //waves
         this.Wave = 0;
-
         this.Zombienum;
         this.Spawnnum = 5;
-
         this.Zombies = new Array();
+        //----------------------------------------------------------------
 
         //cursor
         this.input.setDefaultCursor('url(assets/cursor.png), pointer');
+        //----------------------------------------------------------------
     }
 
     update(){
-
         //update of Player + Zombies + UI
-        this.player.update();
+        this.player.update(this);
         
+        //this.input.mousePointer.x
+        // this.input.mousePointer.y
+
         for(let i = 0; i < this.Zombies.length; i++){
             if (this.Zombies[i] != undefined) {
                 this.Zombies[i].update(this.player);
@@ -87,21 +96,21 @@ export default class MainScene extends Phaser.Scene {
         //----------------------------------------------------------------
 
         //Camera Zoom out/in
-        const zoomspeed = 0.1;
-        const ZoomMax = 8;
-        const ZoomMin = 2;
+        // const zoomspeed = 0.1;
+        // const ZoomMax = 8;
+        // const ZoomMin = 2;
 
-        if (this.inputkeys.out.isDown) {
-            if (this.zoom > ZoomMin) {
-                this.zoom -= zoomspeed;
-            }
-        }
-        else if(this.inputkeys.in.isDown) {
-            if (this.zoom < ZoomMax) {
-                this.zoom += zoomspeed;
-            }
-        }
-        this.camera.setZoom(this.zoom);
+        // if (this.inputkeys.out.isDown) {
+        //     if (this.zoom > ZoomMin) {
+        //         this.zoom -= zoomspeed;
+        //     }
+        // }
+        // else if(this.inputkeys.in.isDown) {
+        //     if (this.zoom < ZoomMax) {
+        //         this.zoom += zoomspeed;
+        //     }
+        // }
+        // this.camera.setZoom(this.zoom);
         //----------------------------------------------------------------
 
         //counts the number of zombies
@@ -125,9 +134,6 @@ export default class MainScene extends Phaser.Scene {
             }
         }
         //----------------------------------------------------------------
-
-        // this.input.mousePointer.x
-        // this.input.mousePointer.y
         
         //Wave
         //calculates based on the current Wave the amounts of zombies to spawn
