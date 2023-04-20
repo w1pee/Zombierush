@@ -14,7 +14,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         this.setFixedRotation();
 
         this.health = 20;
-
+        this.speed = rand(0.1,2);
         this.healthTxt = scene.add.text(this.x,this.y,this.health ,{ font: '10px Arial', fill: '#000000' });
         this.healthTxt.setOrigin(0.5,0.5)
     }
@@ -37,22 +37,21 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         }
 
         let Velocity = new Phaser.Math.Vector2();
-        const speed =  rand(0.1,1);
         //simple system for Following Player
-        if (this.x > Player.x - 5) {
+        if (this.x > Player.x + 10) {
             Velocity.x = -1;
         }
-        else if (this.x < Player.x + 5){
+        else if (this.x < Player.x - 10){
             Velocity.x = 1;
         }
         else {
             Velocity.x = 0;
         }
 
-        if (this.y > Player.y - 5) {
+        if (this.y > Player.y + 10) {
             Velocity.y = -1;
         }
-        else if (this.y < Player.y + 5){
+        else if (this.y < Player.y - 10){
             Velocity.y = 1;
         }
         else {
@@ -60,7 +59,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         }
 
         Velocity.normalize();
-        Velocity.scale(speed);
+        Velocity.scale(this.speed);
         this.setVelocity(Velocity.x, Velocity.y);
         //----------------------------------------------------------------
     }
