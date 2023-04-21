@@ -14,8 +14,8 @@
     <title>Zombierush</title>
     <style>
       .game{
-        border-style: groove;
-        border-width: 10px;
+        /* border-style: groove;
+        border-width: 10px; */
       }
     </style>
 </head>

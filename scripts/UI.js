@@ -1,7 +1,7 @@
 export default class UIScene extends Phaser.Scene{
     constructor(){
         super('UIScene');
-        Phaser.Scene.call(this, { key: 'UIScene', active: true });
+        // Phaser.Scene.call(this, { key: 'UIScene', active: true });
     }
 
     create(){

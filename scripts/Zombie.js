@@ -22,7 +22,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
     static preload(scene){
         scene.load.image('zombie', 'assets/Zombies/images/Zombies.png');
     }
-    update(Player,mousex,mousey){
+    update(Player){
         
         this.healthTxt.x = this.x;
         this.healthTxt.y = this.y+12;
@@ -37,7 +37,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         }
 
         let Velocity = new Phaser.Math.Vector2();
-        //simple system for Following Player
+        //simple system for Following Player    //bad way to do this
         if (this.x > Player.x + 10) {
             Velocity.x = -1;
         }

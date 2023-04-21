@@ -4,7 +4,7 @@ import MyCamera from "./MyCamera.js";
 
 export default class MainScene extends Phaser.Scene {
     constructor() {
-        super("MainScene");
+        super({key: "MainScene"});
     }
     preload(){
         //preload of player + zombie class
@@ -20,7 +20,6 @@ export default class MainScene extends Phaser.Scene {
         this.load.tilemapCSV('roof', 'assets/TileMaps/tilemap1_roof2.csv');
     }
     create(){
-        
         //tilemaps
         const map = this.make.tilemap({ key: "ground", tileWidth: 16, tileHeight: 16 });
         const map2 = this.make.tilemap({ key: "roofCol", tileWidth: 16, tileHeight: 16 });
@@ -30,7 +29,7 @@ export default class MainScene extends Phaser.Scene {
 
         var grnd = map.createLayer(0, tileset);
 
-        this.player = new Player({scene:this,x:640,y:640,texture:'player',frame:'walk_2'});
+        this.player = new Player({scene:this,x:640,y:400,texture:'player',frame:'walk_2'});
 
         var roof2 = map3.createLayer(0, tileset);
         var roof1 = map2.createLayer(0, tileset);
@@ -44,14 +43,12 @@ export default class MainScene extends Phaser.Scene {
             up: Phaser.Input.Keyboard.KeyCodes.W,
             down: Phaser.Input.Keyboard.KeyCodes.S,
             left: Phaser.Input.Keyboard.KeyCodes.A,
-            right: Phaser.Input.Keyboard.KeyCodes.D,
+            right: Phaser.Input.Keyboard.KeyCodes.D
         });
 
         this.inputkeys = this.input.keyboard.addKeys({
-            out: Phaser.Input.Keyboard.KeyCodes.F,
-            in: Phaser.Input.Keyboard.KeyCodes.R,
             kill: Phaser.Input.Keyboard.KeyCodes.E,
-            respawn: Phaser.Input.Keyboard.KeyCodes.Q
+            pause: Phaser.Input.Keyboard.KeyCodes.ESC
         });
 
         //camera setup
@@ -77,6 +74,8 @@ export default class MainScene extends Phaser.Scene {
 
         //cursor
         this.input.setDefaultCursor('url(assets/cursor.png), pointer');
+
+        this.cursorCords = [];
         //----------------------------------------------------------------
     }
 
@@ -85,14 +84,22 @@ export default class MainScene extends Phaser.Scene {
         this.player.update(this);
         
         //this.input.mousePointer.x
-        // this.input.mousePointer.y
+        //this.input.mousePointer.y
 
         for(let i = 0; i < this.Zombies.length; i++){
             if (this.Zombies[i] != undefined) {
-                this.Zombies[i].update(this.player);
+                // this.Zombies[i].update(this.player);
             }
         }
         this.events.emit('setValues',this.player.Health, this.Zombienum);
+        //----------------------------------------------------------------
+
+        //Mouse cursor
+        // this.cursorCords[0] = [this.player.x, this.player.y];
+        // this.cursorCords[1] = [this.cameras.main.scrollX+640,this.cameras.main.scrollY+400];
+        // console.log(this.cursorCords);
+
+        //[this.cameras.main.scrollX,this.cameras.main.scrollY]
         //----------------------------------------------------------------
 
         //Camera Zoom out/in
@@ -112,7 +119,16 @@ export default class MainScene extends Phaser.Scene {
         // }
         // this.camera.setZoom(this.zoom);
         //----------------------------------------------------------------
-
+        
+        //Pauses the game
+        if(this.inputkeys.pause.isDown){
+            //Delete UI
+            this.scene.stop("UIScene");
+            //Game Pause
+            this.scene.launch('Pause')
+            this.scene.pause();
+        }
+        //----------------------------------------------------------------
         //counts the number of zombies
         this.Zombienum = 0;
 
@@ -139,7 +155,7 @@ export default class MainScene extends Phaser.Scene {
         //calculates based on the current Wave the amounts of zombies to spawn
         //then spawns them
         if(this.Zombienum == 0){
-            this.Spawnnum =  (5*(this.Wave+1))-1;
+            this.Spawnnum = 5*this.Wave+1 * rand(1,3);
             this.Wave += 1;
             this.events.emit('announce', this.Wave)
         }
@@ -202,7 +218,10 @@ export default class MainScene extends Phaser.Scene {
         //----------------------------------------------------------------
     }
 }
+//----------------------------------------------------------------
+
 //function for generating random number with min and max value
 function rand(min, max) {
     return Math.round(Math.random() * (max - min) + min);
 }
+//----------------------------------------------------------------

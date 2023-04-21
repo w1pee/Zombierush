@@ -85,8 +85,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         //----------------------------------------------------------------
 
         //x & y position of the cursor(where the bullet is supposed to go)
-        let x = scene.input.mousePointer.x;
-        let y = scene.input.mousePointer.y;
+        let x = scene.cursorCords[0];
+        let y = scene.cursorCords[1];
         //----------------------------------------------------------------
         console.log([x,y]);
         // Create a new bullet sprite at the player's position
