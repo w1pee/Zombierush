@@ -1,17 +1,17 @@
-# Schulprojekt
+# Zombierush
 
-This is a project for IT-class
+### This is a project for IT-class  <br>
 ------------------------------------------------------------
-it is a game about one player that has to surive waves of zombies,
-by killing them he gets higher and higher score.
+it is a game about one player that has to surive waves of zombies,  <br>
+by killing them he gets higher and higher score.    <br>
 ------------------------------------------------------------
-use W,A,S,D to move around.
-use R,F to zoom out.
-use your mouse to aim,
-click Mouse1 to shoot.
+use W,A,S,D to move around. <br>
+use your mouse to aim.  <br>
+click Mouse1 to shoot.  <br>
+Press ESC to pause. <br>
 ------------------------------------------------------------
-made by
+made by <br>
 
-Moritz
-Edwin
-Betül
+Moritz  <br>
+Edwin   <br>
+Betül   <br>
