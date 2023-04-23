@@ -3,7 +3,7 @@ export default class CustomCamera extends Phaser.Cameras.Scene2D.Camera {
     super(x, y, width, height);
     this.scene = scene;
     // additional custom camera logic here
-    this.setZoom(2.8);
+    this.setZoom(3);
   }
 
   follow(Player){

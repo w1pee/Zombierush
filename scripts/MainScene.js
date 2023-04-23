@@ -21,21 +21,21 @@ export default class MainScene extends Phaser.Scene {
     }
     create(){
         //tilemaps
-        const map = this.make.tilemap({ key: "ground", tileWidth: 16, tileHeight: 16 });
-        const map2 = this.make.tilemap({ key: "roofCol", tileWidth: 16, tileHeight: 16 });
-        const map3 = this.make.tilemap({ key: "roof", tileWidth: 16, tileHeight: 16 });
+        this.map = this.make.tilemap({ key: "ground", tileWidth: 16, tileHeight: 16 });
+        this.map2 = this.make.tilemap({ key: "roofCol", tileWidth: 16, tileHeight: 16 });
+        this.map3 = this.make.tilemap({ key: "roof", tileWidth: 16, tileHeight: 16 });
 
-        const tileset = map.addTilesetImage("tileset");
+        const tileset = this.map.addTilesetImage("tileset");
 
-        var grnd = map.createLayer(0, tileset);
+        var grnd = this.map.createLayer(0, tileset);
 
         this.player = new Player({scene:this,x:640,y:400,texture:'player',frame:'walk_2'});
 
-        var roof2 = map3.createLayer(0, tileset);
-        var roof1 = map2.createLayer(0, tileset);
+        this.roof2 = this.map3.createLayer(0, tileset);
+        this.roof1 = this.map2.createLayer(0, tileset);
 
-        roof1.setCollisionByExclusion([ -1 ]);
-        this.matter.world.convertTilemapLayer(roof1);
+        this.roof1.setCollisionByExclusion([ -1 ]);
+        this.matter.world.convertTilemapLayer(this.roof1);
 
 
         //inputs from the player
@@ -94,12 +94,13 @@ export default class MainScene extends Phaser.Scene {
         this.events.emit('setValues',this.player.Health, this.Zombienum);
         //----------------------------------------------------------------
 
-        //Mouse cursor
-        // this.cursorCords[0] = [this.player.x, this.player.y];
-        // this.cursorCords[1] = [this.cameras.main.scrollX+640,this.cameras.main.scrollY+400];
-        // console.log(this.cursorCords);
-
-        //[this.cameras.main.scrollX,this.cameras.main.scrollY]
+        //This Calculates the position of the Cursor in the world, using positon of the camera
+        //first i take the cords of the camera X & Y, then i add the ones from the cursor to it
+        //i do the -640 / -400, because the center of these coordinates is in the center
+        //but the coordinates of the game start at the top-left
+        //so i have to add/subtract half of the Viewport length to align them
+        this.cursorCords[0] = Math.round(this.cameras.main.scrollX)+640 + ((this.input.mousePointer.x - 640)/3)+3;
+        this.cursorCords[1] = Math.round(this.cameras.main.scrollY)+400 + ((this.input.mousePointer.y - 400)/3) - 22; //the cors are a bit offset, idk why, but this fixes it
         //----------------------------------------------------------------
 
         //Camera Zoom out/in

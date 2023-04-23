@@ -10,23 +10,23 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         const compundBody = Body.create({
             parts:[playerCollider,DmgSensor],
             frictionAir:0.5,
-            collisionFilter: {
-                // Set the category and mask bits for the bullet's collision filter
-                category: 0x0001, // category 0x0001
-            }
         });
         this.setExistingBody(compundBody);
         this.setFixedRotation();
+        //atribute for the player
+        this.Health = 100;          //Player Health
+        this.speed = 2.5;           //Player Speed
 
-        this.Health = 100;
-        this.speed = 2.5;
-        this.bulletspeed = 10;
-        this.firerate = 2;
+
+        this.bulletspeed = 8;       //Bullet Speed
+        this.firerate = 10;         //the rate the Player fires at(shots per second)
+        this.ratecheck = true;      //checks if the cooldown is over
+        this.shootPressed = false;  //checks if the cursor is down
     }
 
     static preload(scene){
         scene.load.atlas('player', 'assets/MainPlayer/mainplayer.png', 'assets/MainPlayer/mainplayer_atlas.json');
-        scene.load.image('bullet', 'assets/MainPlayer/bullet.png')
+        scene.load.image('bullet', 'assets/bullet.png');
     }
 
     update(scene){
@@ -56,55 +56,86 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         playerVelocity.scale(this.speed);
         this.setVelocity(playerVelocity.x, playerVelocity.y);
         //----------------------------------------------------------------
-
-        // boolean flag to track if shoot button has been pressed
-        this.shootPressed = false;
-        //----------------------------------------------------------------
-
+        
         // listen for mouse input to shoot
         scene.input.on('pointerdown', function(pointer) {
-            if (pointer.leftButtonDown() && !this.shootPressed) {
-                this.shootBullet(scene);
-                this.shootPressed = true;
-            }
+            this.shootPressed = true;
         }, this);
         //----------------------------------------------------------------
 
-        // reset shootPressed flag when left mouse button is released
-        scene.input.on('pointerup', function(pointer) {
-            if (pointer.leftButtonReleased()) {
-                this.shootPressed = false;
+        //if the mouse is pressed & the cooldown is not active, then it shoots
+        if(this.shootPressed == true){
+            if(this.ratecheck == true){
+                this.shootBullet(scene);    //shoots the Bullet
+                //sets cooldown
+                this.ratecheck = false;
+                this.scene.time.delayedCall(1000 * (1/this.firerate), () => {   //1000 is 1 second | --> 15 shots per second is 1000 * 1/15
+                    this.ratecheck = true;
+                });
+                //----------------------------------------------------------------
             }
-        }, this);
+        }
+        //----------------------------------------------------------------
+
+        //if the mouse is no longer pressed it set it to false
+        scene.input.on('pointerup', function(pointer) {
+            this.shootPressed = false;
+        },this);
         //----------------------------------------------------------------
     }
     shootBullet(scene) {
-        
-        //vector for the bullet
-        let BulletVector = new Phaser.Math.Vector2();
-        //----------------------------------------------------------------
 
         //x & y position of the cursor(where the bullet is supposed to go)
         let x = scene.cursorCords[0];
         let y = scene.cursorCords[1];
         //----------------------------------------------------------------
-        console.log([x,y]);
+
+        //Calculation of the Vector applied to the Bullet
+        let BulletVector = new Phaser.Math.Vector2();   //Vector
+
+        BulletVector.x = x - this.x;
+        BulletVector.y = y - this.y;
+
+        BulletVector.normalize();
+        BulletVector.scale(this.bulletspeed + rand(-0.5,0.5));  //sets the speed of the Bullet with a random value between -0.5 and 0.5 to make it look better
+        //----------------------------------------------------------------
+
+        //calculation of the Rotation of the bullet based on the Vector
+        let AngleRad = Math.atan(BulletVector.y/BulletVector.x);    //calculation of the angle of the bullet
+        let AngleDeg = AngleRad * (180 / Math.PI);  //convertion to Degree
+
+        //adjustment of the angle based on the direction
+        if (BulletVector.x < 0) {       
+            if(BulletVector.y > 0) {
+                AngleDeg += 180;
+            }
+            else {
+                AngleDeg -= 180;
+            }
+        }
+        //----------------------------------------------------------------
+
         // Create a new bullet sprite at the player's position
-        const bullet = scene.matter.add.sprite(x, y, 'bullet');
+        const bullet = scene.matter.add.sprite(this.x, this.y, 'bullet');
         //----------------------------------------------------------------
 
         //Custom collider for bullet
         const {Body,Bodies} = Phaser.Physics.Matter.Matter;
-        var newcollider = Bodies.circle(x,y,2,{label:'BulletCollider'})
+        var newcollider = Bodies.circle(this.x,this.y,2,{label:'BulletCollider'})
         const BulletBody = Body.create({
             parts:[newcollider],
             collisionFilter: {
-                // Set the category and mask bits for the bullet's collision filter
-                category: 0x0002, // category 0x0002
-                mask: 0x0001 // mask 0x0001 (collide with category 0x0001)
             }
         });
         bullet.setExistingBody(BulletBody);
+
+        bullet.setScale(0.75);
+        bullet.setOrigin(0.5,0.5);
+        bullet.rotation = AngleDeg / (180/Math.PI); //set rotation converted back to radian
+        //----------------------------------------------------------------
+
+        //assign the bullet its Vector
+        bullet.setVelocity(BulletVector.x,BulletVector.y);
         //----------------------------------------------------------------
 
         // Destroy the bullet after 2 seconds
@@ -114,13 +145,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         //----------------------------------------------------------------
     }
 }
-
- // // Add the bullet to the physics engine
-        // this.scene.physics.add.existing(bullet);
-      
-        // // Set the bullet's velocity in the direction the player is facing
-        // const velocity = new Phaser.Math.Vector2();
-        // velocity.x = Math.cos(this.rotation) * 1000;
-        // velocity.y = Math.sin(this.rotation) * 1000;
-        // bullet.body.setVelocity(velocity.x, velocity.y);
-      
+//function for generating random number with min and max value
+function rand(min, max) {
+    return Math.random() * (max - min) + min;
+}
+//----------------------------------------------------------------
