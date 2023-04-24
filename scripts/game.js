@@ -19,7 +19,7 @@ var config = {
     default: 'matter',
     matter: {
       gravity: { y:0},
-      debug: true
+      debug: false
     }
   },
   plugins: {
@@ -35,4 +35,4 @@ var config = {
   // },
   }
 };
-new Phaser.Game(config);
+var game = new Phaser.Game(config);

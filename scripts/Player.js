@@ -13,15 +13,21 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         });
         this.setExistingBody(compundBody);
         this.setFixedRotation();
+        this.setCollisionGroup(-1); //setting collision group, so it wont collide with the Player
         //atribute for the player
+        this.maxHealth = 100        //Maximal Player health
         this.Health = 100;          //Player Health
         this.speed = 2.5;           //Player Speed
 
-
         this.bulletspeed = 8;       //Bullet Speed
-        this.firerate = 10;         //the rate the Player fires at(shots per second)
+        this.firerate = 2;          //the rate the Player fires at(shots per second)
+        this.Damage = 5;            //Damage the bullets inflicts onto zombies
         this.ratecheck = true;      //checks if the cooldown is over
         this.shootPressed = false;  //checks if the cursor is down
+        //collision
+        // this.setOnCollideWith( function() {
+        //     console.log('2');
+        // });
     }
 
     static preload(scene){
@@ -129,6 +135,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         });
         bullet.setExistingBody(BulletBody);
 
+        bullet.setCollisionGroup(-1);   //setting collision group, so it wont collide with the Player
         bullet.setScale(0.75);
         bullet.setOrigin(0.5,0.5);
         bullet.rotation = AngleDeg / (180/Math.PI); //set rotation converted back to radian
