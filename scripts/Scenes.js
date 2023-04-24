@@ -50,6 +50,8 @@ export default class Pause extends Phaser.Scene{
             this.scene.resume("MainScene");
             this.scene.launch("UIScene");
             this.scene.stop();
+            const myGame = this.scene.get('MainScene');
+            myGame.pipelineInstance.remove(myGame.cameras.main);
         }
         //----------------------------------------------------------------
     }
@@ -66,6 +68,12 @@ export class GameOver extends Phaser.Scene{
     create(){
         console.log("now in GameOver Scene");   //just for debugging
         this.add.text(640,400,'game over');
+        // goes to start Scene after 2seconds
+        this.time.delayedCall(2000, () => {
+            this.scene.launch('Start');
+            this.scene.stop();
+        });
+        //----------------------------------------------------------------
     }
 }
 //----------------------------------------------------------------
