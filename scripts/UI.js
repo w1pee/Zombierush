@@ -18,23 +18,25 @@ export default class UIScene extends Phaser.Scene{
     
             //xhr.send();
             //}
+        //getting Highscore data from database using ajax call //incomplete
         function gethighs(){
-            $.ajax({
-                url : 'scripts/UI.php',
-                type : 'POST',
-                success : function (result) {
-                    console.log(result);
-                    eval(result);
-                },
-                error : function(){
-                    console.log('error');
-                }
-            })
-        }
+            var jqXHR = $.ajax({
+                            url : 'scripts/UI.php',
+                            type : 'POST',
+                            success : function (result) {
+                                console.log(result);
+                            },
+                            error : function(){
+                                console.log('error');
+                            }
+                            })
+                        return jqXHR;
+                        }
+        var highs = gethighs().done();
 
         //Highscore // sync with database later
         this.add.text(0,0,'Highscore', { font: '50px Arial', fill: '#000000' });
-        this.Highscore = this.add.text(0,50,gethighs(), { font: '50px Arial', fill: '#000000' });
+        this.Highscore = this.add.text(0,50,highs, { font: '50px Arial', fill: '#000000' });
         //----------------------------------------------------------------
 
         //score
