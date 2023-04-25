@@ -30,7 +30,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     static preload(scene){
         scene.load.atlas('mainplayer', 'assets/MainPlayer/mainplayer.png', 'assets/MainPlayer/mainplayer_atlas.json');
         scene.load.animation('mainplayer_anims', 'assets/MainPlayer/mainplayer_anim.json');
-        scene.load.image('bullet', 'assets/MainPlayer/bullet.png'); 
+        scene.load.image('bullet', 'assets/bullet.png'); 
     }
 
     update(scene){
