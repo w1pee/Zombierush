@@ -48,7 +48,8 @@ export default class MainScene extends Phaser.Scene {
             up: Phaser.Input.Keyboard.KeyCodes.W,
             down: Phaser.Input.Keyboard.KeyCodes.S,
             left: Phaser.Input.Keyboard.KeyCodes.A,
-            right: Phaser.Input.Keyboard.KeyCodes.D
+            right: Phaser.Input.Keyboard.KeyCodes.D,
+            Dash:  Phaser.Input.Keyboard.KeyCodes.E
         });
 
         this.inputkeys = this.input.keyboard.addKeys({
@@ -71,6 +72,9 @@ export default class MainScene extends Phaser.Scene {
         this.Spawnnum = 5;
         this.Zombiehealth = 20;
         this.Zombies = new Array();
+        this.ZombieSpeed = 0.5;
+
+        this.Score = 0;
         //----------------------------------------------------------------
 
         //cursor
@@ -82,7 +86,7 @@ export default class MainScene extends Phaser.Scene {
         //Filters Plugin
         this.pipelineInstance = this.plugins.get('rexkawaseblurpipelineplugin');
         //----------------------------------------------------------------
-        this.checkCollisions();
+        this.checkCollisions(this);
     }
 
     update(){
@@ -96,17 +100,8 @@ export default class MainScene extends Phaser.Scene {
             }
         }
         //updates UI
-        this.events.emit('setValues',this.player.Health, this.Zombienum);
+        this.events.emit('setValues', this.Zombienum,this.Score,this.player.Dashcheck);
         //----------------------------------------------------------------
-
-        //Checks if player is dead, if yes switches to GameOver Scene
-        if (this.player.Health <= 0) {
-            //Delete UI
-            this.scene.stop("UIScene");
-            //launch GameOver scene
-            this.scene.launch('GameOver');
-            this.scene.stop();
-        }
 
         //This Calculates the position of the Cursor in the world, using positon of the camera
         //first i take the cords of the camera X & Y, then i add the ones from the cursor to it
@@ -115,24 +110,6 @@ export default class MainScene extends Phaser.Scene {
         //so i have to add/subtract half of the Viewport length to align them
         this.cursorCords[0] = Math.round(this.cameras.main.scrollX)+640 + ((this.input.mousePointer.x - 640)/3)+3;
         this.cursorCords[1] = Math.round(this.cameras.main.scrollY)+400 + ((this.input.mousePointer.y - 400)/3) - 22; //the cors are a bit offset, idk why, but this fixes it
-        //----------------------------------------------------------------
-
-        //Camera Zoom out/in
-        // const zoomspeed = 0.1;
-        // const ZoomMax = 8;
-        // const ZoomMin = 2;
-
-        // if (this.inputkeys.out.isDown) {
-        //     if (this.zoom > ZoomMin) {
-        //         this.zoom -= zoomspeed;
-        //     }
-        // }
-        // else if(this.inputkeys.in.isDown) {
-        //     if (this.zoom < ZoomMax) {
-        //         this.zoom += zoomspeed;
-        //     }
-        // }
-        // this.camera.setZoom(this.zoom);
         //----------------------------------------------------------------
         
         //Pauses the game
@@ -160,17 +137,23 @@ export default class MainScene extends Phaser.Scene {
         //calculates based on the current Wave the amounts of zombies to spawn
         //then spawns them
         if(this.Zombienum == 0){
-            this.Spawnnum = 5*this.Wave+1 * rand(1,3);
-            this.Wave += 1;
-            this.player.Health = this.player.maxHealth;
+            this.Spawnnum = (2*(this.Wave+1)) * rand(1,3);
+            this.Wave++;
             
             this.events.emit('announce', this.Wave);
+
+            if(this.Wave % 2 == 0){
+                this.ZombieSpeed*= 1.2;
+                this.player.firerate++;
+                this.player.DashCooldown*=0.8;
+                this.events.emit('StatsUpgrade');
+            }
         }
         //----------------------------------------------------------------
         //it seperatly spawns the zombies, so it doesnt spawn every zombie in one frame
         //this drastically improves performence, as the game does not have to wait for every zombie to spawn to start the next frame
         if(this.Spawnnum > 0){
-            this.spawn(this.Zombiehealth,20);
+            this.spawn(this.Zombiehealth,this.ZombieSpeed);
             this.Spawnnum--;
         }
         //----------------------------------------------------------------
@@ -189,7 +172,7 @@ export default class MainScene extends Phaser.Scene {
     //----------------------------------------------------------------
 
     //spawns zombie
-    spawn(health,damage){
+    spawn(health,Speed){
         //generates random number for spawn location of the zombie
         //need to improve later
         let xspawn;
@@ -225,12 +208,12 @@ export default class MainScene extends Phaser.Scene {
         do{
             if (this.Zombies[n] == undefined) {
                 loop = false;
-                this.Zombies[n] = new Zombie({scene:this,x:xspawn,y:yspawn,texture:'zombie'},health,damage);
+                this.Zombies[n] = new Zombie({scene:this,x:xspawn,y:yspawn,texture:'zombie'},health,Speed);
             }
             n++;
             if(n == this.Zombies.length){
                 loop = false;
-                this.Zombies[n] = new Zombie({scene:this,x:xspawn,y:yspawn,texture:'zombie'},health,damage);
+                this.Zombies[n] = new Zombie({scene:this,x:xspawn,y:yspawn,texture:'zombie'},health,Speed);
             }
         }
         while(loop == true)
@@ -239,7 +222,7 @@ export default class MainScene extends Phaser.Scene {
     //----------------------------------------------------------------
 
     //here are all the collisons and its actions listed     //best way of doing it i could come up with since phaser.io is down
-    checkCollisions(){
+    checkCollisions(scene){
         this.matter.world.on('collisionstart', (event,bodyA,bodyB) => 
         {
             //Player DmgSensor label:   DmgSensor      
@@ -259,18 +242,30 @@ export default class MainScene extends Phaser.Scene {
             //if bullet and zombie, zombie health - player damage
             if(bodyA.label == 'BulletCollider' && bodyB.label == 'ZombieCollider'){
                 bodyB.gameObject.Health -= this.player.Damage;
+                if(bodyB.gameObject.Health <= 0){
+                    this.Score+=10;
+                }
             }
             else if (bodyB.label == 'BulletCollider' && bodyA.label == 'ZombieCollider'){
                 bodyA.gameObject.Health -= this.player.Damage;
+                if(bodyA.gameObject.Health <= 0){
+                    this.Score+=10;
+                }
             }
             else{
                 if (bodyA.label == 'DmgSensor' && bodyB.label == 'ZombieCollider') {
-                    bodyA.gameObject.Health -= bodyB.gameObject.Damage;
-                    console.log(bodyB.gameObject.Damage);
+                    //Delete UI
+                    scene.scene.stop("UIScene");
+                    //launch GameOver scene
+                    scene.scene.launch('GameOver');
+                    scene.scene.stop();
                 }
                 else if(bodyB.label == 'DmgSensor' && bodyA.label == 'ZombieCollider'){
-                    bodyB.gameObject.Health -= bodyA.gameObject.Damage;
-                    console.log(bodyB.gameObject.Damage);
+                    //Delete UI
+                    scene.scene.stop("UIScene");
+                    //launch GameOver scene
+                    scene.scene.launch('GameOver');
+                    scene.scene.stop();
                 }
             }
         });

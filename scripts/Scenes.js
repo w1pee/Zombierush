@@ -67,7 +67,7 @@ export class GameOver extends Phaser.Scene{
     }
     create(){
         console.log("now in GameOver Scene");   //just for debugging
-        this.add.text(640,400,'game over');
+        this.add.text(640,400,'game over').setOrigin(0.5,0.5);
         // goes to start Scene after 2seconds
         this.time.delayedCall(2000, () => {
             this.scene.launch('Start');
