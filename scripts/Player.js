@@ -6,7 +6,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
         const {Body,Bodies} = Phaser.Physics.Matter.Matter;
         var playerCollider = Bodies.circle(this.x,this.y,5,{isSensor:false,label:'playerCollider'});
-        var DmgSensor = Bodies.circle(this.x,this.y,20,{isSensor:true,label:'DmgSensor'});
+        var DmgSensor = Bodies.circle(this.x,this.y,8,{isSensor:true,label:'DmgSensor'});
         const compundBody = Body.create({
             parts:[playerCollider,DmgSensor],
             frictionAir:0.5,
@@ -15,19 +15,16 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.setFixedRotation();
         this.setCollisionGroup(-1); //setting collision group, so it wont collide with the Player
         //atribute for the player
-        this.maxHealth = 100        //Maximal Player health
-        this.Health = 100;          //Player Health
-        this.speed = 2.5;           //Player Speed
+        this.speed = 1.8;           //Player Speed
+        this.DashSpeed = 8;        //Speed of the Player during the Dash
+        this.DashCooldown = 5;      //cooldown of the Dash in seconds
+        this.Dashcheck = true;
 
         this.bulletspeed = 8;       //Bullet Speed
-        this.firerate = 2;          //the rate the Player fires at(shots per second)
-        this.Damage = 5;            //Damage the bullets inflicts onto zombies
+        this.firerate = 3;          //the rate the Player fires at(shots per second)
+        this.Damage = 10;           //Damage the bullets inflicts onto zombies
         this.ratecheck = true;      //checks if the cooldown is over
         this.shootPressed = false;  //checks if the cursor is down
-        //collision
-        // this.setOnCollideWith( function() {
-        //     console.log('2');
-        // });
     }
 
     static preload(scene){
@@ -36,6 +33,18 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     update(scene){
+        let speed = this.speed;
+        //Dash      //if activate the player accelerates very fast
+        if(this.inputkeys.Dash.isDown && this.Dashcheck == true){
+            speed = this.DashSpeed;
+            this.scene.time.delayedCall(150, () => {
+                this.Dashcheck = false;
+            });
+            this.scene.time.delayedCall(this.DashCooldown*1000, () => {
+                this.Dashcheck = true;
+            });
+        }
+        //----------------------------------------------------------------
         //movement system
         //X
         let playerVelocity = new Phaser.Math.Vector2();
@@ -59,7 +68,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
             playerVelocity.y = 1;
         }
         playerVelocity.normalize();
-        playerVelocity.scale(this.speed);
+        playerVelocity.scale(speed);
         this.setVelocity(playerVelocity.x, playerVelocity.y);
         //----------------------------------------------------------------
         
