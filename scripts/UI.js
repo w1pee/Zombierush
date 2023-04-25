@@ -6,10 +6,35 @@ export default class UIScene extends Phaser.Scene{
 
     create(){
         //basic UI design
+        //function gethighs(){
+            //var xhr = new XMLHttpRequest();
+            //xhr.open('GET', 'scripts/UI.php', true);
+    
+            //xhr.onload = function(){
+                //if(this.status == 200){
+                    //console.log(this.responseText);
+                //}
+            //}
+    
+            //xhr.send();
+            //}
+        function gethighs(){
+            $.ajax({
+                url : 'scripts/UI.php',
+                type : 'POST',
+                success : function (result) {
+                    console.log(result);
+                    eval(result);
+                },
+                error : function(){
+                    console.log('error');
+                }
+            })
+        }
 
         //Highscore // sync with database later
-        this.add.text(0,0,'Highsore', { font: '50px Arial', fill: '#000000' });
-        this.Highscore = this.add.text(0,50, 50, { font: '50px Arial', fill: '#000000' });
+        this.add.text(0,0,'Highscore', { font: '50px Arial', fill: '#000000' });
+        this.Highscore = this.add.text(0,50,gethighs(), { font: '50px Arial', fill: '#000000' });
         //----------------------------------------------------------------
 
         //score

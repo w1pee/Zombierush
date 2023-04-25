@@ -8,6 +8,6 @@ export default class CustomCamera extends Phaser.Cameras.Scene2D.Camera {
 
   follow(Player){
     this.startFollow(Player, false, 0.05, 0.05, 0, 0);
-    this.setBounds(0, 0, 1280, 1280);
+    this.setBounds(0, 0, 1600, 1600);
   }
 }
