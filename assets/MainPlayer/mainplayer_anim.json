@@ -1,10 +1,10 @@
 {
     "anims": [
         {
-            "key": "player_walk",
+            "key": "walk",
             "type": "frames",
             "repeat": -1,
-            "frameRate": 4,
+            "frameRate": 20,
             "frames": [
                 {
                     "key": "mainplayer",
@@ -21,6 +21,30 @@
                 {
                     "key": "mainplayer",
                     "frame": "walk_4"
+                }
+            ]
+        },
+        {
+            "key": "idle",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 8,
+            "frames": [
+                {
+                    "key": "mainplayer",
+                    "frame": "idle_1"
+                },
+                {
+                    "key": "mainplayer",
+                    "frame": "idle_2"
+                },
+                {
+                    "key": "mainplayer",
+                    "frame": "idle_3"
+                },
+                {
+                    "key": "mainplayer",
+                    "frame": "idle_4"
                 }
             ]
         }

@@ -11,6 +11,8 @@ export default class MainScene extends Phaser.Scene {
         Player.preload(this);
         Zombie.preload(this);
 
+        this.load.audio('audio_stepgrass', 'assets/Sounds/running-in-grass.mp3');
+
         //Plugin for Camera blur
         this.load.plugin('rexkawaseblurpipelineplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexkawaseblurpipelineplugin.min.js', true);
 

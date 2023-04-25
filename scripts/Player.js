@@ -31,8 +31,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     static preload(scene){
-        scene.load.atlas('player', 'assets/MainPlayer/mainplayer.png', 'assets/MainPlayer/mainplayer_atlas.json');
-        scene.load.image('bullet', 'assets/bullet.png');
+        scene.load.atlas('mainplayer', 'assets/MainPlayer/mainplayer.png', 'assets/MainPlayer/mainplayer_atlas.json');
+        scene.load.animation('mainplayer_anims', 'assets/MainPlayer/mainplayer_anim.json');
+        scene.load.image('bullet', 'assets/MainPlayer/bullet.png'); 
     }
 
     update(scene){
@@ -61,6 +62,12 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         playerVelocity.normalize();
         playerVelocity.scale(this.speed);
         this.setVelocity(playerVelocity.x, playerVelocity.y);
+        if(Math.abs(playerVelocity.x) > 0.1 || Math.abs(playerVelocity.y) > 0.1) {
+            this.anims.play('walk', true);  
+        }
+        else{
+            this.anims.play('idle', true);
+        }
         //----------------------------------------------------------------
         
         // listen for mouse input to shoot
