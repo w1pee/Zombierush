@@ -60,6 +60,10 @@ export default class UIScene extends Phaser.Scene{
             Firerate.setOrigin(1,0.5);
             let DashSpeed = this.add.text(1280,450,'-10% Dash Cooldown', {font: '40px Arial', fill: '#FED766'});
             DashSpeed.setOrigin(1,0.5);
+            this.time.delayedCall(2000, () => {
+                DashSpeed.destroy();
+                Firerate.destroy();
+            });
         },this);
     }
 }

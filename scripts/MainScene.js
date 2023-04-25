@@ -17,31 +17,36 @@ export default class MainScene extends Phaser.Scene {
         this.load.plugin('rexkawaseblurpipelineplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexkawaseblurpipelineplugin.min.js', true);
 
         //loading images
-        this.load.image('tileset', 'assets/tileset7.png');
+        this.load.image('tilesetGround', 'assets/tileset8-ground.png');
+        this.load.image('tilesetOther', 'assets/tileset8-otherStuff.png');
+        this.load.image('tilesetRoof', 'assets/tileset8-roof.png')
         this.load.image('cursor', 'assets/cursor.png');
 
         //tilemap number 1
         this.load.tilemapCSV('ground', 'assets/TileMaps/tilemap1_ground.csv');
-        this.load.tilemapCSV('roofCol', 'assets/TileMaps/tilemap1_roof.csv');
-        this.load.tilemapCSV('roof', 'assets/TileMaps/tilemap1_roof2.csv');
+        this.load.tilemapCSV('Col', 'assets/TileMaps/tilemap1_col.csv');
+        this.load.tilemapCSV('extras', 'assets/TileMaps/tilemap1_extra.csv');
     }
     create(){
         //tilemaps
         this.map = this.make.tilemap({ key: "ground", tileWidth: 16, tileHeight: 16 });
-        this.map2 = this.make.tilemap({ key: "roofCol", tileWidth: 16, tileHeight: 16 });
-        this.map3 = this.make.tilemap({ key: "roof", tileWidth: 16, tileHeight: 16 });
+        this.map2 = this.make.tilemap({ key: "Col", tileWidth: 16, tileHeight: 16 });
+        this.map3 = this.make.tilemap({ key: "extras", tileWidth: 16, tileHeight: 16 });
 
-        const tileset = this.map.addTilesetImage("tileset");
+        const tilesetGround = this.map.addTilesetImage("tilesetGround");
+        const tilesetOther = this.map.addTilesetImage("tilesetOther");
+        const tilesetRoof = this.map.addTilesetImage("tilesetRoof");
 
-        var grnd = this.map.createLayer(0, tileset);
+        this.Ground = this.map.createLayer(0, tilesetGround);
 
+        //player creation
         this.player = new Player({scene:this,x:640,y:400,texture:'player',frame:'walk_2'});
 
-        this.roof2 = this.map3.createLayer(0, tileset);
-        this.roof1 = this.map2.createLayer(0, tileset);
+        this.extra = this.map3.createLayer(0, tilesetOther);
+        this.Collision = this.map2.createLayer(0, tilesetOther);
 
-        this.roof1.setCollisionByExclusion([ -1 ]);
-        this.matter.world.convertTilemapLayer(this.roof1);
+        this.Collision.setCollisionByExclusion([ -1 ]);
+        this.matter.world.convertTilemapLayer(this.Collision);
 
         //inputs from the player
         this.player.inputkeys = this.input.keyboard.addKeys({
