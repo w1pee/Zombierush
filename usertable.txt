@@ -5,3 +5,5 @@ idUsers int AUTO_INCREMENT PRIMARY KEY NOT NULL,
     pwdUsers longtext not null,
     dateUsers datetime not null
 );
+ALTER TABLE users 
+ADD COLUMN userhighscore text not null AFTER dateUsers;

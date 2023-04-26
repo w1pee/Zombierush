@@ -1,11 +1,11 @@
 export default class Zombie extends Phaser.Physics.Matter.Sprite {
-    constructor(data){
+    constructor(data,SpawnHealth,SpawnSpeed){
         let {scene,x,y,texture,frame} = data;
         super(scene.matter.world,x,y,texture);
         this.scene.add.existing(this);
 
         const {Body,Bodies} = Phaser.Physics.Matter.Matter;
-        var Collider = Bodies.circle(this.x,this.y,7,{isSensor:false,label:'playerCollider'});
+        var Collider = Bodies.circle(this.x,this.y,7,{isSensor:false,label:'ZombieCollider'});
         const compundBody = Body.create({
             parts:[Collider],
             frictionAir:0.2,
@@ -13,9 +13,9 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         this.setExistingBody(compundBody);
         this.setFixedRotation();
 
-        this.health = 20;
-
-        this.healthTxt = scene.add.text(this.x,this.y,this.health ,{ font: '10px Arial', fill: '#000000' });
+        this.Health = SpawnHealth;      //Health of the Zombie
+        this.Speed = SpawnSpeed * rand(0.8,1.2);     //speed the zombie moves at, is randomized
+        this.healthTxt = scene.add.text(this.x,this.y,this.Health ,{ font: '10px Arial', fill: '#000000' });    //text that displays the current health of the zombie
         this.healthTxt.setOrigin(0.5,0.5)
     }
 
@@ -23,10 +23,17 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         scene.load.image('zombie', 'assets/Zombies/images/Zombies.png');
     }
     update(Player){
-        
+
+        //updating text position
         this.healthTxt.x = this.x;
         this.healthTxt.y = this.y+12;
+        //----------------------------------------------------------------
 
+        //updating healthtext
+        this.healthTxt.text = this.Health;
+        //----------------------------------------------------------------
+
+        //when player in reach show health
         if(Player.x+50 > this.x && Player.x-50 < this.x){
             if(Player.y+50 > this.y && Player.y-50 < this.y){
                 this.healthTxt.alpha = 1;
@@ -35,24 +42,24 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         else{
             this.healthTxt.alpha = 0;
         }
+        //----------------------------------------------------------------
 
         let Velocity = new Phaser.Math.Vector2();
-        const speed =  rand(0.1,1);
-        //simple system for Following Player
-        if (this.x > Player.x - 5) {
+        //simple system for Following Player    //bad way to do this    //will improve that later on
+        if (this.x > Player.x + 10) {
             Velocity.x = -1;
         }
-        else if (this.x < Player.x + 5){
+        else if (this.x < Player.x - 10){
             Velocity.x = 1;
         }
         else {
             Velocity.x = 0;
         }
 
-        if (this.y > Player.y - 5) {
+        if (this.y > Player.y + 10) {
             Velocity.y = -1;
         }
-        else if (this.y < Player.y + 5){
+        else if (this.y < Player.y - 10){
             Velocity.y = 1;
         }
         else {
@@ -60,7 +67,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         }
 
         Velocity.normalize();
-        Velocity.scale(speed);
+        Velocity.scale(this.Speed);
         this.setVelocity(Velocity.x, Velocity.y);
         //----------------------------------------------------------------
     }

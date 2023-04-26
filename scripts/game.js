@@ -1,6 +1,7 @@
-import GameOver from "./GameOver.js";
 import MainScene from "./MainScene.js";
+import Pause, { GameOver,Start} from "./Scenes.js";
 import UIScene from "./UI.js";
+
 //plugin for Path finding
 // import BoardPlugin from 'phaser3-rex-plugins/plugins/board-plugin.js';
 
@@ -9,7 +10,7 @@ var config = {
   width: 1280,
   height: 800,
   parent: 'container',
-  scene: [MainScene,UIScene,GameOver],
+  scene: [Start,MainScene,UIScene,Pause,GameOver],
   backgroundColor: '#0000ff',
   scale:{
     zoom: 2,
@@ -18,7 +19,7 @@ var config = {
     default: 'matter',
     matter: {
       gravity: { y:0},
-      debug: true
+      debug: false
     }
   },
   plugins: {
@@ -34,4 +35,4 @@ var config = {
   // },
   }
 };
-new Phaser.Game(config);
+var game = new Phaser.Game(config);

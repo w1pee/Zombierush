@@ -11,11 +11,14 @@
 
     <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
     <script src="//cdn.jsdelivr.net/npm/phaser-matter-collision-plugin"></script>
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-migrate-3.4.1.min.js" integrity="sha256-UnTxHm+zKuDPLfufgEMnKGXDl6fEIjtM+n1Q6lL73ok=" crossorigin="anonymous"></script>
     <title>Zombierush</title>
     <style>
       .game{
-        border-style: groove;
-        border-width: 10px;
+        /* border-style: groove;
+        border-width: 10px; */
       }
     </style>
 </head>
@@ -33,10 +36,14 @@
             <div>
               <?php
                 if(isset($_SESSION['userid'])){
+                  //logout submit box
                   echo '<form action="includes/logout.inc.php" method="post">
                   <button type="submit" name="logout-submit">Logout</button>
                   </form>';
-                  echo($_SESSION['userusn']);
+                  //profile submit box
+                  echo '<form action="profile.php" method="post">
+                  <button type="submit" name="profile-submit">'.$_SESSION['userusn'].'</button>
+                  </form>';
                 }
                 else{
                   echo ' <li><a href="signup.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
