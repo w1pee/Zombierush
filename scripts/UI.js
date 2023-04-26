@@ -35,19 +35,23 @@ export default class UIScene extends Phaser.Scene{
         var highs = gethighs().done();
 
         //Highscore // sync with database later
-        this.add.text(0,0,'Highscore', { font: '50px Arial', fill: '#000000' });
-        this.Highscore = this.add.text(0,50,highs, { font: '50px Arial', fill: '#000000' });
+        this.add.text(0,0,'Highsore', { font: '20px Arial', fill: '#000000' });
+        this.Highscore = this.add.text(0,50, 50, { font: '20px Arial', fill: '#000000' });
         //----------------------------------------------------------------
 
         //score
-        this.ScoreText = this.add.text(window.innerWidth/2,0,'Score',{font: '50px Arial', fill: '#000000'});
+        this.ScoreText = this.add.text(window.innerWidth/2,0,'Score',{font: '20px Arial', fill: '#000000'});
         this.ScoreText.setOrigin(0.5,0);
-        this.Score = this.add.text(window.innerWidth/2,50,0,{font: '50px Arial', fill: '#000000'});
+        this.Score = this.add.text(window.innerWidth/2,50,0,{font: '20px Arial', fill: '#000000'});
         this.Score.setOrigin(0.5,0);
         //----------------------------------------------------------------
 
+        //health
+        this.HealthText = this.add.text(0,750,'Health: ', {font: '20px Arial', fill: '#000000'});
+        //----------------------------------------------------------------
+
         //Zombie number
-        this.ZombieText = this.add.text(0,window.innerheight/2,'Zombies: ', {font: '50px Arial', fill: '#000000'})
+        this.ZombieText = this.add.text(0,window.innerheight/2,'Zombies: ', {font: '20px Arial', fill: '#000000'})
         const myGame = this.scene.get('MainScene');
         //----------------------------------------------------------------
 
