@@ -7,8 +7,8 @@ import UIScene from "./UI.js";
 
 var config = {
   type: Phaser.Auto,
-  width: 1280,
-  height: 800,
+  width: window.innerWidth,
+  height:  window.innerHeight,
   parent: 'container',
   scene: [Start,MainScene,UIScene,Pause,GameOver],
   backgroundColor: '#0000ff',

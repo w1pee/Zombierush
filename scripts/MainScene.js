@@ -63,7 +63,10 @@ export default class MainScene extends Phaser.Scene {
         });
 
         //camera setup
-        this.cam = new MyCamera(this,0,0,1280,800);
+        this.wit =  window.innerWidth;
+        this.hit =  window.innerHeight;
+
+        this.cam = new MyCamera(this,0,0,this.wit,this.hit);
         this.cameras.addExisting(this.cam);
         this.cameras.main = this.cam;
 
@@ -113,8 +116,8 @@ export default class MainScene extends Phaser.Scene {
         //i do the -640 / -400, because the center of these coordinates is in the center
         //but the coordinates of the game start at the top-left
         //so i have to add/subtract half of the Viewport length to align them
-        this.cursorCords[0] = Math.round(this.cameras.main.scrollX)+640 + ((this.input.mousePointer.x - 640)/3)+3;
-        this.cursorCords[1] = Math.round(this.cameras.main.scrollY)+400 + ((this.input.mousePointer.y - 400)/3) - 22; //the cors are a bit offset, idk why, but this fixes it
+        this.cursorCords[0] = Math.round(this.cameras.main.scrollX)+(this.wit/2) + ((this.input.mousePointer.x - this.wit/2)/3)+3;
+        this.cursorCords[1] = Math.round(this.cameras.main.scrollY)+(this.hit/2) + ((this.input.mousePointer.y - this.hit/2)/3) - 22; //the cors are a bit offset, idk why, but this fixes it
         //----------------------------------------------------------------
         
         //Pauses the game

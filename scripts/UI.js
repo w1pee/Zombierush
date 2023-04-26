@@ -40,14 +40,14 @@ export default class UIScene extends Phaser.Scene{
         //----------------------------------------------------------------
 
         //score
-        this.ScoreText = this.add.text(640,0,'Score',{font: '50px Arial', fill: '#000000'});
+        this.ScoreText = this.add.text(window.innerWidth/2,0,'Score',{font: '50px Arial', fill: '#000000'});
         this.ScoreText.setOrigin(0.5,0);
-        this.Score = this.add.text(640,50,0,{font: '50px Arial', fill: '#000000'});
+        this.Score = this.add.text(window.innerWidth/2,50,0,{font: '50px Arial', fill: '#000000'});
         this.Score.setOrigin(0.5,0);
         //----------------------------------------------------------------
 
         //Zombie number
-        this.ZombieText = this.add.text(0,400,'Zombies: ', {font: '50px Arial', fill: '#000000'})
+        this.ZombieText = this.add.text(0,window.innerheight/2,'Zombies: ', {font: '50px Arial', fill: '#000000'})
         const myGame = this.scene.get('MainScene');
         //----------------------------------------------------------------
 
@@ -74,7 +74,7 @@ export default class UIScene extends Phaser.Scene{
         //this function announces the wave, after 2 seconds it deletes itself
         myGame.events.on('announce', function(n)
         {
-            let announce = this.add.text(640,200,'Wave ' + n, {font: '100px Arial', fill: '#FFFFFFFF'});
+            let announce = this.add.text(window.innerWidth/2,200,'Wave ' + n, {font: '100px Arial', fill: '#FFFFFFFF'});
             announce.setOrigin(0.5,0.5);
             this.time.delayedCall(2000, () => {
                 announce.destroy();

@@ -11,8 +11,8 @@ export default class Pause extends Phaser.Scene{
         
         //text
         this.add.text(
-            640,
-            800,
+            window.innerWidth/2,
+            window.innerheight,
             "press ESC to continue...",
             {                           //styling
                 fontSize: 30,
@@ -25,8 +25,8 @@ export default class Pause extends Phaser.Scene{
 
         //button
         this.add.text(
-            640, 
-            200, 
+            window.innerWidth/2, 
+            window.innerheight/2 - 100, 
             "Paused", 
             {                           //styling
                 fontSize: 50,
@@ -67,7 +67,7 @@ export class GameOver extends Phaser.Scene{
     }
     create(){
         console.log("now in GameOver Scene");   //just for debugging
-        this.add.text(640,400,'game over').setOrigin(0.5,0.5);
+        this.add.text(window.innerWidth/2,window.innerheight/2,'game over').setOrigin(0.5,0.5);
         // goes to start Scene after 2seconds
         this.time.delayedCall(2000, () => {
             this.scene.launch('Start');
@@ -89,8 +89,8 @@ export class Start extends Phaser.Scene{
         console.log("now in Start Scene");  //just for debugging
         //text
         this.add.text(
-            640,
-            800,
+            window.innerWidth/2,
+            window.innerheight,
             "press Space to start",
             {                           //styling
                 fontSize: 30,
@@ -102,7 +102,7 @@ export class Start extends Phaser.Scene{
 
         //Button
         this.add.text(
-            640,
+            window.innerWidth/2,
             400,
             "Play",
             {                           //styling
