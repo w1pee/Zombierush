@@ -60,10 +60,11 @@ export default class UIScene extends Phaser.Scene{
         this.DashText.setOrigin(0,1)
 
         //function that syncs the values from the MainScene to UI(here)
-        myGame.events.on('setValues', function(zmb,score,Dash)
+        myGame.events.on('setValues', function(zmb,score,Dash,Highscore)
         {
             this.ZombieText.text = 'Zombies: ' + zmb;
             this.Score.text = score;
+            this.Highscore.text = Highscore;
 
             if(Dash == true){
                 this.DashText.setStyle({fill: '#23C552'});
