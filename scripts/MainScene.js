@@ -160,7 +160,7 @@ export default class MainScene extends Phaser.Scene {
                 if(this.Zombies[i].Health <= 0){
                     this.Zombies[i].healthTxt.destroy();
                     this.Zombies[i].destroy();
-                    this.Zombies[i] = undefined;
+                    this.Zombies[i] = undefined; 
                 }
             }
         }
@@ -180,8 +180,8 @@ export default class MainScene extends Phaser.Scene {
         let check;
 
         do{
-            xspawn = rand(0,1280);
-            yspawn = rand(0,1280);
+            xspawn = rand(0,1600);
+            yspawn = rand(0,1600);
         
             //check x
             if(xspawn > this.player.x-300 && xspawn < this.player.x+300){

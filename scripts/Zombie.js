@@ -48,23 +48,15 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         }
         //----------------------------------------------------------------
         scene.moveZombie = function(path,zombie){
-            // Sets up a list of tweens, one for each tile to walk, that will be chained by the timeline
-            var tweens = [];
-            for(var i = 0; i < path.length-1; i++){
-                var ex = path[i+1].x;
-                var ey = path[i+1].y;
-                tweens.push({
-                    targets: zombie,
-                    x: {value: ex*scene.map.tileWidth, duration: 200},
-                    y: {value: ey*scene.map.tileHeight, duration: 200}
-                });
-            }
-
-            scene.tweens.timeline({
-                tweens: tweens
-            });
+            var vector = new Phaser.Math.Vector2();
+            
+            vector.x = path[1].x - Math.round(zombie.x/16);
+            vector.y = path[1].y - Math.round(zombie.y/16);
+            
+            vector.normalize();
+            vector.scale(zombie.Speed);
+            zombie.setVelocity(vector.x, vector.y);
         };
-        
         
         scene.pathfinder.findPath(Math.round(this.x/16), Math.round(this.y/16), Math.round(scene.player.x/16), Math.round(scene.player.y/16), function(path) {
             if (path === null) {
@@ -75,33 +67,6 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
             }
         }.bind(this));
         scene.pathfinder.calculate();
-
-        // this.Velocity = new Phaser.Math.Vector2();
-        // // simple system for Following Player    //bad way to do this    //will improve that later on
-        // if (this.x > scene.player.x) {
-        //     this.Velocity.x--;
-        // }
-        // else if (this.x < scene.player.x){
-        //     this.Velocity.x++;
-        // }
-        // else {
-        //     this.Velocity.x = 0;
-        // }
-
-        // if (this.y > scene.player.y) {
-        //     this.Velocity.y--;
-        // }
-        // else if (this.y < scene.player.y){
-        //     this.Velocity.y++;
-        // }
-        // else {
-        //     this.Velocity.y = 0;
-        // }
-
-        // this.Velocity.normalize();
-        // this.Velocity.scale(this.Speed);
-        // this.setVelocity(this.Velocity.x, this.Velocity.y);
-        //----------------------------------------------------------------
     }
     pathfindersetup(scene){
         //function looks at the tile and returns the index
@@ -114,7 +79,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         }
         //----------------------------------------------------------------
 
-        var grid = [];
+        this.grid = [];
 
         //generates a grid for the pathfinding algorithmen
         for (let y = 0; y < scene.map.height; y++) {
@@ -122,9 +87,9 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
             for (let x = 0; x < scene.map.width; x++) {
                 col.push(scene.TileID(x,y));
             }
-            grid.push(col);
+            this.grid.push(col);
         }
-        scene.pathfinder.setGrid(grid);
+        scene.pathfinder.setGrid(this.grid);
         //searches for walkable tiles
         var Tileset = scene.map.tilesets[1];
         var properties  = Tileset.tileProperties;
@@ -136,22 +101,8 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
             }
         }
         scene.pathfinder.setAcceptableTiles(-1);
+        scene.pathfinder.enableSync();
     }
-    // Collisons(scene){
-    //     scene.matter.world.on('collision', (event,bodyA,bodyB) =>
-    //     {
-    //         if (bodyA.label == 'ZombieSensor' || bodyB.label == 'ZombieSensor') {
-    //             this.collison = true;
-    //         }
-    //     });
-
-    //     scene.matter.world.on('collisionend', (event,bodyA,bodyB) =>
-    //     {
-    //         if (bodyA.label == 'ZombieSensor' || bodyB.label == 'ZombieSensor') {
-    //             this.collison = false;
-    //         }
-    //     });
-    // }
 }
 
 function rand(min, max) {
