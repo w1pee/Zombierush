@@ -133,7 +133,7 @@ export default class MainScene extends Phaser.Scene {
         //then spawns them
         if(this.Zombienum == 0){
             this.Wave++;
-            this.Spawnnum = this.Wave;
+            this.Spawnnum = 2;
             
             this.events.emit('announce', this.Wave);
 
@@ -147,9 +147,26 @@ export default class MainScene extends Phaser.Scene {
         //----------------------------------------------------------------
         
         //it seperatly spawns the zombies, so it doesnt spawn every zombie in one frame
-        //this drastically improves performence, as the game does not have to wait for every zombie to spawn to start the next frame
+        //this drastically improves performance, as the game does not have to wait for every zombie to spawn to start the next frame
         if(this.Spawnnum > 0){
-            this.spawn(this.Zombiehealth,this.ZombieSpeed);
+            
+            //this is the system for spawing zombies
+            //it first checks if an undefined spot is avaible and fills that in
+            //if not it creates a new spot
+            let loop = true;
+            let n = 0;
+            do{
+                if (this.Zombies[n] == undefined) {
+                    loop = false;
+                    this.Zombies[n] = new Zombie({scene:this,texture:'zombie'},this.Zombiehealth,this.ZombieSpeed,this.player.x,this.player.y);
+                }
+                n++;
+                if(n == this.Zombies.length){
+                    loop = false;
+                    this.Zombies[n] = new Zombie({scene:this,texture:'zombie'},this.Zombiehealth,this.ZombieSpeed,this.player.x,this.player.y);
+                }
+            }
+            while(loop == true)
             this.Spawnnum--;
         }
         //----------------------------------------------------------------
@@ -168,56 +185,6 @@ export default class MainScene extends Phaser.Scene {
         if (this.Score > this.HighScore) {
             this.HighScore = this.Score;
         }
-    }
-    //----------------------------------------------------------------
-
-    //spawns zombie
-    spawn(health,Speed){
-        //generates random number for spawn location of the zombie
-        //need to improve later
-        let xspawn;
-        let yspawn;
-        let check;
-
-        do{
-            xspawn = rand(0,1600);
-            yspawn = rand(0,1600);
-        
-            //check x
-            if(xspawn > this.player.x-300 && xspawn < this.player.x+300){
-                //check y
-                if(yspawn > this.player.y-300 && yspawn < this.player.y+300){
-                check = true;
-                }
-                else{
-                    check = false;
-                }
-            }
-            else{
-                check = false;
-            }
-        }
-        while(check == true);
-        //----------------------------------------------------------------
-
-        //this is the system for spawing zombies
-        //it first checks if an undefined spot is avaible and fills that in
-        //if not it creates a new spot
-        let loop = true;
-        let n = 0;
-        do{
-            if (this.Zombies[n] == undefined) {
-                loop = false;
-                this.Zombies[n] = new Zombie({scene:this,x:xspawn,y:yspawn,texture:'zombie'},health,Speed);
-            }
-            n++;
-            if(n == this.Zombies.length){
-                loop = false;
-                this.Zombies[n] = new Zombie({scene:this,x:xspawn,y:yspawn,texture:'zombie'},health,Speed);
-            }
-        }
-        while(loop == true)
-        //----------------------------------------------------------------
     }
     //----------------------------------------------------------------
 

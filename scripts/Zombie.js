@@ -1,8 +1,13 @@
 export default class Zombie extends Phaser.Physics.Matter.Sprite {
     constructor(data,SpawnHealth,SpawnSpeed){
         let {scene,x,y,texture,frame} = data;
-        super(scene.matter.world,x,y,texture);
+        super(scene.matter.world,0,0,texture);
         this.scene.add.existing(this);
+
+        //pathfinder Setup
+        this.pathfindersetup(this.scene);
+
+        this.cords(scene.player.x,scene.player.y);
 
         const {Body,Bodies} = Phaser.Physics.Matter.Matter;
         var Collider = Bodies.circle(this.x,this.y,7,{isSensor:false,label:'ZombieCollider'});
@@ -19,8 +24,6 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         this.healthTxt = scene.add.text(this.x,this.y,this.Health ,{ font: '10px Arial', fill: '#000000' });    //text that displays the current health of the zombie
         this.healthTxt.setOrigin(0.5,0.5)
 
-        //pathfinder Setup
-        this.pathfindersetup(this.scene);
     }
 
     static preload(scene){
@@ -102,6 +105,23 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         }
         scene.pathfinder.setAcceptableTiles(-1);
         scene.pathfinder.enableSync();
+    }
+    cords(PlayerX,PlayerY){
+        let check;
+        let x;
+        let y;
+        do{
+            x = rand(10,90);
+            y = rand(10,90);
+            check = false;
+
+            if (x < PlayerX - 500 && x > PlayerX + 500 && y < PlayerY - 500 && y > PlayerY + 500) {
+                check = true
+            }
+        }
+        while(this.grid[x][y] != -1 && check == true)
+        this.x = x*16;
+        this.y = y*16;
     }
 }
 
