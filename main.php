@@ -16,6 +16,12 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-migrate-3.4.1.min.js" integrity="sha256-UnTxHm+zKuDPLfufgEMnKGXDl6fEIjtM+n1Q6lL73ok=" crossorigin="anonymous"></script>
     <title>Zombierush</title>
+
+    <style>
+        body{
+          background-color:black;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-inverse">
