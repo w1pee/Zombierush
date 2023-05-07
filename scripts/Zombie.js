@@ -51,14 +51,18 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         }
         //----------------------------------------------------------------
         scene.moveZombie = function(path,zombie){
-            var vector = new Phaser.Math.Vector2();
-            
-            vector.x = path[1].x - Math.round(zombie.x/16);
-            vector.y = path[1].y - Math.round(zombie.y/16);
-            
-            vector.normalize();
-            vector.scale(zombie.Speed);
-            zombie.setVelocity(vector.x, vector.y);
+            if(path != null && zombie != null){
+                var vector = new Phaser.Math.Vector2();
+                vector.x = path[1].x - Math.round(zombie.x/16);
+                vector.y = path[1].y - Math.round(zombie.y/16);
+                
+                vector.normalize();
+                vector.scale(zombie.Speed);
+                zombie.setVelocity(vector.x, vector.y);
+            }
+            else{
+                console.warn('it happend!');
+            }
         };
         
         scene.pathfinder.findPath(Math.round(this.x/16), Math.round(this.y/16), Math.round(scene.player.x/16), Math.round(scene.player.y/16), function(path) {

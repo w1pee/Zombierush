@@ -108,7 +108,7 @@ export class Start extends Phaser.Scene{
         //----------------------------------------------------------------
 
         //Logo Sprite
-        var logo = this.add.sprite(window.innerWidth / 2,150,'logo').setScale(10).setOrigin(0.5,0.5);
+        var logo = this.add.sprite(window.innerWidth / 2,window.innerHeight / 2,'logo').setScale(10).setOrigin(0.5,1);
         //----------------------------------------------------------------
 
         //dropshadow using plugin
