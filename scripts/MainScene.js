@@ -28,8 +28,13 @@ export default class MainScene extends Phaser.Scene {
     }
     create(){
 
-        this.pathfinder = new EasyStar.js();
+        //Generating the map
         this.GenerateMap();
+
+        //Setup for the Path-finding system
+        this.pathfinder = new EasyStar.js();
+        this.pathfindersetup();
+        //----------------------------------------------------------------
 
         //player creation
         this.player = new Player({scene:this,x:640,y:400,texture:'player'});
@@ -42,9 +47,9 @@ export default class MainScene extends Phaser.Scene {
             right: Phaser.Input.Keyboard.KeyCodes.D,
             Dash:  Phaser.Input.Keyboard.KeyCodes.E
         });
+        //----------------------------------------------------------------
 
         this.inputkeys = this.input.keyboard.addKeys({
-            kill: Phaser.Input.Keyboard.KeyCodes.E,
             pause: Phaser.Input.Keyboard.KeyCodes.ESC
         });
 
@@ -81,9 +86,10 @@ export default class MainScene extends Phaser.Scene {
         //Filters Plugin
         this.pipelineInstance = this.plugins.get('rexkawaseblurpipelineplugin');
         //----------------------------------------------------------------
+
+        //here are all the collions the game listens for listed
         this.checkCollisions();
 
-        this.pathfindersetup();
     }
 
     update(){
@@ -244,18 +250,18 @@ export default class MainScene extends Phaser.Scene {
         //tilemaps
         this.map = this.make.tilemap({key:'map'});
         //tileset
-        this.GroundLayer = this.map.addTilesetImage('tileset8-ground','groundTileset');
-        this.OtherLayer = this.map.addTilesetImage('tileset8-otherStuff', 'OtherTileset');
+        this.GroundTileset = this.map.addTilesetImage('tileset8-ground','groundTileset');
+        this.OtherTileset = this.map.addTilesetImage('tileset8-otherStuff', 'OtherTileset');
 
         //layer 1   (ground)
-        this.layer1 = this.map.createLayer('ground',this.GroundLayer,0,0);
+        this.layer1 = this.map.createLayer('ground',this.GroundTileset,0,0);
         //layer 2   (foreground)
-        this.layer2 = this.map.createLayer('other',this.OtherLayer,0,0);
+        this.layer2 = this.map.createLayer('other',this.OtherTileset,0,0);
         this.layer2.setCollisionByProperty({collides:true});
         this.matter.world.convertTilemapLayer(this.layer2);
 
         //layer3    (another foreground)
-        this.layer3 = this.map.createLayer('other2',this.OtherLayer,0,0);
+        this.layer3 = this.map.createLayer('other2',this.OtherTileset,0,0);
         this.layer3.setCollisionByProperty({collides: true});
         this.matter.world.convertTilemapLayer(this.layer3);
     }
@@ -291,17 +297,18 @@ export default class MainScene extends Phaser.Scene {
                 acceptable.push(i);
             }
         }
-        this.pathfinder.setAcceptableTiles(-1);
+        acceptable.push(-1);
+        this.pathfinder.setAcceptableTiles(acceptable);
         this.pathfinder.enableSync();
     }
     SpawnZombie(n){
         let SpawnPos = [0,0];
         do{
-            SpawnPos[0] = rand(5,1595);
-            SpawnPos[1] = rand(5,1595);
+            SpawnPos[0] = rand(5,95);
+            SpawnPos[1] = rand(5,95);
         }
-        while(this.layer2.getTileAt(SpawnPos[0],SpawnPos[1]) == -1);
-        this.Zombies[n] = new Zombie({scene:this,texture:'zombie',Health: this.Zombiehealth,Speed: this.ZombieSpeed,x:SpawnPos[0],y:SpawnPos[1]});
+        while(this.grid[SpawnPos[0],SpawnPos[1]] == -1);
+        this.Zombies[n] = new Zombie({scene:this,texture:'zombie',Health: this.Zombiehealth,Speed: this.ZombieSpeed,x:(SpawnPos[0]*16),y:(SpawnPos[1]*16)});
     }
 }
 
