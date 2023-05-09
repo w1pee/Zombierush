@@ -81,7 +81,9 @@ export default class MainScene extends Phaser.Scene {
         //Filters Plugin
         this.pipelineInstance = this.plugins.get('rexkawaseblurpipelineplugin');
         //----------------------------------------------------------------
-        this.checkCollisions(this);
+        this.checkCollisions();
+
+        this.pathfindersetup();
     }
 
     update(){
@@ -133,7 +135,14 @@ export default class MainScene extends Phaser.Scene {
         //then spawns them
         if(this.Zombienum == 0){
             this.Wave++;
-            this.Spawnnum = 2;
+
+            //5 ℯ^(((1)/(5)) x)
+
+            let euler = 2.718;
+
+            let exponent = this.Wave *  0.2;
+
+            this.Spawnnum = Math.round(5 * (Math.pow(euler,exponent)));
             
             this.events.emit('announce', this.Wave);
 
@@ -148,7 +157,7 @@ export default class MainScene extends Phaser.Scene {
         
         //it seperatly spawns the zombies, so it doesnt spawn every zombie in one frame
         //this drastically improves performance, as the game does not have to wait for every zombie to spawn to start the next frame
-        if(this.Spawnnum > 0){
+        if(this.Spawnnum > 1){
             
             //this is the system for spawing zombies
             //it first checks if an undefined spot is avaible and fills that in
@@ -158,12 +167,12 @@ export default class MainScene extends Phaser.Scene {
             do{
                 if (this.Zombies[n] == undefined) {
                     loop = false;
-                    this.Zombies[n] = new Zombie({scene:this,texture:'zombie'},this.Zombiehealth,this.ZombieSpeed,this.player.x,this.player.y);
+                    this.SpawnZombie(n);
                 }
                 n++;
                 if(n == this.Zombies.length){
                     loop = false;
-                    this.Zombies[n] = new Zombie({scene:this,texture:'zombie'},this.Zombiehealth,this.ZombieSpeed,this.player.x,this.player.y);
+                    this.SpawnZombie(n);
                 }
             }
             while(loop == true)
@@ -207,13 +216,13 @@ export default class MainScene extends Phaser.Scene {
 
             //if bullet and zombie, zombie health - player damage
             if(bodyA.label == 'BulletCollider' && bodyB.label == 'ZombieCollider'){
-                bodyB.gameObject.Health -= this.player.Damage;
+                bodyB.gameObject.takeDamage(this.player.Damage);
                 if(bodyB.gameObject.Health <= 0){
                     this.Score+=10;
                 }
             }
             else if (bodyB.label == 'BulletCollider' && bodyA.label == 'ZombieCollider'){
-                bodyA.gameObject.Health -= this.player.Damage;
+                bodyA.gameObject.takeDamage(this.player.Damage);
                 if(bodyA.gameObject.Health <= 0){
                     this.Score+=10;
                 }
@@ -240,11 +249,59 @@ export default class MainScene extends Phaser.Scene {
 
         //layer 1   (ground)
         this.layer1 = this.map.createLayer('ground',this.GroundLayer,0,0);
-
         //layer 2   (foreground)
-        this.layer2 = this.map.createLayer('extra',this.OtherLayer,0,0);
+        this.layer2 = this.map.createLayer('other',this.OtherLayer,0,0);
         this.layer2.setCollisionByProperty({collides:true});
         this.matter.world.convertTilemapLayer(this.layer2);
+
+        //layer3    (another foreground)
+        this.layer3 = this.map.createLayer('other2',this.OtherLayer,0,0);
+        this.layer3.setCollisionByProperty({collides: true});
+        this.matter.world.convertTilemapLayer(this.layer3);
+    }
+    pathfindersetup(){
+        //function looks at the tile and returns the index
+        this.TileID = function(x,y){
+            var tile = this.layer2.getTileAt(x,y);
+            if(tile == null){
+                return -1;
+            }
+            return tile.index;
+        }
+        //----------------------------------------------------------------
+
+        this.grid = [];
+
+        //generates a grid for the pathfinding algorithmen
+        for (let y = 0; y < this.map.height; y++) {
+            var col = [];
+            for (let x = 0; x < this.map.width; x++) {
+                col.push(this.TileID(x,y));
+            }
+            this.grid.push(col);
+        }
+        this.pathfinder.setGrid(this.grid);
+        //searches for walkable tiles
+        var Tileset = this.map.tilesets[1];
+        var properties  = Tileset.tileProperties;
+        var acceptable = [];
+
+        for (let i = 0; i < this.map.tilesets[1].total; i++) {
+            if(!properties.hasOwnProperty(i)){
+                acceptable.push(i);
+            }
+        }
+        this.pathfinder.setAcceptableTiles(-1);
+        this.pathfinder.enableSync();
+    }
+    SpawnZombie(n){
+        let SpawnPos = [0,0];
+        do{
+            SpawnPos[0] = rand(5,1595);
+            SpawnPos[1] = rand(5,1595);
+        }
+        while(this.layer2.getTileAt(SpawnPos[0],SpawnPos[1]) == -1);
+        this.Zombies[n] = new Zombie({scene:this,texture:'zombie',Health: this.Zombiehealth,Speed: this.ZombieSpeed,x:SpawnPos[0],y:SpawnPos[1]});
     }
 }
 
