@@ -28,11 +28,12 @@ var config = {
       key: 'matterCollision',
       mapping:'matterCollision',
     }
-  //   scene: {
-  //     plugin: BoardPlugin,
-  //     key: 'rexBoard',
-  //     mapping: 'rexBoard'
-  // },
-  }
+  },
+  //capping the fps at 60fps
+  fps: {
+    target: 60,
+    forceSetTimeOut: true
+  },
+  
 };
 var game = new Phaser.Game(config);

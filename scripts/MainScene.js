@@ -71,7 +71,7 @@ export default class MainScene extends Phaser.Scene {
         this.Spawnnum;
         this.Zombiehealth = 20;
         this.Zombies = new Array();
-        this.ZombieSpeed = 0.5;
+        this.ZombieSpeed = 1.5;
 
         this.HighScore = 0;
         this.Score = 0;

@@ -15,12 +15,12 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.setFixedRotation();
         this.setCollisionGroup(-1); //setting collision group, so it wont collide with the Player
         //atribute for the player
-        this.speed = 1.8;           //Player Speed
+        this.speed = 5;           //Player Speed
         this.DashSpeed = 8;        //Speed of the Player during the Dash
         this.DashCooldown = 5;      //cooldown of the Dash in seconds
         this.Dashcheck = true;
 
-        this.bulletspeed = 8;       //Bullet Speed
+        this.bulletspeed = 10;       //Bullet Speed
         this.firerate = 3;          //the rate the Player fires at(shots per second)
         this.Damage = 10;           //Damage the bullets inflicts onto zombies
         this.ratecheck = true;      //checks if the cooldown is over
