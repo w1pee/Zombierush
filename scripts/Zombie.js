@@ -5,7 +5,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         this.scene.add.existing(this);
 
         const {Body,Bodies} = Phaser.Physics.Matter.Matter;
-        var Collider = Bodies.circle(this.x,this.y,5,{isSensor:false,label:'ZombieCollider'});
+        var Collider = Bodies.circle(this.x,this.y,3,{isSensor:false,label:'ZombieCollider'});
         var Sensor = Bodies.circle(this.x,this.y,15,{isSensor:true,label:'ZombieSensor'});
         const compundBody = Body.create({
             parts:[Collider,Sensor],
@@ -24,6 +24,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
     static preload(scene){
         scene.load.image('zombie', 'assets/Zombies/images/Zombies.png');
     }
+
     update(scene){
         
         //updating text position

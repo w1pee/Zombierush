@@ -212,22 +212,22 @@ export default class MainScene extends Phaser.Scene {
             //Zombie Collider label:    ZombieCollider
 
             //so bullet will always be destroyed on impact
-            if(bodyA.label == 'BulletCollider' && bodyB.label != 'ZombieSensor'){
+            if(bodyA.label == 'BulletCollider'){
                 bodyA.gameObject.destroy()
             }
-            else if (bodyB.label == 'BulletCollider' && bodyA.label != 'ZombieSensor'){
+            else if (bodyB.label == 'BulletCollider'){
                 bodyB.gameObject.destroy();
             }
             //----------------------------------------------------------------
 
             //if bullet and zombie, zombie health - player damage
-            if(bodyA.label == 'BulletCollider' && bodyB.label == 'ZombieCollider'){
+            if(bodyA.label == 'BulletCollider' && bodyB.label == 'ZombieSensor'){
                 bodyB.gameObject.takeDamage(this.player.Damage);
                 if(bodyB.gameObject.Health <= 0){
                     this.Score+=10;
                 }
             }
-            else if (bodyB.label == 'BulletCollider' && bodyA.label == 'ZombieCollider'){
+            else if (bodyB.label == 'BulletCollider' && bodyA.label == 'ZombieSensor'){
                 bodyA.gameObject.takeDamage(this.player.Damage);
                 if(bodyA.gameObject.Health <= 0){
                     this.Score+=10;

@@ -17,10 +17,10 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         //atribute for the player
         this.speed = 5;           //Player Speed
         this.DashSpeed = 8;        //Speed of the Player during the Dash
-        this.DashCooldown = 5;      //cooldown of the Dash in seconds
+        this.DashCooldown = 5;     //cooldown of the Dash in seconds
         this.Dashcheck = true;
 
-        this.bulletspeed = 10;       //Bullet Speed
+        this.bulletspeed = 15;      //Bullet Speed
         this.firerate = 3;          //the rate the Player fires at(shots per second)
         this.Damage = 10;           //Damage the bullets inflicts onto zombies
         this.ratecheck = true;      //checks if the cooldown is over
@@ -143,7 +143,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
         //Custom collider for bullet
         const {Body,Bodies} = Phaser.Physics.Matter.Matter;
-        var newcollider = Bodies.circle(this.x,this.y,2,{label:'BulletCollider'})
+        var newcollider = Bodies.circle(this.x,this.y,4,{label:'BulletCollider'})
         const BulletBody = Body.create({
             parts:[newcollider],
             collisionFilter: {
