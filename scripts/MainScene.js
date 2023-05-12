@@ -256,7 +256,7 @@ export default class MainScene extends Phaser.Scene {
         //layer 1   (ground)
         this.layer1 = this.map.createLayer('ground',this.GroundTileset,0,0);
         //layer 2   (foreground)
-        this.layer2 = this.map.createLayer('other',this.OtherTileset,0,0);
+        this.layer2 = this.map.createLayer('buildings',this.OtherTileset,0,0);
         this.layer2.setCollisionByProperty({collides:true});
         this.matter.world.convertTilemapLayer(this.layer2);
 
@@ -290,14 +290,13 @@ export default class MainScene extends Phaser.Scene {
         //searches for walkable tiles
         var Tileset = this.map.tilesets[1];
         var properties  = Tileset.tileProperties;
-        var acceptable = [];
+        var acceptable = [-1];
 
         for (let i = 0; i < this.map.tilesets[1].total; i++) {
             if(!properties.hasOwnProperty(i)){
                 acceptable.push(i);
             }
         }
-        acceptable.push(-1);
         this.pathfinder.setAcceptableTiles(acceptable);
         this.pathfinder.enableSync();
     }
