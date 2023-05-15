@@ -82,14 +82,18 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
     }
 }
 
+//function for rounding a number to the lower value
 function MinRound(number){
-    let NewNumber = Math.round(number);
+    var NewNumber = Math.round(number);
     if(NewNumber > number){
-        return (NewNumber - 1);
+        return (NewNumber--);
     }
     return NewNumber;
 }
+//----------------------------------------------------------------
 
+//function for generating random number with min and max value
 function rand(min, max) {
     return Math.round(Math.random() * (max - min) + min);
 }
+//----------------------------------------------------------------

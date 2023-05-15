@@ -66,7 +66,7 @@ export default class UIScene extends Phaser.Scene{
             this.Score.text = score;
             this.Highscore.text = Highscore;
 
-            if(Dash == true){
+            if(Dash){
                 this.DashText.setStyle({fill: '#23C552'});
             }
             else{

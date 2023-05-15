@@ -37,7 +37,7 @@ export default class MainScene extends Phaser.Scene {
         //----------------------------------------------------------------
 
         //player creation
-        this.player = new Player({scene:this,x:640,y:400,texture:'player'});
+        this.player = new Player({scene:this,x:800,y:800,texture:'player'});
 
         //inputs from the player
         this.player.inputkeys = this.input.keyboard.addKeys({
@@ -181,7 +181,7 @@ export default class MainScene extends Phaser.Scene {
                     this.SpawnZombie(n);
                 }
             }
-            while(loop == true)
+            while(loop)
             this.Spawnnum--;
         }
         //----------------------------------------------------------------
@@ -290,29 +290,57 @@ export default class MainScene extends Phaser.Scene {
         //searches for walkable tiles
         var Tileset = this.map.tilesets[1];
         var properties  = Tileset.tileProperties;
-        var acceptable = [-1];
+        this.acceptable = [-1];
 
         for (let i = 0; i < this.map.tilesets[1].total; i++) {
             if(!properties.hasOwnProperty(i)){
-                acceptable.push(i);
+                this.acceptable.push(i);
             }
         }
-        this.pathfinder.setAcceptableTiles(acceptable);
+        this.pathfinder.setAcceptableTiles(this.acceptable);
         this.pathfinder.enableSync();
     }
     SpawnZombie(n){
-        let SpawnPos = [0,0];
+        let SpawnX;
+        let SpawnY;
+
+        const radius = 20;  //the number of tiles the game spawns zombies away from the player
+
+        const PlayerX = MinRound(this.player.x / 16);
+        const PlayerY = MinRound(this.player.y / 16);
+
+        let InPlayerReach;
+
         do{
-            SpawnPos[0] = rand(5,95);
-            SpawnPos[1] = rand(5,95);
+            InPlayerReach = false;
+            SpawnY = rand(5,95);
+            SpawnX = rand(5,95);
+
+            if(SpawnX>PlayerX-radius&&SpawnX<PlayerX+radius){
+                if(SpawnY>PlayerY-radius&&SpawnY<PlayerY+radius){
+                    InPlayerReach = true;
+                }
+            }
+            console.log('calculating for ' + n);
         }
-        while(this.grid[SpawnPos[0],SpawnPos[1]] == -1);
-        this.Zombies[n] = new Zombie({scene:this,texture:'zombie',Health: this.Zombiehealth,Speed: this.ZombieSpeed,x:(SpawnPos[0]*16),y:(SpawnPos[1]*16)});
+        while(this.grid[SpawnX][SpawnY] != -1 || InPlayerReach);
+
+        this.Zombies[n] = new Zombie({scene:this,texture:'zombie',Health: this.Zombiehealth,Speed: this.ZombieSpeed,x:((SpawnY*16)+8),y:((SpawnX*16)+8)});
     }
 }
 
 //function for generating random number with min and max value
 function rand(min, max) {
     return Math.round(Math.random() * (max - min) + min);
+}
+//----------------------------------------------------------------
+
+//function for rounding a number to the lower value
+function MinRound(number){
+    var NewNumber = Math.round(number);
+    if(NewNumber > number){
+        return (NewNumber--);
+    }
+    return NewNumber;
 }
 //----------------------------------------------------------------

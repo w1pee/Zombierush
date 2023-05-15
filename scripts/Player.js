@@ -15,9 +15,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.setFixedRotation();
         this.setCollisionGroup(-1); //setting collision group, so it wont collide with the Player
         //atribute for the player
-        this.speed = 5;           //Player Speed
-        this.DashSpeed = 8;        //Speed of the Player during the Dash
-        this.DashCooldown = 5;     //cooldown of the Dash in seconds
+        this.speed = 5;             //Player Speed
+        this.DashSpeed = 10;        //Speed of the Player during the Dash
+        this.DashCooldown = 5;      //cooldown of the Dash in seconds
         this.Dashcheck = true;
 
         this.bulletspeed = 15;      //Bullet Speed
@@ -36,9 +36,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     update(scene){
         let speed = this.speed;
         //Dash      //if activate the player accelerates very fast
-        if(this.inputkeys.Dash.isDown && this.Dashcheck == true){
+        if(this.inputkeys.Dash.isDown && this.Dashcheck){
             speed = this.DashSpeed;
-            this.scene.time.delayedCall(150, () => {
+            this.scene.time.delayedCall(250, () => {
                 this.Dashcheck = false;
             });
             this.scene.time.delayedCall(this.DashCooldown*1000, () => {
@@ -86,8 +86,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         //----------------------------------------------------------------
 
         //if the mouse is pressed & the cooldown is not active, then it shoots
-        if(this.shootPressed == true){
-            if(this.ratecheck == true){
+        if(this.shootPressed){
+            if(this.ratecheck){
                 this.shootBullet(scene);    //shoots the Bullet
                 //sets cooldown
                 this.ratecheck = false;
