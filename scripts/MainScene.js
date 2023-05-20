@@ -339,7 +339,7 @@ function rand(min, max) {
 function MinRound(number){
     var NewNumber = Math.round(number);
     if(NewNumber > number){
-        return (NewNumber--);
+        return (NewNumber - 1);
     }
     return NewNumber;
 }
