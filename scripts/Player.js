@@ -33,7 +33,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         scene.load.image('bullet', 'assets/bullet.png'); 
     }
 
-    update(scene){
+    update(){
         let speed = this.speed;
         //Dash      //if activate the player accelerates very fast
         if(this.inputkeys.Dash.isDown && this.Dashcheck){
@@ -80,7 +80,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         //----------------------------------------------------------------
         
         // listen for mouse input to shoot
-        scene.input.on('pointerdown', function(pointer) {
+        this.scene.input.on('pointerdown', function(pointer) {
             this.shootPressed = true;
         }, this);
         //----------------------------------------------------------------
@@ -88,7 +88,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         //if the mouse is pressed & the cooldown is not active, then it shoots
         if(this.shootPressed){
             if(this.ratecheck){
-                this.shootBullet(scene);    //shoots the Bullet
+                this.shootBullet(this.scene);   //shoots the Bullet
                 //sets cooldown
                 this.ratecheck = false;
                 this.scene.time.delayedCall(1000 * (1/this.firerate), () => {   //1000 is 1 second | --> 15 shots per second is 1000 * 1/15
@@ -100,16 +100,16 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         //----------------------------------------------------------------
 
         //if the mouse is no longer pressed it set it to false
-        scene.input.on('pointerup', function(pointer) {
+        this.scene.input.on('pointerup', function(pointer) {
             this.shootPressed = false;
         },this);
         //----------------------------------------------------------------
     }
-    shootBullet(scene) {
+    shootBullet() {
 
         //x & y position of the cursor(where the bullet is supposed to go)
-        let x = scene.cursorCords[0];
-        let y = scene.cursorCords[1];
+        let x = this.scene.cursorCords[0];
+        let y = this.scene.cursorCords[1];
         //----------------------------------------------------------------
 
         //Calculation of the Vector applied to the Bullet
@@ -138,7 +138,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         //----------------------------------------------------------------
 
         // Create a new bullet sprite at the player's position
-        const bullet = scene.matter.add.sprite(this.x, this.y, 'bullet');
+        const bullet = this.scene.matter.add.sprite(this.x, this.y, 'bullet');
         //----------------------------------------------------------------
 
         //Custom collider for bullet

@@ -25,7 +25,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         scene.load.image('zombie', 'assets/Zombies/images/Zombies.png');
     }
 
-    update(scene){
+    update(){
         
         //updating text position
         this.healthTxt.x = this.x;
@@ -37,8 +37,8 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         //----------------------------------------------------------------
 
         //when cursor in reach show health
-        if(scene.cursorCords[0]+50 > this.x && scene.cursorCords[0]-50 < this.x){
-            if(scene.cursorCords[1]+50 > this.y && scene.cursorCords[1]-50 < this.y){
+        if(this.scene.cursorCords[0]+50 > this.x && this.scene.cursorCords[0]-50 < this.x){
+            if(this.scene.cursorCords[1]+50 > this.y && this.scene.cursorCords[1]-50 < this.y){
                 this.healthTxt.alpha = 1;
             }
         }
@@ -46,7 +46,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
             this.healthTxt.alpha = 0;
         }
         //----------------------------------------------------------------
-        scene.moveZombie = function(path,zombie){
+        this.scene.moveZombie = function(path,zombie){
             if(path != null && zombie != null && path != undefined && zombie != undefined && path.length > 1){
                 var vector = new Phaser.Math.Vector2();
 
@@ -61,15 +61,15 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
             }
         };
         
-        scene.pathfinder.findPath(MinRound(this.x/16), MinRound(this.y/16), MinRound(scene.player.x/16), MinRound(scene.player.y/16), function(path) {
+        this.scene.pathfinder.findPath(MinRound(this.x/16), MinRound(this.y/16), MinRound(this.scene.player.x/16), MinRound(this.scene.player.y/16), function(path) {
             if (path === null) {
                 console.warn("Path was not found.");
             } 
             else {
-                scene.moveZombie.bind(this)(path,this);
+                this.scene.moveZombie.bind(this)(path,this);
             }
         }.bind(this));
-        scene.pathfinder.calculate();
+        this.scene.pathfinder.calculate();
     }
     takeDamage(dmg){
         this.Health -= dmg;

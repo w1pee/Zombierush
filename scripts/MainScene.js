@@ -38,6 +38,8 @@ export default class MainScene extends Phaser.Scene {
 
         //player creation
         this.player = new Player({scene:this,x:800,y:800,texture:'player'});
+        this.EntityLayer.add([this.player]);
+        
 
         //inputs from the player
         this.player.inputkeys = this.input.keyboard.addKeys({
@@ -94,7 +96,7 @@ export default class MainScene extends Phaser.Scene {
 
     update(){
         //update of Player + Zombies + UI
-        this.player.update(this);
+        this.player.update();
 
         //updates the Zombie
         for(let i = 0; i < this.Zombies.length; i++){
@@ -249,6 +251,8 @@ export default class MainScene extends Phaser.Scene {
     GenerateMap(){
         //tilemaps
         this.map = this.make.tilemap({key:'map'});
+
+        console.log(this.map.layers[0].data);
         //tileset
         this.GroundTileset = this.map.addTilesetImage('tileset8-ground','groundTileset');
         this.OtherTileset = this.map.addTilesetImage('tileset8-otherStuff', 'OtherTileset');
@@ -256,14 +260,22 @@ export default class MainScene extends Phaser.Scene {
         //layer 1   (ground)
         this.layer1 = this.map.createLayer('ground',this.GroundTileset,0,0);
         //layer 2   (foreground)
-        this.layer2 = this.map.createLayer('buildings',this.OtherTileset,0,0);
+        this.layer2 = this.map.createLayer('other',this.OtherTileset,0,0);
         this.layer2.setCollisionByProperty({collides:true});
         this.matter.world.convertTilemapLayer(this.layer2);
 
         //layer3    (another foreground)
-        this.layer3 = this.map.createLayer('other2',this.OtherTileset,0,0);
+        this.layer3 = this.map.createLayer('detail',this.OtherTileset,0,0);
         this.layer3.setCollisionByProperty({collides: true});
         this.matter.world.convertTilemapLayer(this.layer3);
+
+        this.DefaultLayer = this.add.layer();
+        this.EntityLayer = this.add.layer();
+        this.DetailLayer = this.add.layer();
+
+        this.DefaultLayer.add([this.layer1]);
+
+        this.DetailLayer.add([this.layer2,this.layer3]);
     }
     pathfindersetup(){
         //function looks at the tile and returns the index
@@ -290,15 +302,18 @@ export default class MainScene extends Phaser.Scene {
         //searches for walkable tiles
         var Tileset = this.map.tilesets[1];
         var properties  = Tileset.tileProperties;
-        this.acceptable = [-1];
+        var acceptable = [-1];
 
         for (let i = 0; i < this.map.tilesets[1].total; i++) {
             if(!properties.hasOwnProperty(i)){
-                this.acceptable.push(i);
+                acceptable.push(i);
             }
         }
-        this.pathfinder.setAcceptableTiles(this.acceptable);
+        console.log(acceptable);
+        this.pathfinder.setAcceptableTiles(acceptable);
         this.pathfinder.enableSync();
+        this.pathfinder.setIterationsPerCalculation(5);
+        this.pathfinder.enableDiagonals();
     }
     SpawnZombie(n){
         let SpawnX;
@@ -326,6 +341,7 @@ export default class MainScene extends Phaser.Scene {
         while(this.grid[SpawnX][SpawnY] != -1 || InPlayerReach);
 
         this.Zombies[n] = new Zombie({scene:this,texture:'zombie',Health: this.Zombiehealth,Speed: this.ZombieSpeed,x:((SpawnY*16)+8),y:((SpawnX*16)+8)});
+        this.EntityLayer.add([this.Zombies[n]]);
     }
 }
 
