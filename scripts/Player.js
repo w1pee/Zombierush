@@ -1,3 +1,4 @@
+import Func from "./Func.js";
 export default class Player extends Phaser.Physics.Matter.Sprite {
     constructor(data){
         let {scene,x,y,texture,frame} = data;
@@ -108,8 +109,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     shootBullet() {
 
         //x & y position of the cursor(where the bullet is supposed to go)
-        let x = this.scene.cursorCords[0];
-        let y = this.scene.cursorCords[1];
+        let x = this.scene.cursorCords.x;
+        let y = this.scene.cursorCords.y;
         //----------------------------------------------------------------
 
         //Calculation of the Vector applied to the Bullet
@@ -119,7 +120,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         BulletVector.y = y - this.y;
 
         BulletVector.normalize();
-        BulletVector.scale(this.bulletspeed + rand(-0.5,0.5));  //sets the speed of the Bullet with a random value between -0.5 and 0.5 to make it look better
+        BulletVector.scale(this.bulletspeed + Func.rand(-0.5,0.5));  //sets the speed of the Bullet with a random value between -0.5 and 0.5 to make it look better
         //----------------------------------------------------------------
 
         //calculation of the Rotation of the bullet based on the Vector
@@ -139,6 +140,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
         // Create a new bullet sprite at the player's position
         const bullet = this.scene.matter.add.sprite(this.x, this.y, 'bullet');
+
+        this.scene.EntityLayer.add(bullet);
         //----------------------------------------------------------------
 
         //Custom collider for bullet
@@ -168,8 +171,3 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         //----------------------------------------------------------------
     }
 }
-//function for generating random number with min and max value
-function rand(min, max) {
-    return Math.random() * (max - min) + min;
-}
-//----------------------------------------------------------------

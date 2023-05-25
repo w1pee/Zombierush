@@ -1,3 +1,4 @@
+import Func from "./Func.js";
 export default class Zombie extends Phaser.Physics.Matter.Sprite {
     constructor(data){
         let {scene,x,y,texture,Health,Speed} = data;
@@ -15,10 +16,14 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         this.setFixedRotation();
 
         this.Health = Health;
-        this.Speed = Speed * rand(0.8,1.2);     //adds a little random to Speed
+        this.Speed = Speed * Func.rand(0.8,1.2);     //adds a little random to Speed
         this.healthTxt = scene.add.text(this.x,this.y,this.Health ,{ font: '10px Arial', fill: '#000000' });    //text that displays the current health of the zombie
         this.healthTxt.setOrigin(0.5,0.5)
 
+        this.OldPlayerX = 0;
+        this.OldPlayerY = 0
+
+        this.pathposition;
     }
 
     static preload(scene){
@@ -26,7 +31,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
     }
 
     update(){
-        
+
         //updating text position
         this.healthTxt.x = this.x;
         this.healthTxt.y = this.y+12;
@@ -37,40 +42,46 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         //----------------------------------------------------------------
 
         //when cursor in reach show health
-        if(this.scene.cursorCords[0]+50 > this.x && this.scene.cursorCords[0]-50 < this.x){
-            if(this.scene.cursorCords[1]+50 > this.y && this.scene.cursorCords[1]-50 < this.y){
-                this.healthTxt.alpha = 1;
-            }
+        if(Func.Distance(this.x,this.scene.cursorCords.x,this.y,this.scene.cursorCords.y) < 75){
+            this.healthTxt.alpha = 1;
         }
         else{
             this.healthTxt.alpha = 0;
         }
         //----------------------------------------------------------------
-        this.scene.moveZombie = function(path,zombie){
-            if(path != null && zombie != null && path != undefined && zombie != undefined && path.length > 1){
-                var vector = new Phaser.Math.Vector2();
 
-                let PathX = (path[1].x * 16) + 8;
-                let PathY = (path[1].y * 16) + 8;
-                vector.x = PathX - zombie.x;
-                vector.y = PathY - zombie.y;
-                
-                vector.normalize();
-                vector.scale(zombie.Speed);
-                zombie.setVelocity(vector.x, vector.y);
-            }
-        };
-        
-        this.scene.pathfinder.findPath(MinRound(this.x/16), MinRound(this.y/16), MinRound(this.scene.player.x/16), MinRound(this.scene.player.y/16), function(path) {
-            if (path === null) {
-                console.warn("Path was not found.");
-            } 
-            else {
-                this.scene.moveZombie.bind(this)(path,this);
-            }
-        }.bind(this));
-        this.scene.pathfinder.calculate();
+        //Player position
+        const PlayerX = Func.MinRound(this.scene.player.x / 16);
+        const PlayerY = Func.MinRound(this.scene.player.y / 16);
+        //----------------------------------------------------------------
+
+        //finding Path
+        //When Player changes tile hes on, Zombie searches for a new path
+        if(this.OldPlayerX != PlayerX || this.OldPlayerY != PlayerY){
+            this.scene.pathfinder.findPath(Func.MinRound(this.x/16), Func.MinRound(this.y/16), PlayerX, PlayerY, function(path) {
+                if (path === null) {
+                    console.warn("Path was not found.");
+                }
+                else {
+                    this.path = path;
+                    this.pathposition = 1;
+                    this.Move();
+                }
+            }.bind(this));
+            this.scene.pathfinder.calculate();
+            this.OldPlayerX = PlayerX;
+            this.OldPlayerY = PlayerY;
+        }
+        //----------------------------------------------------------------
+
+        //Movement
+        this.Move();
+        if(Func.MinRound(this.x / 16) === this.path[this.pathposition-1].x && Func.MinRound(this.y / 16) === this.path[this.pathposition-1].y){
+            this.pathposition++;
+        }
+        //----------------------------------------------------------------
     }
+    //function for the Zombie taking damage
     takeDamage(dmg){
         this.Health -= dmg;
 
@@ -80,20 +91,24 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
             this.clearTint();
         });
     }
-}
+    //function for moving the player
+    Move(){
 
-//function for rounding a number to the lower value
-function MinRound(number){
-    var NewNumber = Math.round(number);
-    if(NewNumber > number){
-        return (NewNumber - 1);
+        let Pos = this.pathposition;
+        
+        if(Pos >= this.path.length){
+            Pos = this.path.length-1;
+        }
+
+        var vector = new Phaser.Math.Vector2();
+
+        let PathX = (this.path[Pos].x * 16) + 8;
+        let PathY = (this.path[Pos].y * 16) + 8;
+        vector.x = PathX - this.x;
+        vector.y = PathY - this.y;
+        
+        vector.normalize();
+        vector.scale(this.Speed);
+        this.setVelocity(vector.x, vector.y);
     }
-    return NewNumber;
 }
-//----------------------------------------------------------------
-
-//function for generating random number with min and max value
-function rand(min, max) {
-    return Math.round(Math.random() * (max - min) + min);
-}
-//----------------------------------------------------------------

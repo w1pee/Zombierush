@@ -1,6 +1,7 @@
 import Player from "./Player.js";
 import Zombie from "./Zombie.js";
 import MyCamera from "./MyCamera.js";
+import Func from "./Func.js";
 
 export default class MainScene extends Phaser.Scene {
     constructor() {
@@ -91,7 +92,6 @@ export default class MainScene extends Phaser.Scene {
 
         //here are all the collions the game listens for listed
         this.checkCollisions();
-
     }
 
     update(){
@@ -113,8 +113,8 @@ export default class MainScene extends Phaser.Scene {
         //i do the -640 / -400, because the center of these coordinates is in the center
         //but the coordinates of the game start at the top-left
         //so i have to add/subtract half of the Viewport length to align them
-        this.cursorCords[0] = Math.round(this.cameras.main.scrollX)+(this.wit/2) + ((this.input.mousePointer.x - this.wit/2)/3)+3;
-        this.cursorCords[1] = Math.round(this.cameras.main.scrollY)+(this.hit/2) + ((this.input.mousePointer.y - this.hit/2)/3) - 22; //the cors are a bit offset, idk why, but this fixes it
+        this.cursorCords.x = Math.round(this.cameras.main.scrollX)+(this.wit/2) + ((this.input.mousePointer.x - this.wit/2)/3)+3;
+        this.cursorCords.y = Math.round(this.cameras.main.scrollY)+(this.hit/2) + ((this.input.mousePointer.y - this.hit/2)/3) - 22; //the cors are a bit offset, idk why, but this fixes it
         //----------------------------------------------------------------
         
         //Pauses the game
@@ -142,7 +142,7 @@ export default class MainScene extends Phaser.Scene {
         //calculates based on the current Wave the amounts of zombies to spawn
         //then spawns them
         if(this.Zombienum == 0){
-            this.Wave++;
+            this.Wave += 1;
 
             //5 ℯ^(((1)/(5)) x)
 
@@ -150,8 +150,7 @@ export default class MainScene extends Phaser.Scene {
 
             let exponent = this.Wave *  0.2;
 
-            this.Spawnnum = Math.round(5 * (Math.pow(euler,exponent)));
-            
+            this.Spawnnum = Func.MinRound(5 * (Math.pow(euler,exponent)));
             this.events.emit('announce', this.Wave);
 
             if(this.Wave % 2 == 0){
@@ -166,7 +165,6 @@ export default class MainScene extends Phaser.Scene {
         //it seperatly spawns the zombies, so it doesnt spawn every zombie in one frame
         //this drastically improves performance, as the game does not have to wait for every zombie to spawn to start the next frame
         if(this.Spawnnum > 1){
-            
             //this is the system for spawing zombies
             //it first checks if an undefined spot is avaible and fills that in
             //if not it creates a new spot
@@ -176,6 +174,7 @@ export default class MainScene extends Phaser.Scene {
                 if (this.Zombies[n] == undefined) {
                     loop = false;
                     this.SpawnZombie(n);
+                    break;
                 }
                 n++;
                 if(n == this.Zombies.length){
@@ -251,8 +250,6 @@ export default class MainScene extends Phaser.Scene {
     GenerateMap(){
         //tilemaps
         this.map = this.make.tilemap({key:'map'});
-
-        console.log(this.map.layers[0].data);
         //tileset
         this.GroundTileset = this.map.addTilesetImage('tileset8-ground','groundTileset');
         this.OtherTileset = this.map.addTilesetImage('tileset8-otherStuff', 'OtherTileset');
@@ -309,7 +306,6 @@ export default class MainScene extends Phaser.Scene {
                 acceptable.push(i);
             }
         }
-        console.log(acceptable);
         this.pathfinder.setAcceptableTiles(acceptable);
         this.pathfinder.enableSync();
         this.pathfinder.setIterationsPerCalculation(5);
@@ -319,24 +315,21 @@ export default class MainScene extends Phaser.Scene {
         let SpawnX;
         let SpawnY;
 
-        const radius = 20;  //the number of tiles the game spawns zombies away from the player
+        const radius = 25;  //the number of tiles the game spawns zombies away from the player
 
-        const PlayerX = MinRound(this.player.x / 16);
-        const PlayerY = MinRound(this.player.y / 16);
+        const PlayerX = Func.MinRound(this.player.x / 16);
+        const PlayerY = Func.MinRound(this.player.y / 16);
 
         let InPlayerReach;
 
         do{
             InPlayerReach = false;
-            SpawnY = rand(5,95);
-            SpawnX = rand(5,95);
+            SpawnY = Func.rand(5,95);
+            SpawnX = Func.rand(5,95);
 
-            if(SpawnX>PlayerX-radius&&SpawnX<PlayerX+radius){
-                if(SpawnY>PlayerY-radius&&SpawnY<PlayerY+radius){
-                    InPlayerReach = true;
-                }
+            if(Func.Distance(SpawnX,PlayerX,SpawnY,PlayerY) < radius){
+                InPlayerReach = true;
             }
-            console.log('calculating for ' + n);
         }
         while(this.grid[SpawnX][SpawnY] != -1 || InPlayerReach);
 
@@ -344,19 +337,3 @@ export default class MainScene extends Phaser.Scene {
         this.EntityLayer.add([this.Zombies[n]]);
     }
 }
-
-//function for generating random number with min and max value
-function rand(min, max) {
-    return Math.round(Math.random() * (max - min) + min);
-}
-//----------------------------------------------------------------
-
-//function for rounding a number to the lower value
-function MinRound(number){
-    var NewNumber = Math.round(number);
-    if(NewNumber > number){
-        return (NewNumber - 1);
-    }
-    return NewNumber;
-}
-//----------------------------------------------------------------
