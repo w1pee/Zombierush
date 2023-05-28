@@ -1,0 +1,72 @@
+{
+    "anims": [
+        {
+            "key": "idle",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 5,
+            "frames": [
+                {
+                    "key": "default_player1wak",
+                    "frame": "player1wak_idle1"
+                },
+                {
+                    "key": "default_player1wak",
+                    "frame": "player1wak_idle2"
+                },
+                {
+                    "key": "default_player1wak",
+                    "frame": "player1wak_idle3"
+                }
+            ]
+        },
+        {
+            "key": "walkleft",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 12,
+            "frames": [
+                {
+                    "key": "default_player1wak",
+                    "frame": "player1wak_walkleft1"
+                },
+                {
+                    "key": "default_player1wak",
+                    "frame": "player1wak_walkleft2"
+                },
+                {
+                    "key": "default_player1wak",
+                    "frame": "player1wak_walkleft3"
+                },
+                {
+                    "key": "default_player1wak",
+                    "frame": "player1wak_walkleft4"
+                }
+            ]
+        },
+        {
+            "key": "walkright",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 12,
+            "frames": [
+                {
+                    "key": "default_player1wak",
+                    "frame": "player1wak_walkright1"
+                },
+                {
+                    "key": "default_player1wak",
+                    "frame": "player1wak_walkright2"
+                },
+                {
+                    "key": "default_player1wak",
+                    "frame": "player1wak_walkright3"
+                },
+                {
+                    "key": "default_player1wak",
+                    "frame": "player1wak_walkright4"
+                }
+            ]
+        }
+    ]
+}

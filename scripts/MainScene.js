@@ -38,7 +38,7 @@ export default class MainScene extends Phaser.Scene {
         //----------------------------------------------------------------
 
         //player creation
-        this.player = new Player({scene:this,x:800,y:800,texture:'player'});
+        this.player = new Player({scene:this,x:800,y:800,texture:'default_player1'});     
         this.EntityLayer.add([this.player]);
         
 
@@ -333,7 +333,7 @@ export default class MainScene extends Phaser.Scene {
         }
         while(this.grid[SpawnX][SpawnY] != -1 || InPlayerReach);
 
-        this.Zombies[n] = new Zombie({scene:this,texture:'zombie',Health: this.Zombiehealth,Speed: this.ZombieSpeed,x:((SpawnY*16)+8),y:((SpawnX*16)+8)});
+        this.Zombies[n] = new Zombie({scene:this,texture:'default_zombiedino1',Health: this.Zombiehealth,Speed: this.ZombieSpeed,x:((SpawnY*16)+8),y:((SpawnX*16)+8)}); 
         this.EntityLayer.add([this.Zombies[n]]);
     }
 }

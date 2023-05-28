@@ -27,7 +27,8 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
     }
 
     static preload(scene){
-        scene.load.image('zombie', 'assets/Zombies/images/Zombies.png');
+        scene.load.atlas('default_zombiedino1', 'assets/MainPlayer/default_zombiedino1.png', 'assets/MainPlayer/default_zombiedino1_atlas.json');
+        scene.load.animation('default_zombiedino1_anims', 'assets/MainPlayer/default_zombiedino1_anim.json'); 
     }
 
     update(){
@@ -110,5 +111,16 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         vector.normalize();
         vector.scale(this.Speed);
         this.setVelocity(vector.x, vector.y);
+        if(Math.abs(vector.x) > 0.1 || Math.abs(vector.y) > 0.1){
+            this.anims.play('walkrightz', true);
+        }
+        //needs to be fixed that when zombiedino goes into the left direction screen, the walkleftz animation plays
+        //fixidea: if statement by locating Players direction from the zombiedino     
+        if(Math.abs(vector.x) < 0 || Math.abs(vector.y) < 0){
+            this.anims.play('walkleftz', true);
+        } 
+        if(Math.abs(vector.x) == 0 || Math.abs(vector.y) == 0){
+            this.anims.play('idlez', true);
+        }   
     }
 }

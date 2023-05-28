@@ -1,7 +1,7 @@
 {
     "frames": [
         {
-            "filename": "idle_4",
+            "filename": "zombiedino1_walkright1",
             "frame": {
                 "w": 16,
                 "h": 16,
@@ -14,7 +14,7 @@
             }
         },
         {
-            "filename": "idle_1",
+            "filename": "zombiedino1_walkleft4",
             "frame": {
                 "w": 16,
                 "h": 16,
@@ -27,7 +27,7 @@
             }
         },
         {
-            "filename": "idle_2",
+            "filename": "zombiedino1_walkright2",
             "frame": {
                 "w": 16,
                 "h": 16,
@@ -40,7 +40,7 @@
             }
         },
         {
-            "filename": "walk_1",
+            "filename": "zombiedino1_walkright3",
             "frame": {
                 "w": 16,
                 "h": 16,
@@ -53,7 +53,7 @@
             }
         },
         {
-            "filename": "walk_2",
+            "filename": "zombiedino1_walkright4",
             "frame": {
                 "w": 16,
                 "h": 16,
@@ -66,7 +66,7 @@
             }
         },
         {
-            "filename": "walk_3",
+            "filename": "zombiedino1_idle1",
             "frame": {
                 "w": 16,
                 "h": 16,
@@ -79,7 +79,7 @@
             }
         },
         {
-            "filename": "walk_4",
+            "filename": "zombiedino1_idle2",
             "frame": {
                 "w": 16,
                 "h": 16,
@@ -92,12 +92,51 @@
             }
         },
         {
-            "filename": "idle_3",
+            "filename": "zombiedino1_idle3",
             "frame": {
                 "w": 16,
                 "h": 16,
                 "x": 16,
                 "y": 32
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "zombiedino1_walkleft1",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 32,
+                "y": 32
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "zombiedino1_walkleft2",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 48,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "zombiedino1_walkleft3",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 48,
+                "y": 16
             },
             "anchor": {
                 "x": 0.5,

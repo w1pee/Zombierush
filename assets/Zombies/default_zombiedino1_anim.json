@@ -1,0 +1,72 @@
+{
+    "anims": [
+        {
+            "key": "walkleft",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 12,
+            "frames": [
+                {
+                    "key": "default_zombiedino1",
+                    "frame": "zombiedino1_walkleft1"
+                },
+                {
+                    "key": "default_zombiedino1",
+                    "frame": "zombiedino1_walkleft2"
+                },
+                {
+                    "key": "default_zombiedino1",
+                    "frame": "zombiedino1_walkleft3"
+                },
+                {
+                    "key": "default_zombiedino1",
+                    "frame": "zombiedino1_walkleft4"
+                }
+            ]
+        },
+        {
+            "key": "walkright",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 12,
+            "frames": [
+                {
+                    "key": "default_zombiedino1",
+                    "frame": "zombiedino1_walkright1"
+                },
+                {
+                    "key": "default_zombiedino1",
+                    "frame": "zombiedino1_walkright2"
+                },
+                {
+                    "key": "default_zombiedino1",
+                    "frame": "zombiedino1_walkright3"
+                },
+                {
+                    "key": "default_zombiedino1",
+                    "frame": "zombiedino1_walkright4"
+                }
+            ]
+        },
+        {
+            "key": "idle",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 5,
+            "frames": [
+                {
+                    "key": "default_zombiedino1",
+                    "frame": "zombiedino1_idle1"
+                },
+                {
+                    "key": "default_zombiedino1",
+                    "frame": "zombiedino1_idle2"
+                },
+                {
+                    "key": "default_zombiedino1",
+                    "frame": "zombiedino1_idle3"
+                }
+            ]
+        }
+    ]
+}

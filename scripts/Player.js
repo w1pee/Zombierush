@@ -29,8 +29,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     static preload(scene){
-        scene.load.atlas('mainplayer', 'assets/MainPlayer/mainplayer.png', 'assets/MainPlayer/mainplayer_atlas.json');
-        scene.load.animation('mainplayer_anims', 'assets/MainPlayer/mainplayer_anim.json');
+        scene.load.atlas('default_player1wak', 'assets/MainPlayer/default_player1wak.png', 'assets/MainPlayer/default_player1wak_atlas.json');
+        scene.load.animation('default_player1wak_anims', 'assets/MainPlayer/default_player1wak_anim.json');    
         scene.load.image('bullet', 'assets/bullet.png'); 
     }
 
@@ -55,9 +55,11 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         }
         else if(this.inputkeys.left.isDown){
             playerVelocity.x = -1;
+            this.anims.play('walkleft', true);
         }
         else if(this.inputkeys.right.isDown){
             playerVelocity.x = 1;
+            this.anims.play('walkright', true);
         }
         //Y
         if(this.inputkeys.up.isDown && this.inputkeys.down.isDown){
@@ -65,19 +67,32 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         }
         else if(this.inputkeys.up.isDown){
             playerVelocity.y = -1;
+            this.anims.play('walkright', true);
         }
         else if(this.inputkeys.down.isDown){
             playerVelocity.y = 1;
+            this.anims.play('walkleft', true);
         }
+        else if(this.inputkeys.down.isDown && this.inputkeys.right.isDown) {
+            this.anims.play('walkright', true);
+        }
+        else if(this.inputkeys.up.isDown && this.inputkeys.right.isDown) {
+            this.anims.play('walkright', true);
+        }
+        else if(this.inputkeys.down.isDown && this.inputkeys.left.isDown) {
+            this.anims.play('walkleft', true);
+        }
+        else if(this.inputkeys.up.isDown && this.inputkeys.left.isDown) {
+            this.anims.play('walkleft', true);
+        }
+        else if(Math.abs(playerVelocity.x) == 0 && Math.abs(playerVelocity.y) == 0) {
+            this.anims.play('idle', true);  
+        }   
+  
+  
         playerVelocity.normalize();
         playerVelocity.scale(speed);
         this.setVelocity(playerVelocity.x, playerVelocity.y);
-        if(Math.abs(playerVelocity.x) > 0.1 || Math.abs(playerVelocity.y) > 0.1) {
-            this.anims.play('walk', true);  
-        }
-        else{
-            this.anims.play('idle', true);
-        }
         //----------------------------------------------------------------
         
         // listen for mouse input to shoot
