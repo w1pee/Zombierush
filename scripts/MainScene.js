@@ -2,6 +2,7 @@ import Player from "./Player.js";
 import Zombie from "./Zombie.js";
 import MyCamera from "./MyCamera.js";
 import Func from "./Func.js";
+import Map from './MapGen.js';
 
 export default class MainScene extends Phaser.Scene {
     constructor() {
@@ -254,11 +255,19 @@ export default class MainScene extends Phaser.Scene {
         this.GroundTileset = this.map.addTilesetImage('tileset8-ground','groundTileset');
         this.OtherTileset = this.map.addTilesetImage('tileset8-otherStuff', 'OtherTileset');
 
+        var Generation = Map.NoiseMap(100,100,3);
+
+        for (let i = 0; i < 100; i++) {
+            for (let n = 0; n < 100; n++) {
+                this.map.layers[0].data[i][n].index = Generation[i][n];
+            }
+        }
+
         //layer 1   (ground)
         this.layer1 = this.map.createLayer('ground',this.GroundTileset,0,0);
         //layer 2   (foreground)
         this.layer2 = this.map.createLayer('other',this.OtherTileset,0,0);
-        this.layer2.setCollisionByProperty({collides:true});
+        this.layer2.setCollisionByProperty({collides:true}); 
         this.matter.world.convertTilemapLayer(this.layer2);
 
         //layer3    (another foreground)
