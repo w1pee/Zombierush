@@ -255,11 +255,17 @@ export default class MainScene extends Phaser.Scene {
         this.GroundTileset = this.map.addTilesetImage('tileset8-ground','groundTileset');
         this.OtherTileset = this.map.addTilesetImage('tileset8-otherStuff', 'OtherTileset');
 
-        var Generation = Map.NoiseMap(100,100,3);
+        var Generation = Map.PerlinNoise(100,100,16,1.3);
+
+        console.log(Generation);
 
         for (let i = 0; i < 100; i++) {
             for (let n = 0; n < 100; n++) {
-                this.map.layers[0].data[i][n].index = Generation[i][n];
+                let value = Generation[i][n];
+
+               
+                this.map.layers[0].data[i][n].index = Math.floor(value*5);
+                console.log(Math.floor(value*4 + 1));
             }
         }
 
