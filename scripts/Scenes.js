@@ -11,13 +11,12 @@ export default class Pause extends Phaser.Scene{
         
         //text
         this.add.text(
-            window.innerWidth/2,
-            window.innerheight/2,
+            window.innerWidth/2,window.innerHeight-80,
             "press ESC to continue...",
             {                           //styling
-                fontSize: 30,
+                font: '30px',
                 color: "#FFFFFF",
-                fontStyle: "bold",
+                fontFamily: 'CustomFont',
                 backgroundColor: "#000000",
             }
         ).setOrigin(0.5,1);
@@ -29,12 +28,12 @@ export default class Pause extends Phaser.Scene{
             window.innerHeight / 2 - 200, 
             "Paused", 
             {                           //styling
-                fontSize: 50,
+                font: '50px',
                 color: "#FFFFFF",
-                fontStyle: "bold",
+                fontFamily: 'CustomFont',
                 backgroundColor: "#000000",
             }
-        ).setOrigin(0.5,0.5);
+        ).setOrigin(0.5,1);
         //----------------------------------------------------------------
 
         //input
@@ -129,9 +128,9 @@ export class Start extends Phaser.Scene{
             window.innerHeight-80, 
             "press Space to start",
             {                           //styling
-                fontSize: 30,
+                font: '50px',
                 color: "#FFFFFF",
-                fontStyle: "bold",
+                fontFamily: 'CustomFamily',
                 backgroundColor: "#000000",
             }
         ).setOrigin(0.5,1);

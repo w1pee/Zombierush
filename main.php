@@ -7,7 +7,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="preload" as="font" href="assets/Font/PressStart2P-Regular.ttf" type="font/ttf" />
 
     <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
     <script src="//cdn.jsdelivr.net/npm/phaser-matter-collision-plugin"></script>
@@ -21,6 +24,12 @@
         body{
           background-color:black;
         }
+
+        @font-face{
+          font-family: CustomFont;
+          src: url('./PressStart2P-Regular.ttf');
+        }
+
     </style>
 </head>
 <body>

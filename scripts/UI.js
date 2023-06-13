@@ -35,28 +35,24 @@ export default class UIScene extends Phaser.Scene{
         var highs = gethighs().done();
 
         //Highscore // sync with database later
-        this.add.text(0,0,'Highsore', { font: '20px Arial', fill: '#000000' });
-        this.Highscore = this.add.text(0,50, 50, { font: '20px Arial', fill: '#000000' });
+        this.add.text(0,0,'Highsore', { font: '50px', fontFamily: 'CustomFont', fill: '#000000',backgroundColor :'#ffffff'});
+        this.Highscore = this.add.text(0,50, 50, { font: '50px', fill: '#ffffff', backgroundColor :'#000000'});
         //----------------------------------------------------------------
 
         //score
-        this.ScoreText = this.add.text(window.innerWidth/2,0,'Score',{font: '20px Arial', fill: '#000000'});
+        this.ScoreText = this.add.text(window.innerWidth/2,0,'Score',{font: '50px', fontFamily: 'CustomFont', fill: '#000000',backgroundColor :'#ffffff'});
         this.ScoreText.setOrigin(0.5,0);
-        this.Score = this.add.text(window.innerWidth/2,50,0,{font: '20px Arial', fill: '#000000'});
+        this.Score = this.add.text(window.innerWidth/2,50,0,{font: '50px', fontFamily: 'CustomFont', fill: '#ffffff', backgroundColor :'#000000'});
         this.Score.setOrigin(0.5,0);
         //----------------------------------------------------------------
 
-        //health
-        this.HealthText = this.add.text(0,750,'Health: ', {font: '20px Arial', fill: '#000000'});
-        //----------------------------------------------------------------
-
         //Zombie number
-        this.ZombieText = this.add.text(0,window.innerheight/2,'Zombies: ', {font: '20px Arial', fill: '#000000'})
+        this.ZombieText = this.add.text(0,window.innerheight/2,'Zombies: ', {font: '50px', fontFamily: 'CustomFont', fill: '#000000'})
         const myGame = this.scene.get('MainScene');
         //----------------------------------------------------------------
 
         //Dash availability
-        this.DashText = this.add.text(0,800,'Dash', {font: '50px Arial', fill: '#000000'})
+        this.DashText = this.add.text(0,800,'Dash', {font: '50px', fontFamily: 'CustomFont', fill: '#000000'})
         this.DashText.setOrigin(0,1)
 
         //function that syncs the values from the MainScene to UI(here)
@@ -79,7 +75,7 @@ export default class UIScene extends Phaser.Scene{
         //this function announces the wave, after 2 seconds it deletes itself
         myGame.events.on('announce', function(n)
         {
-            let announce = this.add.text(window.innerWidth/2,200,'Wave ' + n, {font: '100px Arial', fill: '#FFFFFFFF'});
+            let announce = this.add.text(window.innerWidth/2,200,'Wave ' + n, {font: '100px', fill: '#FFFFFFFF',fontFamily: 'CustomFont'});
             announce.setOrigin(0.5,0.5);
             this.time.delayedCall(2000, () => {
                 announce.destroy();
@@ -88,9 +84,9 @@ export default class UIScene extends Phaser.Scene{
         //----------------------------------------------------------------
 
         myGame.events.on('StatsUpgrade', function(){
-            let Firerate = this.add.text(1280,400,'+1 firerate',{font: '40px Arial', fill: '#FED766'});
+            let Firerate = this.add.text(1280,400,'+1 firerate',{font: '40px', fill: '#FED766',fontFamily: 'CustomFont'});
             Firerate.setOrigin(1,0.5);
-            let DashSpeed = this.add.text(1280,450,'-10% Dash Cooldown', {font: '40px Arial', fill: '#FED766'});
+            let DashSpeed = this.add.text(1280,450,'-10% Dash Cooldown', {font: '40px', fill: '#FED766',fontFamily: 'CustomFont'});
             DashSpeed.setOrigin(1,0.5);
             this.time.delayedCall(2000, () => {
                 DashSpeed.destroy();
