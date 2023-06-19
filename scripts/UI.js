@@ -35,14 +35,14 @@ export default class UIScene extends Phaser.Scene{
         var highs = gethighs().done();
 
         //Highscore // sync with database later
-        this.add.text(0,0,'Highsore', { font: '50px', fontFamily: 'CustomFont', fill: '#000000',backgroundColor :'#ffffff'});
-        this.Highscore = this.add.text(0,50, 50, { font: '50px', fill: '#ffffff', backgroundColor :'#000000'});
+        this.add.text(0,0,'Highsore', { font: '25px', fontFamily: 'CustomFont', fill: '#000000',backgroundColor :'#ffffff'});
+        this.Highscore = this.add.text(0,25, 50, { font: '50px', fill: '#ffffff', backgroundColor :'#000000'});
         //----------------------------------------------------------------
 
         //score
-        this.ScoreText = this.add.text(window.innerWidth/2,0,'Score',{font: '50px', fontFamily: 'CustomFont', fill: '#000000',backgroundColor :'#ffffff'});
+        this.ScoreText = this.add.text(window.innerWidth/2,0,'Score',{font: '25px', fontFamily: 'CustomFont', fill: '#000000',backgroundColor :'#ffffff'});
         this.ScoreText.setOrigin(0.5,0);
-        this.Score = this.add.text(window.innerWidth/2,50,0,{font: '50px', fontFamily: 'CustomFont', fill: '#ffffff', backgroundColor :'#000000'});
+        this.Score = this.add.text(window.innerWidth/2,25,0,{font: '50px', fontFamily: 'CustomFont', fill: '#ffffff', backgroundColor :'#000000'});
         this.Score.setOrigin(0.5,0);
         //----------------------------------------------------------------
 

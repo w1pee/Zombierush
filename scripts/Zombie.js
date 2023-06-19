@@ -17,7 +17,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
 
         this.Health = Health;
         this.Speed = Speed * Func.rand(0.8,1.2);     //adds a little random to Speed
-        this.healthTxt = scene.add.text(this.x,this.y,this.Health ,{ font: '10px Arial', fill: '#000000' });    //text that displays the current health of the zombie
+        this.healthTxt = scene.add.text(this.x,this.y,this.Health ,{ font: '9px', fontFamily: 'CustomFont', color: '#ffffff',stroke: '#000000',strokeThickness:3});
         this.healthTxt.setOrigin(0.5,0.5)
 
         this.OldPlayerX = 0;
