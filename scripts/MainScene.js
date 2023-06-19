@@ -24,9 +24,6 @@ export default class MainScene extends Phaser.Scene {
         //loading Tilesets
         this.load.image('groundTileset', 'assets/tileset8-ground.png')
         this.load.image('OtherTileset', 'assets/tileset8-otherStuff.png')
-
-        //loading tilemaps
-        this.load.tilemapTiledJSON('map','assets/TileMaps/tilemap.json');
     }
     create(){
 
@@ -151,7 +148,7 @@ export default class MainScene extends Phaser.Scene {
 
             let exponent = this.Wave *  0.2;
 
-            this.Spawnnum = Func.MinRound(5 * (Math.pow(euler,exponent)));
+            this.Spawnnum = Math.floor(5 * (Math.pow(euler,exponent)));
             this.events.emit('announce', this.Wave);
 
             if(this.Wave % 2 == 0){
@@ -249,45 +246,92 @@ export default class MainScene extends Phaser.Scene {
         });
     }
     GenerateMap(){
-        //tilemaps
-        this.map = this.make.tilemap({key:'map'});
-        //tileset
-        this.GroundTileset = this.map.addTilesetImage('tileset8-ground','groundTileset');
-        this.OtherTileset = this.map.addTilesetImage('tileset8-otherStuff', 'OtherTileset');
 
         var Generation = Map.PerlinNoise(100,100,16,1.3);
-
-        console.log(Generation);
-
+        var coli = new Array(100).fill(null).map(() => new Array(100));
+        var grnd = Generation;
         for (let i = 0; i < 100; i++) {
             for (let n = 0; n < 100; n++) {
                 let value = Generation[i][n];
-
-               
-                this.map.layers[0].data[i][n].index = Math.floor(value*5);
-                console.log(Math.floor(value*4 + 1));
+                let RandomOffset = Func.rand(0,1) * 15;
+                grnd[i][n]=Math.floor(value*5) + RandomOffset;
+                coli[i][n] = -1;
             }
         }
 
-        //layer 1   (ground)
-        this.layer1 = this.map.createLayer('ground',this.GroundTileset,0,0);
-        //layer 2   (foreground)
-        this.layer2 = this.map.createLayer('other',this.OtherTileset,0,0);
-        this.layer2.setCollisionByProperty({collides:true}); 
+        //---------------
+        coli[50][51] = 2;
+        coli[51][51] = 2;
+        coli[52][51] = 2;
+        coli[53][51] = 2;
+        //---------------
+        coli[50][52] = 2;
+        coli[51][52] = 2;
+        coli[52][52] = 2;
+        coli[53][52] = 2;
+        //---------------
+        coli[50][53] = 2;
+        coli[51][53] = 2;
+        coli[52][53] = 2;
+        coli[53][53] = 2;
+        //---------------
+        coli[50][54] = 2;
+        coli[51][54] = 2;
+        coli[52][54] = 2;
+        coli[53][54] = 2;
+        //---------------
+
+        //Ground
+        const groundMap = this.make.tilemap({data:grnd, tileWidth:16, tileHeight:16});
+        const tiles1 = groundMap.addTilesetImage("groundTileset");
+        const layer1 = groundMap.createLayer(0,tiles1,0,0);
+        //----------------------------------------------------------------
+
+        //Collision
+        const CollisionMap = this.make.tilemap({data:coli, tileWidth:16, tileHeight:16});
+        const tiles2 = CollisionMap.addTilesetImage("OtherTileset");
+        this.layer2 = CollisionMap.createLayer(0,tiles2,0,0);
+
+        //Function that goes through the tiles and assigns them properties
+        for(let i = 0; i<100;i++){
+            for (let j = 0; j < 100; j++) {
+                this.layer2.layer.data[i][j].properties.collides = false;
+            }
+        }
+        this.layer2.layer.data[50][51].properties.collides = true;
+        this.layer2.layer.data[51][51].properties.collides = true;
+        this.layer2.layer.data[52][51].properties.collides = true;
+        this.layer2.layer.data[53][51].properties.collides = true;
+        //----------------------------------------------------------------
+        this.layer2.layer.data[50][52].properties.collides = true;
+        this.layer2.layer.data[51][52].properties.collides = true;
+        this.layer2.layer.data[52][52].properties.collides = true;
+        this.layer2.layer.data[53][52].properties.collides = true;
+        //----------------------------------------------------------------
+        this.layer2.layer.data[50][53].properties.collides = true;
+        this.layer2.layer.data[51][53].properties.collides = true;
+        this.layer2.layer.data[52][53].properties.collides = true;
+        this.layer2.layer.data[53][53].properties.collides = true;
+        //----------------------------------------------------------------
+        this.layer2.layer.data[50][54].properties.collides = true;
+        this.layer2.layer.data[51][54].properties.collides = true;
+        this.layer2.layer.data[52][54].properties.collides = true;
+        this.layer2.layer.data[53][54].properties.collides = true;
+        //----------------------------------------------------------------
+
+        //collision
+        this.layer2.setCollisionByProperty({collides:true});
         this.matter.world.convertTilemapLayer(this.layer2);
+        //----------------------------------------------------------------
 
-        //layer3    (another foreground)
-        this.layer3 = this.map.createLayer('detail',this.OtherTileset,0,0);
-        this.layer3.setCollisionByProperty({collides: true});
-        this.matter.world.convertTilemapLayer(this.layer3);
-
+        //Layers
         this.DefaultLayer = this.add.layer();
         this.EntityLayer = this.add.layer();
         this.DetailLayer = this.add.layer();
 
-        this.DefaultLayer.add([this.layer1]);
-
-        this.DetailLayer.add([this.layer2,this.layer3]);
+        this.DefaultLayer.add([layer1]);
+        this.DetailLayer.add([this.layer2]);
+        //----------------------------------------------------------------
     }
     pathfindersetup(){
         //function looks at the tile and returns the index
@@ -303,24 +347,17 @@ export default class MainScene extends Phaser.Scene {
         this.grid = [];
 
         //generates a grid for the pathfinding algorithmen
-        for (let y = 0; y < this.map.height; y++) {
+        for (let y = 0; y < 100; y++) {
             var col = [];
-            for (let x = 0; x < this.map.width; x++) {
+            for (let x = 0; x < 100; x++) {
                 col.push(this.TileID(x,y));
             }
             this.grid.push(col);
         }
         this.pathfinder.setGrid(this.grid);
         //searches for walkable tiles
-        var Tileset = this.map.tilesets[1];
-        var properties  = Tileset.tileProperties;
         var acceptable = [-1];
-
-        for (let i = 0; i < this.map.tilesets[1].total; i++) {
-            if(!properties.hasOwnProperty(i)){
-                acceptable.push(i);
-            }
-        }
+        
         this.pathfinder.setAcceptableTiles(acceptable);
         this.pathfinder.enableSync();
         this.pathfinder.setIterationsPerCalculation(5);
@@ -332,8 +369,8 @@ export default class MainScene extends Phaser.Scene {
 
         const radius = 25;  //the number of tiles the game spawns zombies away from the player
 
-        const PlayerX = Func.MinRound(this.player.x / 16);
-        const PlayerY = Func.MinRound(this.player.y / 16);
+        const PlayerX = Math.floor(this.player.x / 16);
+        const PlayerY = Math.floor(this.player.y / 16);
 
         let InPlayerReach;
 
