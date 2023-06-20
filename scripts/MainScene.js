@@ -247,7 +247,10 @@ export default class MainScene extends Phaser.Scene {
     }
     GenerateMap(){
 
-        var Generation = Map.PerlinNoise(100,100,16,1.3);
+        const Generation = Map.PerlinNoise(100,100,16,1.3);
+        const buildings = Map.buildings(100,100);
+        console.log(buildings);
+
         var coli = new Array(100).fill(null).map(() => new Array(100));
         var grnd = Generation;
         for (let i = 0; i < 100; i++) {
@@ -255,72 +258,23 @@ export default class MainScene extends Phaser.Scene {
                 let value = Generation[i][n];
                 let RandomOffset = Func.rand(0,1) * 15;
                 grnd[i][n]=Math.floor(value*5) + RandomOffset;
-                coli[i][n] = -1;
+                coli[i][n] = buildings[i][n];
             }
         }
 
-        //---------------
-        coli[50][51] = 2;
-        coli[51][51] = 2;
-        coli[52][51] = 2;
-        coli[53][51] = 2;
-        //---------------
-        coli[50][52] = 2;
-        coli[51][52] = 2;
-        coli[52][52] = 2;
-        coli[53][52] = 2;
-        //---------------
-        coli[50][53] = 2;
-        coli[51][53] = 2;
-        coli[52][53] = 2;
-        coli[53][53] = 2;
-        //---------------
-        coli[50][54] = 2;
-        coli[51][54] = 2;
-        coli[52][54] = 2;
-        coli[53][54] = 2;
-        //---------------
-
-        //Ground
+        //Ground layer
         const groundMap = this.make.tilemap({data:grnd, tileWidth:16, tileHeight:16});
         const tiles1 = groundMap.addTilesetImage("groundTileset");
         const layer1 = groundMap.createLayer(0,tiles1,0,0);
         //----------------------------------------------------------------
 
-        //Collision
+        //Building layer
         const CollisionMap = this.make.tilemap({data:coli, tileWidth:16, tileHeight:16});
         const tiles2 = CollisionMap.addTilesetImage("OtherTileset");
         this.layer2 = CollisionMap.createLayer(0,tiles2,0,0);
 
-        //Function that goes through the tiles and assigns them properties
-        for(let i = 0; i<100;i++){
-            for (let j = 0; j < 100; j++) {
-                this.layer2.layer.data[i][j].properties.collides = false;
-            }
-        }
-        this.layer2.layer.data[50][51].properties.collides = true;
-        this.layer2.layer.data[51][51].properties.collides = true;
-        this.layer2.layer.data[52][51].properties.collides = true;
-        this.layer2.layer.data[53][51].properties.collides = true;
-        //----------------------------------------------------------------
-        this.layer2.layer.data[50][52].properties.collides = true;
-        this.layer2.layer.data[51][52].properties.collides = true;
-        this.layer2.layer.data[52][52].properties.collides = true;
-        this.layer2.layer.data[53][52].properties.collides = true;
-        //----------------------------------------------------------------
-        this.layer2.layer.data[50][53].properties.collides = true;
-        this.layer2.layer.data[51][53].properties.collides = true;
-        this.layer2.layer.data[52][53].properties.collides = true;
-        this.layer2.layer.data[53][53].properties.collides = true;
-        //----------------------------------------------------------------
-        this.layer2.layer.data[50][54].properties.collides = true;
-        this.layer2.layer.data[51][54].properties.collides = true;
-        this.layer2.layer.data[52][54].properties.collides = true;
-        this.layer2.layer.data[53][54].properties.collides = true;
-        //----------------------------------------------------------------
-
         //collision
-        this.layer2.setCollisionByProperty({collides:true});
+        this.layer2.setCollisionByExclusion([-1]);
         this.matter.world.convertTilemapLayer(this.layer2);
         //----------------------------------------------------------------
 
