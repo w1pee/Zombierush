@@ -246,19 +246,14 @@ export default class MainScene extends Phaser.Scene {
         });
     }
     GenerateMap(){
-
-        const Generation = Map.PerlinNoise(100,100,16,1.3);
+        const Generation = Map.PerlinNoise(100,100,32,1);
         const buildings = Map.buildings(100,100);
-        console.log(buildings);
 
-        var coli = new Array(100).fill(null).map(() => new Array(100));
-        var grnd = Generation;
+        var grnd = new Array(100).fill(null).map(() => new Array(100));
         for (let i = 0; i < 100; i++) {
             for (let n = 0; n < 100; n++) {
-                let value = Generation[i][n];
-                let RandomOffset = Func.rand(0,1) * 15;
-                grnd[i][n]=Math.floor(value*5) + RandomOffset;
-                coli[i][n] = buildings[i][n];
+                let value = Generation[i][n]*3;
+                grnd[i][n]=Math.floor(value);
             }
         }
 
@@ -269,12 +264,12 @@ export default class MainScene extends Phaser.Scene {
         //----------------------------------------------------------------
 
         //Building layer
-        const CollisionMap = this.make.tilemap({data:coli, tileWidth:16, tileHeight:16});
+        const CollisionMap = this.make.tilemap({data:buildings, tileWidth:16, tileHeight:16});
         const tiles2 = CollisionMap.addTilesetImage("OtherTileset");
         this.layer2 = CollisionMap.createLayer(0,tiles2,0,0);
 
         //collision
-        this.layer2.setCollisionByExclusion([-1]);
+        this.layer2.setCollisionByExclusion([-1,0,1,2,3,4,15,17,18,19,30,31,32]);
         this.matter.world.convertTilemapLayer(this.layer2);
         //----------------------------------------------------------------
 
@@ -310,7 +305,7 @@ export default class MainScene extends Phaser.Scene {
         }
         this.pathfinder.setGrid(this.grid);
         //searches for walkable tiles
-        var acceptable = [-1];
+        var acceptable = [-1,0,1,2,3,4,15,17,18,19,30,31,32];
         
         this.pathfinder.setAcceptableTiles(acceptable);
         this.pathfinder.enableSync();
