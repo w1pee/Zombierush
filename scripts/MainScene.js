@@ -246,17 +246,32 @@ export default class MainScene extends Phaser.Scene {
         });
     }
     GenerateMap(){
-        const Generation = Map.PerlinNoise(100,100,32,1);
+        const Generation = Map.PerlinNoise(100,100,16,1);
         const buildings = Map.buildings(100,100);
 
-        var grnd = new Array(100).fill(null).map(() => new Array(100));
+        var grnd = Generation;
         for (let i = 0; i < 100; i++) {
-            for (let n = 0; n < 100; n++) {
-                let value = Generation[i][n]*3;
-                grnd[i][n]=Math.floor(value);
+            for (let j = 0; j < 100; j++) {
+                
+                const value = Math.floor(grnd[i][j] *10);
+                let set;
+                const offset = Math.round(Math.random()*3) * 15;
+
+                switch(value){
+                    case 0: set = 0; break;
+                    case 1: set = 0; break;
+                    case 2: set = 0; break;
+                    case 3: set = 0; break;
+                    case 4: set = 1; break;
+                    case 5: set = 2; break;
+                    case 6: set = 3; break;
+                    case 7: set = 4; break;
+                    case 8: set = 4; break;
+                    case 9: set = 4; break;
+                }
+                grnd[i][j] = set + offset;
             }
         }
-
         //Ground layer
         const groundMap = this.make.tilemap({data:grnd, tileWidth:16, tileHeight:16});
         const tiles1 = groundMap.addTilesetImage("groundTileset");
