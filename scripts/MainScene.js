@@ -1,5 +1,5 @@
 import Player from "./Player.js";
-import Zombie from "./Zombie.js";
+import Zombie,{Coin} from "./Zombie.js";
 import MyCamera from "./MyCamera.js";
 import Func from "./Func.js";
 
@@ -11,6 +11,7 @@ export default class MainScene extends Phaser.Scene {
         //preload of player + zombie class
         Player.preload(this);
         Zombie.preload(this);
+        Coin.preload(this);
 
         this.load.audio('audio_stepgrass', 'assets/Sounds/running-in-grass.mp3');
 
@@ -191,9 +192,34 @@ export default class MainScene extends Phaser.Scene {
         for (let i = 0; i < this.Zombies.length; i++) {
             if (this.Zombies[i] != undefined) {
                 if(this.Zombies[i].Health <= 0){
+
+                    //generating coin with random value
+                    const x = this.Zombies[i].x;
+                    const y = this.Zombies[i].y;
+                    let value;
+
+                    switch(Func.rand(0,9)){
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5: value = '10';break;
+                        case 6: 
+                        case 7: 
+                        case 8: value = '25';break
+                        case 9: value = '75';
+                        default:
+                    }
+                    let coin = new Coin({scene:this,x:x,y:y,texture:value});
+                    coin.setCollisionGroup(-1);
+                    coin.setScale(0.75);
+                    coin.setOrigin(0.5,0.5);
+
+                    //deleting Zombie
                     this.Zombies[i].healthTxt.destroy();
                     this.Zombies[i].destroy();
-                    this.Zombies[i] = undefined; 
+                    this.Zombies[i] = undefined;
                 }
             }
         }

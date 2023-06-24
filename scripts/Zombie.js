@@ -124,3 +124,29 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
                 }   
     }
 }
+
+export class Coin extends Phaser.Physics.Matter.Sprite{
+    constructor(data){
+        let {scene,x,y,texture} = data;
+        super(scene.matter.world,x,y,texture);
+        this.scene.add.existing(this);
+
+        const {Body,Bodies} = Phaser.Physics.Matter.Matter;
+        var Sensor = Bodies.circle(this.x,this.y,15,{isSensor:true,label:'CoinSensor'});
+        const compundBody = Body.create({
+            parts: [Sensor],
+        });
+        this.setExistingBody(compundBody);
+        this.setFixedRotation();
+    }
+
+    static preload(scene){
+        scene.load.image('10', 'assets/coin10.png');
+        scene.load.image('25', 'assets/coin25.png');
+        scene.load.image('75', 'assets/coin75.png');
+    }
+
+    value(){
+        return this.value;
+    }
+}
