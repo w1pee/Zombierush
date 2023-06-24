@@ -94,105 +94,116 @@ export default class MapGen {
 
         function Assign(x,y){
 
-            const Tile = 16;
-
             const OffsetX = Math.round(Math.random()*4 - 2);
             const OffsetY = Math.round(Math.random()*4 - 2);
             
             //choosing a 7x7 Structure that will be inserted into the Grid
-            //const choose = Math.round(Math.random()*4);
-            const choose = 0;
+            const choose = Math.round(Math.random()*2);
             const Structure = Struct(choose);
 
-            //System for filling in the Structure in
-            for (let i = 0; i < 7; i++) {
-                for (let j = 0; j < 7; j++) {
-                    var element;
+            //System for filling in the Structure
+            for (let i = 1; i < 8; i++) {
+                for (let j = 1; j < 8; j++) {
                     if(Structure[i][j] === 1){
-                        element = 16;
+                        let connections = [0,0,0,0,0,0,0,0]; 
+                        
+                        if(Structure[i-1][j-1]  != 0) {connections[0] = 1}
+                        if(Structure[i-1][j]    != 0)   {connections[1] = 1}
+                        if(Structure[i-1][j+1]  != 0) {connections[2] = 1};
+                        //------------------------------------------
+                        if(Structure[i][j-1]    != 0)   {connections[3] = 1};    
+                        if(Structure[i][j+1]    != 0)   {connections[4] = 1}; 
+                        //------------------------------------------
+                        if(Structure[i+1][j-1]  != 0) {connections[5] = 1}; 
+                        if(Structure[i+1][j]    != 0)   {connections[6] = 1}; 
+                        if(Structure[i+1][j+1]  != 0) {connections[7] = 1}; 
+
+                        const element = chooseTile(decode(connections.reverse()));
+
+                        Grid_result[x+i-4+OffsetX][y+j-4+OffsetY] = element;
                     }
-                    else if(Structure[i][j] === 2){
-                        element = 2;
-                    }
-                    else{
-                        element = -1;
-                    }
-                    Grid_result[x+i-4+OffsetX][y+j-4+OffsetY] = element;
                 }
             }
 
             //here are all the buildings saved
+
+            //saved as 9x9 but only uses 7x7
+            //please leave a border of 0s
+            //else it doesnt work // the border is used as a buffer // easiest solution it think
             function Struct(value){
                 switch(value){
                     case 0:
                         return [
-                            [2,2,2,2,2,0,0],
-                            [2,1,1,1,2,2,2],
-                            [2,1,1,1,1,1,2],
-                            [2,1,1,1,1,1,2],
-                            [2,1,1,1,1,1,2],
-                            [2,1,1,1,2,2,2],
-                            [2,2,2,2,2,0,0]
+                            [0,0,0,0,0,0,0,0,0],
+                            [0,1,1,1,1,1,0,0,0],
+                            [0,1,1,1,1,1,1,1,0],
+                            [0,1,1,1,1,1,1,1,0],
+                            [0,1,1,1,1,1,1,1,0],
+                            [0,1,1,1,1,1,1,1,0],
+                            [0,1,1,1,1,1,1,1,0],
+                            [0,1,1,1,1,1,0,0,0],
+                            [0,0,0,0,0,0,0,0,0]
                         ];
+                    case 1:
+                        return[
+                            [0,0,0,0,0,0,0,0,0],
+                            [0,0,1,1,1,1,1,0,0],
+                            [0,0,1,1,1,1,1,0,0],
+                            [0,0,1,1,1,1,1,0,0],
+                            [0,0,1,1,1,1,1,0,0],
+                            [0,0,1,1,1,1,1,0,0],
+                            [0,0,1,1,1,1,1,0,0],
+                            [0,0,1,1,1,1,1,0,0],
+                            [0,0,0,0,0,0,0,0,0]
+                        ]
+                    case 2:
+                        return[
+                            [0,0,0,0,0,0,0,0,0],
+                            [0,0,0,0,0,0,0,0,0],
+                            [0,1,1,1,1,1,1,1,0],
+                            [0,1,1,1,1,1,1,1,0],
+                            [0,1,1,1,1,1,1,1,0],
+                            [0,1,1,1,1,1,1,1,0],
+                            [0,1,1,1,1,1,1,1,0],
+                            [0,0,0,0,0,0,0,0,0],
+                            [0,0,0,0,0,0,0,0,0]
+                        ]
                 }
             }
-        }
 
-        console.log(Grid_result);
-
-        for (let i = 1; i < 99; i++) {
-            for (let j = 1; j < 99; j++) {
-                let connections = [0,0,0,0,0,0,0,0]; 
-                if(Grid_result[i][j] == 2){
-                    
-                    if(Grid_result[i-1][j-1] != -1) {connections[0] = 1}
-                    if(Grid_result[i-1][j] != -1)   {connections[1] = 1}
-                    if(Grid_result[i-1][j+1] != -1) {connections[2] = 1};
-                    //-------------------------------------------------------
-                    if(Grid_result[i][j-1] != -1)   {connections[3] = 1};    
-                    if(Grid_result[i][j+1] != -1)   {connections[4] = 1}; 
-                    //-------------------------------------------------------
-                    if(Grid_result[i+1][j-1] != -1) {connections[5] = 1}; 
-                    if(Grid_result[i+1][j] != -1)   {connections[6] = 1}; 
-                    if(Grid_result[i+1][j+1] != -1) {connections[7] = 1}; 
-
-                    Grid_result[i][j] = chooseTile(decode(connections.reverse()));
+            function decode(array){
+                let number = 0;
+                for (let i = 0; i < array.length; i++) {
+                    if (array[i] == true) {
+                        number += Math.pow(2,i);
+                    }
                 }
+                return number;
             }
-        }
-
-        function decode(array){
-            let number = 0;
-            for (let i = 0; i < array.length; i++) {
-                if (array[i] == true) {
-                    number += Math.pow(2,i);
+    
+            function chooseTile(n){
+                switch(n){
+                    case 11: return 0;
+                    case 22: return 2;
+                    case 23: return 2;
+                    case 31: return 1;
+                    case 104: return 30;
+    
+                    case 107: return 15;
+                    case 127: return 3;
+                    case 159: return 1;
+                    case 208: return 32;
+                    case 214: return 17;
+    
+                    case 223: return 4;
+                    case 240: return 32;
+                    case 248: return 31;
+                    case 251: return 18;
+                    case 252: return 31;
+                    case 254: return 19;
+    
+                    default: console.log(n); return 16;
                 }
-            }
-            return number;
-        }
-
-        function chooseTile(n){
-            switch(n){
-                case 11: return 0;
-                case 22: return 2;
-                case 23: return 2;
-                case 31: return 1;
-                case 104: return 30;
-
-                case 107: return 15;
-                case 127: return 3;
-                case 159: return 1;
-                case 208: return 32;
-                case 214: return 17;
-
-                case 223: return 4;
-                case 240: return 32;
-                case 248: return 31;
-                case 251: return 18;
-                case 252: return 31;
-                case 254: return 19;
-
-                default: console.log(n); return 5;
             }
         }
 
