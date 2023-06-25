@@ -212,7 +212,7 @@ export default class MainScene extends Phaser.Scene {
                         default:
                     }
                     let coin = new Coin({scene:this,x:x,y:y,texture:value});
-                    // coin.setCollisionGroup(-1);
+                    coin.setCollisionGroup(-1);
                     coin.setScale(0.75);
                     coin.setOrigin(0.5,0.5);
 

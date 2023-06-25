@@ -14,7 +14,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         });
         this.setExistingBody(compundBody);
         this.setFixedRotation();
-        this.setCollisionGroup(-1); //setting collision group, so it wont collide with the Player
         //atribute for the player
         this.speed = 5;             //Player Speed
         this.DashSpeed = 10;        //Speed of the Player during the Dash
@@ -135,6 +134,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         BulletVector.y = y - this.y;
 
         BulletVector.normalize();
+
         BulletVector.scale(this.bulletspeed + Func.rand(-0.5,0.5));  //sets the speed of the Bullet with a random value between -0.5 and 0.5 to make it look better
         //----------------------------------------------------------------
 
@@ -153,15 +153,21 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         }
         //----------------------------------------------------------------
 
-        // Create a new bullet sprite at the player's position
-        const bullet = this.scene.matter.add.sprite(this.x, this.y, 'bullet');
+        //copying the vector
+        let BulletVector2 = new Phaser.Math.Vector2();
+        BulletVector2.x = BulletVector.x;
+        BulletVector2.y = BulletVector.y;
+        BulletVector2.normalize();
+        BulletVector2.scale(10)
 
+        // Create a new bullet sprite at the player's position
+        const bullet = this.scene.matter.add.sprite(this.x + BulletVector2.x, this.y + BulletVector2.y, 'bullet');
         this.scene.EntityLayer.add(bullet);
         //----------------------------------------------------------------
 
         //Custom collider for bullet
         const {Body,Bodies} = Phaser.Physics.Matter.Matter;
-        var newcollider = Bodies.circle(this.x,this.y,4,{label:'BulletCollider'})
+        var newcollider = Bodies.circle(bullet.x,bullet.y,4,{label:'BulletCollider'})
         const BulletBody = Body.create({
             parts:[newcollider],
             collisionFilter: {

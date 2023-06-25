@@ -147,6 +147,6 @@ export class Coin extends Phaser.Physics.Matter.Sprite{
     }
 
     value(){
-        return 10;
+        return parseInt(this.texture.key);
     }
 }
