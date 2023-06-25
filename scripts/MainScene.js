@@ -212,7 +212,7 @@ export default class MainScene extends Phaser.Scene {
                         default:
                     }
                     let coin = new Coin({scene:this,x:x,y:y,texture:value});
-                    coin.setCollisionGroup(-1);
+                    // coin.setCollisionGroup(-1);
                     coin.setScale(0.75);
                     coin.setOrigin(0.5,0.5);
 
@@ -237,39 +237,32 @@ export default class MainScene extends Phaser.Scene {
             //Player DmgSensor label:   DmgSensor      
             //Bullet Collider label:    BulletCollider
             //Zombie Collider label:    ZombieCollider
+            //Coin Collider label:      CoinSensor
 
             //so bullet will always be destroyed on impact
-            if(bodyA.label == 'BulletCollider'){
-                bodyA.gameObject.destroy()
-            }
-            else if (bodyB.label == 'BulletCollider'){
+            if (bodyB.label == 'BulletCollider'){
                 bodyB.gameObject.destroy();
             }
             //----------------------------------------------------------------
 
             //if bullet and zombie, zombie health - player damage
-            if(bodyA.label == 'BulletCollider' && bodyB.label == 'ZombieSensor'){
-                bodyB.gameObject.takeDamage(this.player.Damage);
-                if(bodyB.gameObject.Health <= 0){
-                    this.Score+=10;
-                }
-            }
-            else if (bodyB.label == 'BulletCollider' && bodyA.label == 'ZombieSensor'){
+            if (bodyB.label == 'BulletCollider' && bodyA.label == 'ZombieSensor'){
                 bodyA.gameObject.takeDamage(this.player.Damage);
-                if(bodyA.gameObject.Health <= 0){
-                    this.Score+=10;
-                }
             }
-            else{
-                if (bodyA.label == 'DmgSensor' && bodyB.label == 'ZombieCollider' || bodyB.label == 'DmgSensor' && bodyA.label == 'ZombieCollider') {
-                    //Delete UI
-                    this.scene.stop("UIScene");
-                    //launch GameOver scene
-                    this.scene.launch('GameOver');
-                    this.scene.stop();
 
-                    //insert HighScore into Database here
-                }
+            if (bodyA.label == 'DmgSensor' && bodyB.label == 'ZombieCollider' || bodyB.label == 'DmgSensor' && bodyA.label == 'ZombieCollider') {
+                //Delete UI
+                this.scene.stop("UIScene");
+                //launch GameOver scene
+                this.scene.launch('GameOver');
+                this.scene.stop();
+
+                //insert HighScore into Database here
+            }
+
+            if(bodyA.label == 'playerCollider' && bodyB.label == 'CoinSensor'){
+                this.Score+= bodyB.gameObject.value();
+                bodyB.gameObject.destroy();
             }
         });
     }

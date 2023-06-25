@@ -147,6 +147,6 @@ export class Coin extends Phaser.Physics.Matter.Sprite{
     }
 
     value(){
-        return this.value;
+        return 10;
     }
 }
