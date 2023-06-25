@@ -1,7 +1,7 @@
 import Func from "./Func.js";
 export default class Zombie extends Phaser.Physics.Matter.Sprite {
     constructor(data){
-        let {scene,x,y,texture,Health,Speed} = data;
+        let {scene,x,y,texture} = data;
         super(scene.matter.world,x,y,texture);
         this.scene.add.existing(this);
 
@@ -15,13 +15,13 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         this.setExistingBody(compundBody);
         this.setFixedRotation();
 
-        this.Health = Health;
-        this.Speed = Speed * Func.rand(0.8,1.2);     //adds a little random to Speed
+        this.Health = 20;
+        this.Speed = Func.rand(1,1.5);     //adds a little random to Speed
         this.healthTxt = scene.add.text(this.x,this.y,this.Health ,{ font: '9px', fontFamily: 'CustomFont', color: '#ffffff',stroke: '#000000',strokeThickness:3});
         this.healthTxt.setOrigin(0.5,0.5)
 
         this.OldPlayerX = 0;
-        this.OldPlayerY = 0
+        this.OldPlayerY = 0;
 
         this.pathposition;
     }

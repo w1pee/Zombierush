@@ -82,9 +82,7 @@ export default class MainScene extends Phaser.Scene {
         this.Wave = 0;
         this.Zombienum;
         this.Spawnnum;
-        this.Zombiehealth = 20;
         this.Zombies = new Array();
-        this.ZombieSpeed = 1.5;
 
         this.HighScore = 0;
         this.Score = 0;
@@ -386,7 +384,7 @@ export default class MainScene extends Phaser.Scene {
         }
         while(SpawnX < 1 || SpawnX > 99 || SpawnY < 1 ||  SpawnY > 99 || this.grid[Math.floor(SpawnX)][Math.floor(SpawnY)] != -1);
 
-        this.Zombies[n] = new Zombie({scene:this,texture:'default_zombiedino1',Health: this.Zombiehealth,Speed: this.ZombieSpeed,x:(SpawnY*16),y:(SpawnX*16)}); 
+        this.Zombies[n] = new Zombie({scene:this,texture:'default_zombiedino1',x:(SpawnY*16),y:(SpawnX*16)}); 
         this.EntityLayer.add([this.Zombies[n]]);
     }
 }

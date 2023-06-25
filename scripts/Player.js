@@ -15,7 +15,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.setExistingBody(compundBody);
         this.setFixedRotation();
         //atribute for the player
-        this.speed = 5;             //Player Speed
+        this.speed = 3.2;           //Player Speed
         this.DashSpeed = 10;        //Speed of the Player during the Dash
         this.DashCooldown = 5;      //cooldown of the Dash in seconds
         this.Dashcheck = true;
