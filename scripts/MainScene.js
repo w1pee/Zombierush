@@ -38,7 +38,18 @@ export default class MainScene extends Phaser.Scene {
         //----------------------------------------------------------------
 
         //player creation
-        this.player = new Player({scene:this,x:800,y:800,texture:'default_player1'});     
+        console.log(this.grid);
+
+        let PlayerXSpawn;
+        let PlayerYSpawn;
+
+        do{
+            PlayerXSpawn = Func.rand(20,80);
+            PlayerYSpawn = Func.rand(20,80);
+        }
+        while(this.grid[PlayerXSpawn][PlayerYSpawn] != -1);
+
+        this.player = new Player({scene:this,x:Math.floor(PlayerXSpawn * 16) + 8,y:Math.floor(PlayerYSpawn * 16) + 8,texture:'default_player1'});     
         this.EntityLayer.add([this.player]);
         
 
