@@ -25,12 +25,16 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.Damage = 10;           //Damage the bullets inflicts onto zombies
         this.ratecheck = true;      //checks if the cooldown is over
         this.shootPressed = false;  //checks if the cursor is down
+
+        this.scene.shoot_sound = this.scene.sound.add('shoot1', {loop:false});
     }
 
     static preload(scene){
         scene.load.atlas('default_player1wak', 'assets/MainPlayer/default_player1wak.png', 'assets/MainPlayer/default_player1wak_atlas.json');
         scene.load.animation('default_player1wak_anims', 'assets/MainPlayer/default_player1wak_anim.json');    
         scene.load.image('bullet', 'assets/bullet.png'); 
+
+        scene.load.audio('shoot1',['sounds/shoot.wav']);
     }
 
     update(){
@@ -103,6 +107,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         //if the mouse is pressed & the cooldown is not active, then it shoots
         if(this.shootPressed){
             if(this.ratecheck){
+                this.scene.shoot_sound.play();
                 this.shootBullet(this.scene);   //shoots the Bullet
                 //sets cooldown
                 this.ratecheck = false;
