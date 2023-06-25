@@ -47,7 +47,7 @@ export default class MainScene extends Phaser.Scene {
             PlayerXSpawn = Func.rand(20,80);
             PlayerYSpawn = Func.rand(20,80);
         }
-        while(this.grid[PlayerXSpawn][PlayerYSpawn] != -1);
+        while(this.grid[PlayerYSpawn][PlayerXSpawn] != -1);
 
         this.player = new Player({scene:this,x:Math.floor(PlayerXSpawn * 16) + 8,y:Math.floor(PlayerYSpawn * 16) + 8,texture:'default_player1'});     
         this.EntityLayer.add([this.player]);
@@ -328,23 +328,30 @@ export default class MainScene extends Phaser.Scene {
 
         const radius = 25;  //the number of tiles the game spawns zombies away from the player
 
-        const PlayerX = Func.MinRound(this.player.x / 16);
-        const PlayerY = Func.MinRound(this.player.y / 16);
-
-        let InPlayerReach;
+        const PlayerX = this.player.y /16;
+        const PlayerY = this.player.x /16;
 
         do{
-            InPlayerReach = false;
-            SpawnY = Func.rand(5,95);
-            SpawnX = Func.rand(5,95);
+            //random radian
+            let radian = Math.PI * Math.random()*2;
 
-            if(Func.Distance(SpawnX,PlayerX,SpawnY,PlayerY) < radius){
-                InPlayerReach = true;
-            }
+            //Vecor based on the radian
+            var Vector = new Phaser.Math.Vector2();
+            Vector.x = Math.cos(radian);
+            Vector.y = Math.sin(radian);
+
+            //scaling the vecor to the radius
+            Vector.x*=radius;
+            Vector.y*=radius;
+            //adding the Vector to the player position
+            SpawnX = PlayerX + Vector.x;
+            SpawnY = PlayerY + Vector.y;
+
+            console.log([SpawnX,SpawnY]);
         }
-        while(this.grid[SpawnX][SpawnY] != -1 || InPlayerReach);
+        while(SpawnX < 1 || SpawnX > 99 || SpawnY < 1 ||  SpawnY > 99 || this.grid[Math.floor(SpawnX)][Math.floor(SpawnY)] != -1);
 
-        this.Zombies[n] = new Zombie({scene:this,texture:'default_zombiedino1',Health: this.Zombiehealth,Speed: this.ZombieSpeed,x:((SpawnY*16)+8),y:((SpawnX*16)+8)}); 
+        this.Zombies[n] = new Zombie({scene:this,texture:'default_zombiedino1',Health: this.Zombiehealth,Speed: this.ZombieSpeed,x:(SpawnY*16),y:(SpawnX*16)}); 
         this.EntityLayer.add([this.Zombies[n]]);
     }
 }
