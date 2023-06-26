@@ -5,5 +5,8 @@ idUsers int AUTO_INCREMENT PRIMARY KEY NOT NULL,
     pwdUsers longtext not null,
     dateUsers datetime not null
 );
-ALTER TABLE users 
-ADD COLUMN userhighscore text not null AFTER dateUsers;
+ALTER TABLE users
+ADD COLUMN userhighscore varchar(9) DEFAULT '0' not null AFTER dateUsers;
+
+ALTER USER 'Edwin' IDENTIFIED WITH mysql_native_password BY 'ps123!';
+flush priviliges;
