@@ -43,7 +43,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         //----------------------------------------------------------------
 
         //when cursor in reach show health
-        if(Func.Distance(this.x,this.scene.cursorCords.x,this.y,this.scene.cursorCords.y) < 75){
+        if(Func.Distance({x: this.x, y: this.y},{x: this.scene.cursorCords.x, y:this.scene.cursorCords.y}) < 75){
             this.healthTxt.alpha = 1;
         }
         else{
@@ -52,14 +52,14 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         //----------------------------------------------------------------
 
         //Player position
-        const PlayerX = Func.MinRound(this.scene.player.x / 16);
-        const PlayerY = Func.MinRound(this.scene.player.y / 16);
+        const PlayerX = Math.floor(this.scene.player.x / 16);
+        const PlayerY = Math.floor(this.scene.player.y / 16);
         //----------------------------------------------------------------
 
         //finding Path
         //When Player changes tile hes on, Zombie searches for a new path
         if(this.OldPlayerX != PlayerX || this.OldPlayerY != PlayerY){
-            this.scene.pathfinder.findPath(Func.MinRound(this.x/16), Func.MinRound(this.y/16), PlayerX, PlayerY, function(path) {
+            this.scene.pathfinder.findPath(Math.floor(this.x/16), Math.floor(this.y/16), PlayerX, PlayerY, function(path) {
                 if (path === null) {
                     console.warn("Path was not found.");
                 }
@@ -77,7 +77,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
 
         //Movement
         this.Move();
-        if(Func.MinRound(this.x / 16) === this.path[this.pathposition-1].x && Func.MinRound(this.y / 16) === this.path[this.pathposition-1].y){
+        if(Math.floor(this.x / 16) === this.path[this.pathposition-1].x && Math.floor(this.y / 16) === this.path[this.pathposition-1].y){
             this.pathposition++;
         }
         //----------------------------------------------------------------

@@ -20,8 +20,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.DashCooldown = 5;      //cooldown of the Dash in seconds
         this.Dashcheck = true;
 
-        this.bulletspeed = 15;      //Bullet Speed
-        this.firerate = 3;          //the rate the Player fires at(shots per second)
+        this.bulletspeed = 7.5;     //Bullet Speed
+        this.firerate = 1;          //the rate the Player fires at(shots per second)
         this.Damage = 10;           //Damage the bullets inflicts onto zombies
         this.ratecheck = true;      //checks if the cooldown is over
         this.shootPressed = false;  //checks if the cursor is down
@@ -163,7 +163,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         BulletVector2.x = BulletVector.x;
         BulletVector2.y = BulletVector.y;
         BulletVector2.normalize();
-        BulletVector2.scale(10)
+        BulletVector2.scale(15);
 
         // Create a new bullet sprite at the player's position
         const bullet = this.scene.matter.add.sprite(this.x + BulletVector2.x, this.y + BulletVector2.y, 'bullet');
