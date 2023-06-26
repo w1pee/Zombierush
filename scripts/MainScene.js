@@ -8,6 +8,9 @@ export default class MainScene extends Phaser.Scene {
     constructor() {
         super({key: "MainScene"});
     }
+    init(data){
+        this.HighScore = data.highscore;
+    }
     preload(){
         //preload of player + zombie class
         Player.preload(this);
@@ -84,7 +87,6 @@ export default class MainScene extends Phaser.Scene {
         this.Spawnnum;
         this.Zombies = new Array();
 
-        this.HighScore = 0;
         this.Score = 0;
         //----------------------------------------------------------------
 
@@ -222,6 +224,7 @@ export default class MainScene extends Phaser.Scene {
                     coin.setCollisionGroup(-1);
                     coin.setScale(0.75);
                     coin.setOrigin(0.5,0.5);
+                    this.EntityLayer.add([coin]);
 
                     //deleting Zombie
                     this.Zombies[i].healthTxt.destroy();
@@ -261,7 +264,7 @@ export default class MainScene extends Phaser.Scene {
                 //Delete UI
                 this.scene.stop("UIScene");
                 //launch GameOver scene
-                this.scene.launch('GameOver');
+                this.scene.launch('GameOver', { highscore: this.HighScore, score: this.Score});
                 this.scene.stop();
 
                 //insert HighScore into Database here

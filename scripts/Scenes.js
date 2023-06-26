@@ -64,15 +64,147 @@ export class GameOver extends Phaser.Scene{
     constructor(){
         super('GameOver')
     }
+    init (data){
+        this.Highscore = data.highscore;
+        this.Score = data.score;
+    }
+    preload(){
+        this.load.image('background', 'assets/background.png');
+        this.load.image('GameOver', 'assets/GameOver.png');
+
+        this.load.plugin('rexdropshadowpipelineplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexdropshadowpipelineplugin.min.js', true);
+    }
     create(){
         console.log("now in GameOver Scene");   //just for debugging
-        this.add.text(window.innerWidth/2,window.innerheight/2,'game over').setOrigin(0.5,0.5);
-        // goes to start Scene after 2seconds
-        this.time.delayedCall(2000, () => {
-            this.scene.launch('Start');
-            this.scene.stop();
+
+        //calculates the number of background patterns to be applied
+        let PanelX = this.PanelsNum(window.innerWidth);
+        let PanelY = this.PanelsNum(window.innerHeight);
+        //----------------------------------------------------------------
+
+        //fills in the background
+        for (let x = 0; x < PanelX; x++) {
+            for (let y = 0; y < PanelY; y++) {
+                this.add.sprite(x*160,y*160,'background').setScale(5).setOrigin(0,0);
+            }
+        }
+        //----------------------------------------------------------------
+
+        var GameOver = this.add.sprite(window.innerWidth / 2,window.innerHeight / 8,'GameOver').setScale(10);
+
+        //dropshadow using plugin
+        this.pipelineInstance = this.plugins.get('rexdropshadowpipelineplugin');
+        this.pipelineInstance.add(GameOver,{
+            angle: 270,
+            distance: 20,
+            shadowColor: 0x000000,
+            alpha: 0.6,
+            name: 'rexDropShadowPostFx'
         });
         //----------------------------------------------------------------
+
+        //Highscore text
+        this.add.text(
+            window.innerWidth / 2, 
+            window.innerHeight / 3.5, 
+            "Highscore",
+            {                           //styling
+                font: '50px',
+                color: "#000000",
+                fontFamily: 'CustomFamily',
+                backgroundColor: "#FFFFFF",
+            }
+        ).setOrigin(0.5,1);
+
+        //Highscore number
+        var highscore = this.add.text(
+            window.innerWidth / 2, 
+            window.innerHeight / 3.5 + 75, 
+            0,
+            {                           //styling
+                font: '75px',
+                color: "#FFFFFF",
+                fontFamily: 'CustomFamily',
+                backgroundColor: "#000000",
+            }
+        ).setOrigin(0.5,1);
+        
+        //tween that counts from 0 to the highscore
+        var tweenHs = this.tweens.add({
+            targets: { value: 0 },
+            value: this.Highscore,
+            duration: (this.Highscore * 10),
+            onUpdate: function (tween, target) {
+                // onUpdate callback function, called on each update of the tween
+                highscore.text = Math.floor(target.value);
+            }
+        });
+
+        //score text
+        this.add.text(
+            window.innerWidth / 2, 
+            window.innerHeight / 2, 
+            "Score",
+            {                           //styling
+                font: '50px',
+                color: "#000000",
+                fontFamily: 'CustomFamily',
+                backgroundColor: "#FFFFFF",
+            }
+        ).setOrigin(0.5,1);
+
+        //score number
+        var score = this.add.text(
+            window.innerWidth / 2, 
+            window.innerHeight / 2 + 75, 
+            0,
+            {                           //styling
+                font: '75px',
+                color: "#FFFFFF",
+                fontFamily: 'CustomFamily',
+                backgroundColor: "#000000",
+            }
+        ).setOrigin(0.5,1);
+        
+        //tween that counts from 0 to the highscore
+        var tweenS = this.tweens.add({
+            targets: { value: 0 },
+            value: this.Score,
+            duration: (this.Score * 20),
+            onUpdate: function (tween, target) {
+                // onUpdate callback function, called on each update of the tween
+                score.text = Math.floor(target.value);
+            }
+        });
+        
+        this.add.text(
+            window.innerWidth / 2, 
+            window.innerHeight-80, 
+            "press Space to continue",
+            {                           //styling
+                font: '50px',
+                color: "#FFFFFF",
+                fontFamily: 'CustomFamily',
+                backgroundColor: "#000000",
+            }
+        ).setOrigin(0.5,1);
+
+        //input
+        this.inputkeys = this.input.keyboard.addKeys({
+            Start: Phaser.Input.Keyboard.KeyCodes.SPACE,
+        });
+        //----------------------------------------------------------------
+    }
+    update(){
+        if (this.inputkeys.Start.isDown) {
+            this.scene.launch('Start',{highscore: this.Highscore});
+            this.scene.stop();
+        }
+    }
+    PanelsNum(n){
+        let x = Math.round(n/160);
+        if(x * 160 < n){return x+1;}
+        return x;
     }
 }
 //----------------------------------------------------------------
@@ -83,6 +215,14 @@ export class GameOver extends Phaser.Scene{
 export class Start extends Phaser.Scene{
     constructor(){
         super('Start');
+    }
+    init(data){
+        if(data.highscore === undefined){
+            this.Highscore = 0;
+        }
+        else{
+            this.Highscore = data.highscore;
+        }
     }
     preload(){
         this.load.image('logo', 'assets/logo.png');
@@ -143,7 +283,7 @@ export class Start extends Phaser.Scene{
     }
     update(){
         if (this.inputkeys.Start.isDown) {
-            this.scene.launch('MainScene');
+            this.scene.launch('MainScene',{highscore: this.Highscore});
             this.scene.launch("UIScene");
             this.scene.stop();
         }
