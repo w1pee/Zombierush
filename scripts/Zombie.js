@@ -66,7 +66,6 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
                 else {
                     this.path = path;
                     this.pathposition = 1;
-                    this.Move();
                 }
             }.bind(this));
             this.scene.pathfinder.calculate();
@@ -76,9 +75,11 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         //----------------------------------------------------------------
 
         //Movement
-        this.Move();
-        if(Math.floor(this.x / 16) === this.path[this.pathposition-1].x && Math.floor(this.y / 16) === this.path[this.pathposition-1].y){
-            this.pathposition++;
+        if(this.path.length > 0){
+            this.Move(this.path);
+            if(Math.floor(this.x / 16) === this.path[this.pathposition-1].x && Math.floor(this.y / 16) === this.path[this.pathposition-1].y){
+                this.pathposition++;
+            }
         }
         //----------------------------------------------------------------
     }
@@ -92,8 +93,9 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
             this.clearTint();
         });
     }
-    //function for moving the player
+    //function for moving the Zombie
     Move(){
+        console.log(this.path);
 
         let Pos = this.pathposition;
         

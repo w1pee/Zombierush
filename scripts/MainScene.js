@@ -115,7 +115,7 @@ export default class MainScene extends Phaser.Scene {
             }
         }
         //updates UI
-        this.events.emit('setValues', this.Zombienum,this.Score,this.player.Dashcheck,this.HighScore);
+        this.events.emit('setValues', this.Zombienum,this.Score,this.player.Stamina,this.HighScore);
         //----------------------------------------------------------------
 
         //This Calculates the position of the Cursor in the world, using positon of the camera

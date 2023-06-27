@@ -3,6 +3,9 @@ export default class UIScene extends Phaser.Scene{
         super('UIScene');
         // Phaser.Scene.call(this, { key: 'UIScene', active: true });
     }
+    preload(){
+        this.load.image('stamina', 'assets/StaminaArrow.png');
+    }
 
     create(){
         //basic UI design
@@ -51,9 +54,11 @@ export default class UIScene extends Phaser.Scene{
         const myGame = this.scene.get('MainScene');
         //----------------------------------------------------------------
 
-        //Dash availability
-        this.DashText = this.add.text(0,800,'Dash', {font: '50px', fontFamily: 'CustomFont', fill: '#000000'})
-        this.DashText.setOrigin(0,1)
+        this.stam1 = this.add.sprite(50 ,window.innerHeight - 120,'stamina').setScale(5).setOrigin(0.5,0.5);
+        this.stam2 = this.add.sprite(70 ,window.innerHeight - 120,'stamina').setScale(5).setOrigin(0.5,0.5);
+        this.stam3 = this.add.sprite(90,window.innerHeight - 120,'stamina').setScale(5).setOrigin(0.5,0.5);
+        this.stam4 = this.add.sprite(110,window.innerHeight - 120,'stamina').setScale(5).setOrigin(0.5,0.5);
+        this.stam5 = this.add.sprite(130,window.innerHeight - 120,'stamina').setScale(5).setOrigin(0.5,0.5);
 
         //function that syncs the values from the MainScene to UI(here)
         myGame.events.on('setValues', function(zmb,score,Dash,Highscore)
@@ -62,12 +67,16 @@ export default class UIScene extends Phaser.Scene{
             this.Score.text = score;
             this.Highscore.text = Highscore;
 
-            if(Dash){
-                this.DashText.setStyle({fill: '#23C552'});
-            }
-            else{
-                this.DashText.setStyle({fill: '#F84F31'});
-            }
+            if(Dash >= 1){this.stam1.alpha = 1;}
+            else{this.stam1.alpha = 0;}
+            if(Dash >= 2){this.stam2.alpha = 1;}
+            else{this.stam2.alpha = 0;}
+            if(Dash >= 3){this.stam3.alpha = 1;}
+            else{this.stam3.alpha = 0;}
+            if(Dash >= 4){this.stam4.alpha = 1;}
+            else{this.stam4.alpha = 0;}
+            if(Dash >= 5){this.stam5.alpha = 1;}
+            else{this.stam5.alpha = 0;}
 
         },this);
         //----------------------------------------------------------------

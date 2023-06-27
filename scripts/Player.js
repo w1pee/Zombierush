@@ -16,9 +16,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.setFixedRotation();
         //atribute for the player
         this.speed = 3.2;           //Player Speed
-        this.DashSpeed = 10;        //Speed of the Player during the Dash
-        this.DashCooldown = 5;      //cooldown of the Dash in seconds
-        this.Dashcheck = true;
+        this.Stamina = 5;
+        this.dash = false;
+        this.check = true;
 
         this.bulletspeed = 7.5;     //Bullet Speed
         this.firerate = 1;          //the rate the Player fires at(shots per second)
@@ -38,17 +38,22 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     update(){
-        let speed = this.speed;
-        //Dash      //if activate the player accelerates very fast
-        if(this.inputkeys.Dash.isDown && this.Dashcheck){
-            speed = this.DashSpeed;
-            this.scene.time.delayedCall(250, () => {
-                this.Dashcheck = false;
-            });
-            this.scene.time.delayedCall(this.DashCooldown*1000, () => {
-                this.Dashcheck = true;
-            });
+        if(this.Stamina < 5){
+            this.Stamina+= 1/180;
         }
+
+        //check for input to dash
+        if(this.check){
+            if(this.inputkeys.Dash.isDown && this.Stamina >= 1){
+            this.Stamina-= 1;
+            this.dash = true;
+            this.check = false;
+        }}
+
+        if(!this.inputkeys.Dash.isDown){
+            this.check = true;
+        }
+
         //----------------------------------------------------------------
         //movement system
         //X
@@ -94,9 +99,25 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   
   
         playerVelocity.normalize();
-        playerVelocity.scale(speed);
+        playerVelocity.scale(this.speed);
         this.setVelocity(playerVelocity.x, playerVelocity.y);
         //----------------------------------------------------------------
+
+        if(this.dash){
+            let DashVector = new Phaser.Math.Vector2();
+
+            DashVector.x = this.scene.cursorCords.x - this.x;
+            DashVector.y = this.scene.cursorCords.y - this.y;
+
+            DashVector.normalize();
+            DashVector.scale(this.speed*8);
+
+            this.setVelocity(DashVector.x, DashVector.y);
+
+            this.scene.time.delayedCall(100, () => {
+                this.dash = false;
+            });
+        }
         
         // listen for mouse input to shoot
         this.scene.input.on('pointerdown', function(pointer) {
