@@ -32,7 +32,7 @@ if(isset($_POST['login-submit'])){
                     $_SESSION['userid'] = $row['idUsers'];
                     $_SESSION['userusn'] = $row['usnUsers'];
 
-                    header("Location: ../main.php?login=success");
+                    header("Location: ../index.php?login=success");
                     exit();
                 }
                 else{
@@ -50,6 +50,6 @@ if(isset($_POST['login-submit'])){
     
 }
 else{
-    header("Location: ../main.php");
+    header("Location: ../index.php");
     exit();
 }

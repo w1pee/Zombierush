@@ -34,6 +34,11 @@ if(isset($_POST['signup-submit'])){
                 header("Location: ../signup.php?error=weakpwd&usn=".$username."&mail=".$email);
                 exit();
         }
+        elseif(isset($_POST['headbacktogamefromsignup'])){
+                header("Location: ../index.php");
+                exit();
+        }
+
 
         $sql = "SELECT usnUsers FROM users WHERE usnUsers=?;";
         $stmt = mysqli_stmt_init($conn);

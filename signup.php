@@ -26,6 +26,7 @@
                 }
                 elseif($_GET['signup'] == "success"){
                     echo '<p>Signup successful!</p>';
+                    echo '<button type="submit" name="headbacktogamefromsignup">Head back to the Game!</button>';
                 }
             }
         ?>
