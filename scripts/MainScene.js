@@ -382,8 +382,6 @@ export default class MainScene extends Phaser.Scene {
             //adding the Vector to the player position
             SpawnX = PlayerX + Vector.x;
             SpawnY = PlayerY + Vector.y;
-
-            console.log([SpawnX,SpawnY]);
         }
         while(SpawnX < 1 || SpawnX > 99 || SpawnY < 1 ||  SpawnY > 99 || this.grid[Math.floor(SpawnX)][Math.floor(SpawnY)] != -1);
 

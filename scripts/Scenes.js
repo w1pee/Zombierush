@@ -133,7 +133,7 @@ export class GameOver extends Phaser.Scene{
         var tweenHs = this.tweens.add({
             targets: { value: 0 },
             value: this.Highscore,
-            duration: (this.Highscore * 10),
+            duration: (Math.pow((-1.0008),(10000-this.Highscore))+4000),
             onUpdate: function (tween, target) {
                 // onUpdate callback function, called on each update of the tween
                 highscore.text = Math.floor(target.value);
@@ -167,10 +167,11 @@ export class GameOver extends Phaser.Scene{
         ).setOrigin(0.5,1);
         
         //tween that counts from 0 to the highscore
+        //f(x)=-1.0008^(-x+10000)+4000
         var tweenS = this.tweens.add({
             targets: { value: 0 },
             value: this.Score,
-            duration: (this.Score * 20),
+            duration: (Math.pow((-1.0008),(10000-this.Score))+4100),
             onUpdate: function (tween, target) {
                 // onUpdate callback function, called on each update of the tween
                 score.text = Math.floor(target.value);

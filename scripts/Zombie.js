@@ -75,8 +75,14 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         //----------------------------------------------------------------
 
         //Movement
-        if(this.path.length > 0){
-            this.Move(this.path);
+        if(this.path.length >= 1){
+            this.Move();
+            if(this.pathposition <= 1){
+                this.pathposition = 1;
+            }
+            if(this.pathposition >= this.path.length - 1){
+                this.pathposition = this.path.length - 1;
+            }
             if(Math.floor(this.x / 16) === this.path[this.pathposition-1].x && Math.floor(this.y / 16) === this.path[this.pathposition-1].y){
                 this.pathposition++;
             }
@@ -95,8 +101,6 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
     }
     //function for moving the Zombie
     Move(){
-        console.log(this.path);
-
         let Pos = this.pathposition;
         
         if(Pos >= this.path.length){
