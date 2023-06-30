@@ -5,23 +5,12 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         super(scene.matter.world,x,y,texture);
         this.scene.add.existing(this);
 
-        const {Body,Bodies} = Phaser.Physics.Matter.Matter;
-        var Collider = Bodies.circle(this.x,this.y,5,{isSensor:true,label:'ZombieCollider'});
-        const compundBody = Body.create({
-            parts:[Collider],
-            frictionAir:0.2,
-        });
-        this.setExistingBody(compundBody);
         this.setFixedRotation();
 
-        this.setCollisionGroup(-1);
-
         this.Health = 20;
-        this.Speed = ((Math.random()*1.75)+0.25);     //adds a little random to Speed
+        this.Speed = ((Math.random()*1.25)+0.25);     //adds a little random to Speed
         this.healthTxt = scene.add.text(this.x,this.y,this.Health ,{ font: '9px', fontFamily: 'CustomFont', color: '#ffffff',stroke: '#000000',strokeThickness:3});
         this.healthTxt.setOrigin(0.5,0.5)
-
-        console.log(this.Speed);
 
         this.OldPlayerX = 0;
         this.OldPlayerY = 0;
@@ -91,34 +80,6 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
             }
         }
         //----------------------------------------------------------------
-
-        //cheking if dead
-        if(this.Health <= 0){
-            //generating coin with random value
-            let value;
-            switch(Func.rand(0,9)){
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5: value = '10';break;
-                case 6: 
-                case 7: 
-                case 8: value = '25';break
-                case 9: value = '75';
-                default:
-            }
-            let coin = new Coin({scene:this.scene,x:this.x,y:this.y,texture:value});
-            coin.setCollisionGroup(-1);
-            coin.setScale(0.75);
-            coin.setOrigin(0.5,0.5);
-            this.scene.EntityLayer.add([coin]);
-
-            //deleting Zombie
-            this.healthTxt.destroy();
-            this.destroy();
-        }
     }
     //function for the Zombie taking damage
     takeDamage(dmg){
@@ -159,6 +120,31 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
                 if(Math.abs(vector.x) == 0 || Math.abs(vector.y) == 0){
                     this.anims.play('idlez', true);
                 }   
+    }
+    kill(){
+        //generating coin with random value
+        let value;
+        switch(Func.rand(0,9)){
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5: value = '10';break;
+            case 6: 
+            case 7: 
+            case 8: value = '25';break
+            case 9: value = '75';
+            default:
+        }
+        let coin = new Coin({scene:this.scene,x:this.x,y:this.y,texture:value});
+        coin.setCollisionGroup(-1);
+        coin.setScale(0.75);
+        coin.setOrigin(0.5,0.5);
+        this.scene.EntityLayer.add([coin]);
+
+        //deleting Zombie
+        this.healthTxt.destroy();
     }
 }
 

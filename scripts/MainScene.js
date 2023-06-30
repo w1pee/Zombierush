@@ -97,6 +97,17 @@ export default class MainScene extends Phaser.Scene {
         //Filters Plugin
         this.pipelineInstance = this.plugins.get('rexkawaseblurpipelineplugin');
         //----------------------------------------------------------------
+
+        //destoying bullet when it hits anything
+        // this.matter.world.on('collisionstart', (event,bodyA,bodyB) => 
+        // {
+        //     console.log(bodyA);
+        //     //so bullet will always be destroyed on impact
+        //     if (bodyB.label == 'BulletCollider' && bodyA.label === "Rectangle Body"){
+        //         bodyB.gameObject.destroy();
+        //         console.log('yip');
+        //     }
+        // });
     }
 
     update(){
@@ -172,9 +183,8 @@ export default class MainScene extends Phaser.Scene {
     }
     //----------------------------------------------------------------
 
-    //here are all the collisons and its actions listed     //best way of doing it i could come up with since phaser.io is down
+    //own system that checks for specific collisions every frame
     checkCollisions(){
-
         //this.EntityLayer.list //list all game objects on entitylayer
         let Zombies = [];
         let Coins = [];
@@ -194,50 +204,39 @@ export default class MainScene extends Phaser.Scene {
                 Bullets.push(this.EntityLayer.list[i]);
             }
         }
-        console.log(Zombies);
-        console.log(Coins);
-        console.log(Bullets);
-        console.log('--------------------');
+        //checking collision Player / Zombie
+        for (let i = 0; i < Zombies.length; i++) {
+            if(Func.Distance(this.player,Zombies[i]) < 15){
+                //Delete UI
+                this.scene.stop("UIScene");
+                //launch GameOver scene
+                this.scene.launch('GameOver', { highscore: this.HighScore, score: this.Score});
+                this.scene.stop();
+                return;
+            }
+        }
+        //checking collision Zombies / Bullets
+        for (let i = 0; i < Zombies.length; i++) {
+            for (let j = 0; j < Bullets.length; j++) {
+                if(Func.Distance(Bullets[j],Zombies[i]) < 15){
+                    Zombies[i].takeDamage(10);
+                    Bullets[j].destroy();
 
-        //checking collision Zombies
-
-
-
-
-
-        // this.matter.world.on('collisionstart', (event,bodyA,bodyB) => 
-        // {
-        //     //Player DmgSensor label:   DmgSensor      
-        //     //Bullet Collider label:    BulletCollider
-        //     //Zombie Collider label:    ZombieCollider
-        //     //Coin Collider label:      CoinSensor
-
-        //     //so bullet will always be destroyed on impact
-        //     if (bodyB.label == 'BulletCollider'){
-        //         bodyB.gameObject.destroy();
-        //     }
-        //     //----------------------------------------------------------------
-
-        //     //if bullet and zombie, zombie health - player damage
-        //     if (bodyB.label == 'BulletCollider' && bodyA.label == 'ZombieCollider'){
-        //         bodyA.gameObject.takeDamage(this.player.Damage);
-        //     }
-
-        //     if (bodyA.label == 'DmgSensor' && bodyB.label == 'ZombieCollider' || bodyB.label == 'DmgSensor' && bodyA.label == 'ZombieCollider') {
-        //         //Delete UI
-        //         this.scene.stop("UIScene");
-        //         //launch GameOver scene
-        //         this.scene.launch('GameOver', { highscore: this.HighScore, score: this.Score});
-        //         this.scene.stop();
-
-        //         //insert HighScore into Database here
-        //     }
-
-        //     if(bodyA.label == 'playerCollider' && bodyB.label == 'CoinSensor'){
-        //         this.Score+= bodyB.gameObject.value();
-        //         bodyB.gameObject.destroy();
-        //     }
-        // });
+                    if(Zombies[i].Health <= 0){
+                        Zombies[i].kill();
+                        Zombies[i].destroy();
+                    }
+                    return;
+                }
+            }
+        }
+        //checking collision Coin / Player
+        for (let i = 0; i < Coins.length; i++) {
+            if(Func.Distance(this.player,Coins[i]) < 15){
+                this.Score += Coins[i].value();
+                Coins[i].destroy();
+            }
+        }
     }
     GenerateMap(){
         const Generation = Map.PerlinNoise(100,100,16,1);
