@@ -108,12 +108,6 @@ export default class MainScene extends Phaser.Scene {
         //update of Player + Zombies + UI
         this.player.update();
 
-        //updates the Zombie
-        for(let i = 0; i < this.Zombies.length; i++){
-            if (this.Zombies[i] != undefined) {
-                this.Zombies[i].update(this);
-            }
-        }
         //updates UI
         this.events.emit('setValues', this.Zombienum,this.Score,this.player.Stamina,this.HighScore);
         //----------------------------------------------------------------
@@ -190,6 +184,8 @@ export default class MainScene extends Phaser.Scene {
             
             if(this.EntityLayer.list[i].name == "Zombie"){
                 Zombies.push(this.EntityLayer.list[i]);
+                //updating zombie
+                this.EntityLayer.list[i].update();
             }
             else if(this.EntityLayer.list[i].name == "Coin"){
                 Coins.push(this.EntityLayer.list[i]);
@@ -201,6 +197,7 @@ export default class MainScene extends Phaser.Scene {
         console.log(Zombies);
         console.log(Coins);
         console.log(Bullets);
+        console.log('--------------------');
 
         //checking collision Zombies
 
