@@ -83,9 +83,7 @@ export default class MainScene extends Phaser.Scene {
 
         //waves
         this.Wave = 0;
-        this.Zombienum;
         this.Spawnnum;
-        this.Zombies = new Array();
 
         this.Score = 0;
         //----------------------------------------------------------------
@@ -99,12 +97,14 @@ export default class MainScene extends Phaser.Scene {
         //Filters Plugin
         this.pipelineInstance = this.plugins.get('rexkawaseblurpipelineplugin');
         //----------------------------------------------------------------
-
-        //here are all the collions the game listens for listed
-        this.checkCollisions();
     }
 
     update(){
+        //here are all the collions the game listens for listed
+        this.checkCollisions();
+
+        // console.log(this.EntityLayer.list);
+
         //update of Player + Zombies + UI
         this.player.update();
 
@@ -138,20 +138,10 @@ export default class MainScene extends Phaser.Scene {
         }
         //----------------------------------------------------------------
 
-        //counts the number of zombies
-        this.Zombienum = 0;
-
-        for (let i = 0; i < this.Zombies.length; i++) {
-            if (this.Zombies[i] != undefined) {
-                this.Zombienum++;
-            }
-        }
-        //----------------------------------------------------------------
-
         //Wave
         //calculates based on the current Wave the amounts of zombies to spawn
         //then spawns them
-        if(this.Zombienum == 0){
+        if((this.sys.displayList.list.length - 3) == 0){
             this.Wave += 1;
 
             //5 ℯ^(((1)/(5)) x)
@@ -173,66 +163,14 @@ export default class MainScene extends Phaser.Scene {
         //----------------------------------------------------------------
         
         //it seperatly spawns the zombies, so it doesnt spawn every zombie in one frame
-        //this drastically improves performance, as the game does not have to wait for every zombie to spawn to start the next frame
+        //this improves performance, as the game does not have to wait for every zombie to spawn to start the next frame
         if(this.Spawnnum > 1){
-            //this is the system for spawing zombies
-            //it first checks if an undefined spot is avaible and fills that in
-            //if not it creates a new spot
-            let loop = true;
-            let n = 0;
-            do{
-                if (this.Zombies[n] == undefined) {
-                    loop = false;
-                    this.SpawnZombie(n);
-                    break;
-                }
-                n++;
-                if(n == this.Zombies.length){
-                    loop = false;
-                    this.SpawnZombie(n);
-                }
-            }
-            while(loop)
+            //spawns zombie
+            this.SpawnZombie();
             this.Spawnnum--;
         }
         //----------------------------------------------------------------
 
-        //checking if any Zombies are dead
-        for (let i = 0; i < this.Zombies.length; i++) {
-            if (this.Zombies[i] != undefined) {
-                if(this.Zombies[i].Health <= 0){
-
-                    //generating coin with random value
-                    const x = this.Zombies[i].x;
-                    const y = this.Zombies[i].y;
-                    let value;
-
-                    switch(Func.rand(0,9)){
-                        case 0:
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                        case 5: value = '10';break;
-                        case 6: 
-                        case 7: 
-                        case 8: value = '25';break
-                        case 9: value = '75';
-                        default:
-                    }
-                    let coin = new Coin({scene:this,x:x,y:y,texture:value});
-                    coin.setCollisionGroup(-1);
-                    coin.setScale(0.75);
-                    coin.setOrigin(0.5,0.5);
-                    this.EntityLayer.add([coin]);
-
-                    //deleting Zombie
-                    this.Zombies[i].healthTxt.destroy();
-                    this.Zombies[i].destroy();
-                    this.Zombies[i] = undefined;
-                }
-            }
-        }
         //set HighScore
         if (this.Score > this.HighScore) {
             this.HighScore = this.Score;
@@ -242,39 +180,67 @@ export default class MainScene extends Phaser.Scene {
 
     //here are all the collisons and its actions listed     //best way of doing it i could come up with since phaser.io is down
     checkCollisions(){
-        this.matter.world.on('collisionstart', (event,bodyA,bodyB) => 
-        {
-            //Player DmgSensor label:   DmgSensor      
-            //Bullet Collider label:    BulletCollider
-            //Zombie Collider label:    ZombieCollider
-            //Coin Collider label:      CoinSensor
 
-            //so bullet will always be destroyed on impact
-            if (bodyB.label == 'BulletCollider'){
-                bodyB.gameObject.destroy();
+        //this.EntityLayer.list //list all game objects on entitylayer
+        let Zombies = [];
+        let Coins = [];
+        let Bullets = [];
+
+        for (let i = 0; i < this.EntityLayer.list.length; i++) {
+            
+            if(this.EntityLayer.list[i].name == "Zombie"){
+                Zombies.push(this.EntityLayer.list[i]);
             }
-            //----------------------------------------------------------------
-
-            //if bullet and zombie, zombie health - player damage
-            if (bodyB.label == 'BulletCollider' && bodyA.label == 'ZombieSensor'){
-                bodyA.gameObject.takeDamage(this.player.Damage);
+            else if(this.EntityLayer.list[i].name == "Coin"){
+                Coins.push(this.EntityLayer.list[i]);
             }
-
-            if (bodyA.label == 'DmgSensor' && bodyB.label == 'ZombieCollider' || bodyB.label == 'DmgSensor' && bodyA.label == 'ZombieCollider') {
-                //Delete UI
-                this.scene.stop("UIScene");
-                //launch GameOver scene
-                this.scene.launch('GameOver', { highscore: this.HighScore, score: this.Score});
-                this.scene.stop();
-
-                //insert HighScore into Database here
+            else if(this.EntityLayer.list[i].name == "Bullet"){
+                Bullets.push(this.EntityLayer.list[i]);
             }
+        }
+        console.log(Zombies);
+        console.log(Coins);
+        console.log(Bullets);
 
-            if(bodyA.label == 'playerCollider' && bodyB.label == 'CoinSensor'){
-                this.Score+= bodyB.gameObject.value();
-                bodyB.gameObject.destroy();
-            }
-        });
+        //checking collision Zombies
+
+
+
+
+
+        // this.matter.world.on('collisionstart', (event,bodyA,bodyB) => 
+        // {
+        //     //Player DmgSensor label:   DmgSensor      
+        //     //Bullet Collider label:    BulletCollider
+        //     //Zombie Collider label:    ZombieCollider
+        //     //Coin Collider label:      CoinSensor
+
+        //     //so bullet will always be destroyed on impact
+        //     if (bodyB.label == 'BulletCollider'){
+        //         bodyB.gameObject.destroy();
+        //     }
+        //     //----------------------------------------------------------------
+
+        //     //if bullet and zombie, zombie health - player damage
+        //     if (bodyB.label == 'BulletCollider' && bodyA.label == 'ZombieCollider'){
+        //         bodyA.gameObject.takeDamage(this.player.Damage);
+        //     }
+
+        //     if (bodyA.label == 'DmgSensor' && bodyB.label == 'ZombieCollider' || bodyB.label == 'DmgSensor' && bodyA.label == 'ZombieCollider') {
+        //         //Delete UI
+        //         this.scene.stop("UIScene");
+        //         //launch GameOver scene
+        //         this.scene.launch('GameOver', { highscore: this.HighScore, score: this.Score});
+        //         this.scene.stop();
+
+        //         //insert HighScore into Database here
+        //     }
+
+        //     if(bodyA.label == 'playerCollider' && bodyB.label == 'CoinSensor'){
+        //         this.Score+= bodyB.gameObject.value();
+        //         bodyB.gameObject.destroy();
+        //     }
+        // });
     }
     GenerateMap(){
         const Generation = Map.PerlinNoise(100,100,16,1);
@@ -312,11 +278,11 @@ export default class MainScene extends Phaser.Scene {
         //Building layer
         const CollisionMap = this.make.tilemap({data:buildings, tileWidth:16, tileHeight:16});
         const tiles2 = CollisionMap.addTilesetImage("OtherTileset");
-        this.layer2 = CollisionMap.createLayer(0,tiles2,0,0);
+        const layer2 = CollisionMap.createLayer(0,tiles2,0,0);
 
         //collision
-        this.layer2.setCollisionByExclusion([-1,0,1,2,3,4,15,17,18,19,30,31,32]);
-        this.matter.world.convertTilemapLayer(this.layer2);
+        layer2.setCollisionByExclusion([-1,0,1,2,3,4,15,17,18,19,30,31,32]);
+        this.matter.world.convertTilemapLayer(layer2);
         //----------------------------------------------------------------
 
         //Layers
@@ -325,13 +291,14 @@ export default class MainScene extends Phaser.Scene {
         this.DetailLayer = this.add.layer();
 
         this.DefaultLayer.add([layer1]);
-        this.DetailLayer.add([this.layer2]);
+        this.DetailLayer.add([layer2]);
         //----------------------------------------------------------------
     }
     pathfindersetup(){
+        console.log(this);
         //function looks at the tile and returns the index
         this.TileID = function(x,y){
-            var tile = this.layer2.getTileAt(x,y);
+            var tile = this.DetailLayer.list[0].getTileAt(x,y);
             if(tile == null){
                 return -1;
             }
@@ -358,7 +325,7 @@ export default class MainScene extends Phaser.Scene {
         this.pathfinder.setIterationsPerCalculation(5);
         this.pathfinder.enableDiagonals();
     }
-    SpawnZombie(n){
+    SpawnZombie(){
         let SpawnX;
         let SpawnY;
 
@@ -385,7 +352,7 @@ export default class MainScene extends Phaser.Scene {
         }
         while(SpawnX < 1 || SpawnX > 99 || SpawnY < 1 ||  SpawnY > 99 || this.grid[Math.floor(SpawnX)][Math.floor(SpawnY)] != -1);
 
-        this.Zombies[n] = new Zombie({scene:this,texture:'default_zombiedino1',x:(SpawnY*16),y:(SpawnX*16)}); 
-        this.EntityLayer.add([this.Zombies[n]]);
+        let zombie = new Zombie({scene:this,texture:'default_zombiedino1',x:(SpawnY*16),y:(SpawnX*16)}); 
+        this.EntityLayer.add([zombie]);
     }
 }

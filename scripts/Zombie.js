@@ -6,24 +6,28 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         this.scene.add.existing(this);
 
         const {Body,Bodies} = Phaser.Physics.Matter.Matter;
-        var Collider = Bodies.circle(this.x,this.y,3,{isSensor:false,label:'ZombieCollider'});
-        var Sensor = Bodies.circle(this.x,this.y,15,{isSensor:true,label:'ZombieSensor'});
+        var Collider = Bodies.circle(this.x,this.y,5,{isSensor:true,label:'ZombieCollider'});
         const compundBody = Body.create({
-            parts:[Collider,Sensor],
+            parts:[Collider],
             frictionAir:0.2,
         });
         this.setExistingBody(compundBody);
         this.setFixedRotation();
 
+        this.setCollisionGroup(-1);
+
         this.Health = 20;
-        this.Speed = Func.rand(1,1.5);     //adds a little random to Speed
+        this.Speed = ((Math.random()*1.75)+0.25);     //adds a little random to Speed
         this.healthTxt = scene.add.text(this.x,this.y,this.Health ,{ font: '9px', fontFamily: 'CustomFont', color: '#ffffff',stroke: '#000000',strokeThickness:3});
         this.healthTxt.setOrigin(0.5,0.5)
+
+        console.log(this.Speed);
 
         this.OldPlayerX = 0;
         this.OldPlayerY = 0;
 
         this.pathposition;
+        this.name = 'Zombie';
     }
 
     static preload(scene){
@@ -32,7 +36,6 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
     }
 
     update(){
-
         //updating text position
         this.healthTxt.x = this.x;
         this.healthTxt.y = this.y+12;
@@ -88,6 +91,34 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
             }
         }
         //----------------------------------------------------------------
+
+        //cheking if dead
+        if(this.Health <= 0){
+            //generating coin with random value
+            let value;
+            switch(Func.rand(0,9)){
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5: value = '10';break;
+                case 6: 
+                case 7: 
+                case 8: value = '25';break
+                case 9: value = '75';
+                default:
+            }
+            let coin = new Coin({scene:this.scene,x:this.x,y:this.y,texture:value});
+            coin.setCollisionGroup(-1);
+            coin.setScale(0.75);
+            coin.setOrigin(0.5,0.5);
+            this.scene.EntityLayer.add([coin]);
+
+            //deleting Zombie
+            this.healthTxt.destroy();
+            this.destroy();
+        }
     }
     //function for the Zombie taking damage
     takeDamage(dmg){
@@ -144,6 +175,8 @@ export class Coin extends Phaser.Physics.Matter.Sprite{
         });
         this.setExistingBody(compundBody);
         this.setFixedRotation();
+
+        this.name = 'Coin';
     }
 
     static preload(scene){
@@ -151,8 +184,8 @@ export class Coin extends Phaser.Physics.Matter.Sprite{
         scene.load.image('25', 'assets/coin25.png');
         scene.load.image('75', 'assets/coin75.png');
     }
-
+    //returning the value of the coin
     value(){
-        return parseInt(this.texture.key);
+        return parseInt(this.texture.key);  //converting string to int
     }
 }

@@ -15,7 +15,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.setExistingBody(compundBody);
         this.setFixedRotation();
         //atribute for the player
-        this.speed = 3.2;           //Player Speed
+        this.speed = 2.5;           //Player Speed
         this.Stamina = 5;
         this.dash = false;
         this.check = true;
@@ -189,6 +189,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         // Create a new bullet sprite at the player's position
         const bullet = this.scene.matter.add.sprite(this.x + BulletVector2.x, this.y + BulletVector2.y, 'bullet');
         this.scene.EntityLayer.add(bullet);
+        bullet.name = 'Bullet';
         //----------------------------------------------------------------
 
         //Custom collider for bullet
@@ -201,7 +202,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         });
         bullet.setExistingBody(BulletBody);
 
-        bullet.setCollisionGroup(-1);   //setting collision group, so it wont collide with the Player
         bullet.setScale(0.75);
         bullet.setOrigin(0.5,0.5);
         bullet.rotation = AngleDeg / (180/Math.PI); //set rotation converted back to radian
