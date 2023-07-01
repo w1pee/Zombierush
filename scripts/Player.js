@@ -189,6 +189,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         const bullet = this.scene.matter.add.sprite(this.x + BulletVector2.x, this.y + BulletVector2.y, 'bullet');
         this.scene.EntityLayer.add(bullet);
         bullet.name = 'Bullet';
+        bullet.setCollisionGroup(-1);
         //----------------------------------------------------------------
 
         //Custom collider for bullet

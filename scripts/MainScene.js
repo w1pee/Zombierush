@@ -99,15 +99,13 @@ export default class MainScene extends Phaser.Scene {
         //----------------------------------------------------------------
 
         //destoying bullet when it hits anything
-        // this.matter.world.on('collisionstart', (event,bodyA,bodyB) => 
-        // {
-        //     console.log(bodyA);
-        //     //so bullet will always be destroyed on impact
-        //     if (bodyB.label == 'BulletCollider' && bodyA.label === "Rectangle Body"){
-        //         bodyB.gameObject.destroy();
-        //         console.log('yip');
-        //     }
-        // });
+        this.matter.world.on('collisionend', (event,bodyA,bodyB) => 
+        {
+            //so bullet will always be destroyed on impact
+            if (bodyB.label == 'BulletCollider' && bodyA.label === "Rectangle Body"){
+                bodyB.gameObject.destroy();
+            }
+        });
     }
 
     update(){
@@ -161,7 +159,6 @@ export default class MainScene extends Phaser.Scene {
             if(this.Wave % 2 == 0){
                 this.ZombieSpeed*= 1.2;
                 this.player.firerate++;
-                this.player.DashCooldown*=0.8;
                 this.events.emit('StatsUpgrade');
             }
         }
@@ -206,7 +203,7 @@ export default class MainScene extends Phaser.Scene {
         }
         //checking collision Player / Zombie
         for (let i = 0; i < Zombies.length; i++) {
-            if(Func.Distance(this.player,Zombies[i]) < 15){
+            if(Func.Distance(this.player,Zombies[i]) < 25){
                 //Delete UI
                 this.scene.stop("UIScene");
                 //launch GameOver scene
@@ -218,7 +215,7 @@ export default class MainScene extends Phaser.Scene {
         //checking collision Zombies / Bullets
         for (let i = 0; i < Zombies.length; i++) {
             for (let j = 0; j < Bullets.length; j++) {
-                if(Func.Distance(Bullets[j],Zombies[i]) < 15){
+                if(Func.Distance(Bullets[j],Zombies[i]) < 25){
                     Zombies[i].takeDamage(10);
                     Bullets[j].destroy();
 
@@ -232,7 +229,7 @@ export default class MainScene extends Phaser.Scene {
         }
         //checking collision Coin / Player
         for (let i = 0; i < Coins.length; i++) {
-            if(Func.Distance(this.player,Coins[i]) < 15){
+            if(Func.Distance(this.player,Coins[i]) < 25){
                 this.Score += Coins[i].value();
                 Coins[i].destroy();
             }

@@ -137,11 +137,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
             case 9: value = '75';
             default:
         }
-        let coin = new Coin({scene:this.scene,x:this.x,y:this.y,texture:value});
-        coin.setCollisionGroup(-1);
-        coin.setScale(0.75);
-        coin.setOrigin(0.5,0.5);
-        this.scene.EntityLayer.add([coin]);
+        new Coin({scene:this.scene,x:this.x,y:this.y,texture:value});
 
         //deleting Zombie
         this.healthTxt.destroy();
@@ -154,6 +150,7 @@ export class Coin extends Phaser.Physics.Matter.Sprite{
         super(scene.matter.world,x,y,texture);
         this.scene.add.existing(this);
 
+        //idk why, but i have to create a body here so it does not collide
         const {Body,Bodies} = Phaser.Physics.Matter.Matter;
         var Sensor = Bodies.circle(this.x,this.y,15,{isSensor:true,label:'CoinSensor'});
         const compundBody = Body.create({
@@ -161,6 +158,11 @@ export class Coin extends Phaser.Physics.Matter.Sprite{
         });
         this.setExistingBody(compundBody);
         this.setFixedRotation();
+
+        this.setCollisionGroup(-1);
+        this.setScale(0.75);
+        this.setOrigin(0.5,0.5);
+        this.scene.EntityLayer.add([this]);
 
         this.name = 'Coin';
     }
