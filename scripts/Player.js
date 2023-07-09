@@ -27,6 +27,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.shootPressed = false;  //checks if the cursor is down
 
         this.scene.shoot_sound = this.scene.sound.add('shoot1', {loop:false});
+        this.scene.walk = this.scene.sound.add('walk1', {loop:false});
+        
     }
 
     static preload(scene){
@@ -35,6 +37,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         scene.load.image('bullet', 'assets/bullet.png'); 
 
         scene.load.audio('shoot1',['sounds/shoot.wav']);
+       scene.load.audio('walk1',['sounds/walksound.wav']);
+
     }
 
     update(){
@@ -90,7 +94,15 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         }
         else if(Math.abs(playerVelocity.x) == 0 && Math.abs(playerVelocity.y) == 0) {
             this.anims.play('idle', true);  
+
         }   
+    
+           if (playerVelocity.x!=0 || playerVelocity.y!=0 ){
+            console.log("test");
+            this.scene.walk.play();
+        }
+
+
   
   
         playerVelocity.normalize();

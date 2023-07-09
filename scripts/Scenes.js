@@ -6,7 +6,9 @@ export default class Pause extends Phaser.Scene{
     constructor(){
         super("Pause");
     }
+   
     create(){
+    
         console.log("now in Pause"); //just for debugging
         
         //text
@@ -64,13 +66,22 @@ export class GameOver extends Phaser.Scene{
     constructor(){
         super('GameOver')
     }
+
+    preload(){
+        this.load.audio("gameover1", ["Sounds/gameover.wav"]);
+
+    }
     create(){
+    
+        this.gameover1 = this.sound.add("gameover1", { loop: false });
+        this.gameover1.play();
+       
         console.log("now in GameOver Scene");   //just for debugging
         this.add.text(window.innerWidth/2,window.innerheight/2,'game over').setOrigin(0.5,0.5);
         // goes to start Scene after 2seconds
         this.time.delayedCall(2000, () => {
             this.scene.launch('Start');
-            this.scene.stop();
+            this.scene.stop(); 
         });
         //----------------------------------------------------------------
     }
@@ -85,8 +96,10 @@ export class Start extends Phaser.Scene{
         super('Start');
     }
     preload(){
+        
         this.load.image('logo', 'assets/logo.png');
         this.load.image('background', 'assets/background.png');
+
 
         this.load.plugin('rexdropshadowpipelineplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexdropshadowpipelineplugin.min.js', true);
 

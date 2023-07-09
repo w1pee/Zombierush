@@ -9,13 +9,17 @@ export default class MainScene extends Phaser.Scene {
         super({key: "MainScene"});
     }
     preload(){
+
+         //play sound  
+        this.load.audio('start1',['sounds/startclik.wav']);
+
         //preload of player + zombie class
         Player.preload(this);
         Zombie.preload(this);
         Coin.preload(this);
 
-        this.load.audio('audio_stepgrass', 'assets/Sounds/running-in-grass.mp3');
-
+        
+        this.load.audio
         //Plugin for Camera blur
         this.load.plugin('rexkawaseblurpipelineplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexkawaseblurpipelineplugin.min.js', true);
 
@@ -25,8 +29,14 @@ export default class MainScene extends Phaser.Scene {
         //loading Tilesets
         this.load.image('groundTileset', 'assets/tileset8-ground.png')
         this.load.image('OtherTileset', 'assets/tileset8-otherStuff.png')
+        
+        
     }
     create(){
+       
+         // start sound
+         this.start = this.sound.add('start1', {loop:false});
+         this.start.play();
 
         //Generating the map
         this.GenerateMap();
@@ -270,6 +280,7 @@ export default class MainScene extends Phaser.Scene {
             if(bodyA.label == 'playerCollider' && bodyB.label == 'CoinSensor'){
                 this.Score+= bodyB.gameObject.value();
                 bodyB.gameObject.destroy();
+               
             }
         });
     }
