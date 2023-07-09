@@ -6,7 +6,9 @@ export default class Pause extends Phaser.Scene{
     constructor(){
         super("Pause");
     }
+   
     create(){
+    
         console.log("now in Pause"); //just for debugging
         
         //text
@@ -64,6 +66,7 @@ export class GameOver extends Phaser.Scene{
     constructor(){
         super('GameOver')
     }
+<<<<<<< HEAD
     init (data){
         this.Highscore = data.highscore;
         this.Score = data.score;
@@ -73,9 +76,20 @@ export class GameOver extends Phaser.Scene{
         this.load.image('GameOver', 'assets/GameOver.png');
 
         this.load.plugin('rexdropshadowpipelineplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexdropshadowpipelineplugin.min.js', true);
+=======
+
+    preload(){
+        this.load.audio("gameover1", ["Sounds/gameover.wav"]);
+
+>>>>>>> newSounds
     }
     create(){
+    
+        this.gameover1 = this.sound.add("gameover1", { loop: false });
+        this.gameover1.play();
+       
         console.log("now in GameOver Scene");   //just for debugging
+<<<<<<< HEAD
 
         //calculates the number of background patterns to be applied
         let PanelX = this.PanelsNum(window.innerWidth);
@@ -100,6 +114,13 @@ export class GameOver extends Phaser.Scene{
             shadowColor: 0x000000,
             alpha: 0.6,
             name: 'rexDropShadowPostFx'
+=======
+        this.add.text(window.innerWidth/2,window.innerheight/2,'game over').setOrigin(0.5,0.5);
+        // goes to start Scene after 2seconds
+        this.time.delayedCall(2000, () => {
+            this.scene.launch('Start');
+            this.scene.stop(); 
+>>>>>>> newSounds
         });
         //----------------------------------------------------------------
 
@@ -226,8 +247,10 @@ export class Start extends Phaser.Scene{
         }
     }
     preload(){
+        
         this.load.image('logo', 'assets/logo.png');
         this.load.image('background', 'assets/background.png');
+
 
         this.load.plugin('rexdropshadowpipelineplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexdropshadowpipelineplugin.min.js', true);
 
