@@ -1,7 +1,7 @@
 {
     "anims": [
         {
-            "key": "walkleft",
+            "key": "walkleftplayer1",
             "type": "frames",
             "repeat": -1,
             "frameRate": 8,
@@ -25,7 +25,7 @@
             ]
         },
         {
-            "key": "walkright",
+            "key": "walkrightplayer1",
             "type": "frames",
             "repeat": -1,
             "frameRate": 8,
@@ -49,7 +49,7 @@
             ]
         },
         {
-            "key": "idle",
+            "key": "idleplayer1",
             "type": "frames",
             "repeat": -1,
             "frameRate": 3,

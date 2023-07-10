@@ -14,7 +14,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.setExistingBody(compundBody);
         this.setFixedRotation();
         //atribute for the player
-        this.speed = 2.5;           //Player Speed
+        this.speed = 3;           //Player Speed
         this.Stamina = 5;
         this.dash = false;
         this.check = true;
@@ -66,11 +66,11 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         }
         else if(this.inputkeys.left.isDown){
             playerVelocity.x = -1;
-            this.anims.play('walkleft', true);
+            this.anims.play('walkleftplayer1wak', true);
         }
         else if(this.inputkeys.right.isDown){
             playerVelocity.x = 1;
-            this.anims.play('walkright', true);
+            this.anims.play('walkrightplayer1wak', true);
         }
         //Y
         if(this.inputkeys.up.isDown && this.inputkeys.down.isDown){
@@ -78,34 +78,22 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         }
         else if(this.inputkeys.up.isDown){
             playerVelocity.y = -1;
-            this.anims.play('walkright', true);
+            this.anims.play('walkrightplayer1wak', true);
         }
         else if(this.inputkeys.down.isDown){
             playerVelocity.y = 1;
-            this.anims.play('walkleft', true);
+            this.anims.play('walkleftplayer1wak', true);
         }
-        else if(this.inputkeys.down.isDown && this.inputkeys.right.isDown) {
-            this.anims.play('walkright', true);
+        else if(this.inputkeys.down.isDown && this.inputkeys.right.isDown || this.inputkeys.up.isDown && this.inputkeys.right.isDown) {
+            this.anims.play('walkrightplayer1wak', true);
         }
-        else if(this.inputkeys.up.isDown && this.inputkeys.right.isDown) {
-            this.anims.play('walkright', true);
-        }
-        else if(this.inputkeys.down.isDown && this.inputkeys.left.isDown) {
-            this.anims.play('walkleft', true);
-        }
-        else if(this.inputkeys.up.isDown && this.inputkeys.left.isDown) {
-            this.anims.play('walkleft', true);
+        else if(this.inputkeys.down.isDown && this.inputkeys.left.isDown || this.inputkeys.up.isDown && this.inputkeys.left.isDown) {
+            this.anims.play('walkleftplayer1wak', true);
         }
         else if(Math.abs(playerVelocity.x) == 0 && Math.abs(playerVelocity.y) == 0) {
-            this.anims.play('idle', true);  
+            this.anims.play('idleplayer1wak', true);  
 
         }   
-    
-           if (playerVelocity.x!=0 || playerVelocity.y!=0 ){
-            console.log("test");
-            this.scene.walk.play();
-        }
-
 
   
   

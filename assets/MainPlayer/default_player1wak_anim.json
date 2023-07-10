@@ -1,30 +1,10 @@
 {
     "anims": [
         {
-            "key": "idle",
+            "key": "walkleftplayer1wak",
             "type": "frames",
             "repeat": -1,
-            "frameRate": 5,
-            "frames": [
-                {
-                    "key": "default_player1wak",
-                    "frame": "player1wak_idle1"
-                },
-                {
-                    "key": "default_player1wak",
-                    "frame": "player1wak_idle2"
-                },
-                {
-                    "key": "default_player1wak",
-                    "frame": "player1wak_idle3"
-                }
-            ]
-        },
-        {
-            "key": "walkleft",
-            "type": "frames",
-            "repeat": -1,
-            "frameRate": 12,
+            "frameRate": 8,
             "frames": [
                 {
                     "key": "default_player1wak",
@@ -45,10 +25,10 @@
             ]
         },
         {
-            "key": "walkright",
+            "key": "walkrightplayer1wak",
             "type": "frames",
             "repeat": -1,
-            "frameRate": 12,
+            "frameRate": 8,
             "frames": [
                 {
                     "key": "default_player1wak",
@@ -65,6 +45,26 @@
                 {
                     "key": "default_player1wak",
                     "frame": "player1wak_walkright4"
+                }
+            ]
+        },
+        {
+            "key": "idleplayer1wak",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 3,
+            "frames": [
+                {
+                    "key": "default_player1wak",
+                    "frame": "player1wak_idle1"
+                },
+                {
+                    "key": "default_player1wak",
+                    "frame": "player1wak_idle2"
+                },
+                {
+                    "key": "default_player1wak",
+                    "frame": "player1wak_idle3"
                 }
             ]
         }

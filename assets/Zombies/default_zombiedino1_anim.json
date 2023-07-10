@@ -1,10 +1,10 @@
 {
     "anims": [
         {
-            "key": "walkleft",
+            "key": "walkleftzombiedino1",
             "type": "frames",
             "repeat": -1,
-            "frameRate": 12,
+            "frameRate": 8,
             "frames": [
                 {
                     "key": "default_zombiedino1",
@@ -25,10 +25,10 @@
             ]
         },
         {
-            "key": "walkright",
+            "key": "walkrightzombiedino1",
             "type": "frames",
             "repeat": -1,
-            "frameRate": 12,
+            "frameRate": 8,
             "frames": [
                 {
                     "key": "default_zombiedino1",
@@ -49,10 +49,10 @@
             ]
         },
         {
-            "key": "idle",
+            "key": "idlezombiedino1",
             "type": "frames",
             "repeat": -1,
-            "frameRate": 5,
+            "frameRate": 3,
             "frames": [
                 {
                     "key": "default_zombiedino1",

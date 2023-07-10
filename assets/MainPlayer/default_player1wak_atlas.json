@@ -1,90 +1,12 @@
 {
     "frames": [
         {
-            "filename": "player1wak_lookright",
+            "filename": "player1wak_walkleft2",
             "frame": {
                 "w": 16,
                 "h": 16,
                 "x": 0,
                 "y": 0
-            },
-            "anchor": {
-                "x": 0.5,
-                "y": 0.5
-            }
-        },
-        {
-            "filename": "player1wak_lookleft",
-            "frame": {
-                "w": 16,
-                "h": 16,
-                "x": 16,
-                "y": 0
-            },
-            "anchor": {
-                "x": 0.5,
-                "y": 0.5
-            }
-        },
-        {
-            "filename": "player1wak_idle1",
-            "frame": {
-                "w": 16,
-                "h": 16,
-                "x": 0,
-                "y": 16
-            },
-            "anchor": {
-                "x": 0.5,
-                "y": 0.5
-            }
-        },
-        {
-            "filename": "player1wak_idle2",
-            "frame": {
-                "w": 16,
-                "h": 16,
-                "x": 16,
-                "y": 16
-            },
-            "anchor": {
-                "x": 0.5,
-                "y": 0.5
-            }
-        },
-        {
-            "filename": "player1wak_idle3",
-            "frame": {
-                "w": 16,
-                "h": 16,
-                "x": 32,
-                "y": 0
-            },
-            "anchor": {
-                "x": 0.5,
-                "y": 0.5
-            }
-        },
-        {
-            "filename": "player1wak_walkright3",
-            "frame": {
-                "w": 16,
-                "h": 16,
-                "x": 32,
-                "y": 16
-            },
-            "anchor": {
-                "x": 0.5,
-                "y": 0.5
-            }
-        },
-        {
-            "filename": "player1wak_walkright2",
-            "frame": {
-                "w": 16,
-                "h": 16,
-                "x": 0,
-                "y": 32
             },
             "anchor": {
                 "x": 0.5,
@@ -97,20 +19,7 @@
                 "w": 16,
                 "h": 16,
                 "x": 16,
-                "y": 32
-            },
-            "anchor": {
-                "x": 0.5,
-                "y": 0.5
-            }
-        },
-        {
-            "filename": "player1wak_walkleft2",
-            "frame": {
-                "w": 16,
-                "h": 16,
-                "x": 32,
-                "y": 32
+                "y": 0
             },
             "anchor": {
                 "x": 0.5,
@@ -122,8 +31,8 @@
             "frame": {
                 "w": 16,
                 "h": 16,
-                "x": 48,
-                "y": 0
+                "x": 0,
+                "y": 16
             },
             "anchor": {
                 "x": 0.5,
@@ -135,7 +44,7 @@
             "frame": {
                 "w": 16,
                 "h": 16,
-                "x": 48,
+                "x": 16,
                 "y": 16
             },
             "anchor": {
@@ -148,7 +57,33 @@
             "frame": {
                 "w": 16,
                 "h": 16,
-                "x": 48,
+                "x": 32,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "player1wak_walkright2",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 32,
+                "y": 16
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "player1wak_walkright3",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 0,
                 "y": 32
             },
             "anchor": {
@@ -158,6 +93,71 @@
         },
         {
             "filename": "player1wak_walkright4",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 16,
+                "y": 32
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "player1wak_idle1",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 32,
+                "y": 32
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "player1wak_idle2",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 48,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "player1wak_lookleft",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 48,
+                "y": 16
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "player1wak_lookright",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 48,
+                "y": 32
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "player1wak_idle3",
             "frame": {
                 "w": 16,
                 "h": 16,

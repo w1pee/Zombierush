@@ -109,16 +109,16 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         vector.normalize();
         vector.scale(this.Speed);
         this.setVelocity(vector.x, vector.y);
-        if(Math.abs(vector.x) > 0.1 || Math.abs(vector.y) > 0.1){
-                    this.anims.play('walkrightz', true);
+        if(vector.x > 0.1){
+                    this.anims.play('walkrightzombiedino1', true);
                 }
                 //needs to be fixed that when zombiedino goes into the left direction screen, the walkleftz animation plays
                 //fixidea: if statement by locating Players direction from the zombiedino     
-                if(Math.abs(vector.x) < 0 || Math.abs(vector.y) < 0){
-                    this.anims.play('walkleftz', true);
+                if(vector.x < 0.1){
+                    this.anims.play('walkleftzombiedino1', true);
                 } 
-                if(Math.abs(vector.x) == 0 || Math.abs(vector.y) == 0){
-                    this.anims.play('idlez', true);
+                if(vector.x == 0 || Math.abs(vector.y) == 0){
+                    this.anims.play('idlezombiedino1', true);
                 }   
     }
     kill(){

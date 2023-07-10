@@ -1,7 +1,7 @@
 {
     "frames": [
         {
-            "filename": "zombiedino1_walkright1",
+            "filename": "zombiedino1_walkleft4",
             "frame": {
                 "w": 16,
                 "h": 16,
@@ -14,7 +14,7 @@
             }
         },
         {
-            "filename": "zombiedino1_walkleft4",
+            "filename": "zombiedino1_walkleft3",
             "frame": {
                 "w": 16,
                 "h": 16,
@@ -27,11 +27,24 @@
             }
         },
         {
-            "filename": "zombiedino1_walkright2",
+            "filename": "zombiedino1_walkright1",
             "frame": {
                 "w": 16,
                 "h": 16,
                 "x": 0,
+                "y": 16
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "zombiedino1_walkright2",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 16,
                 "y": 16
             },
             "anchor": {
@@ -44,8 +57,8 @@
             "frame": {
                 "w": 16,
                 "h": 16,
-                "x": 16,
-                "y": 16
+                "x": 32,
+                "y": 0
             },
             "anchor": {
                 "x": 0.5,
@@ -58,19 +71,6 @@
                 "w": 16,
                 "h": 16,
                 "x": 32,
-                "y": 0
-            },
-            "anchor": {
-                "x": 0.5,
-                "y": 0.5
-            }
-        },
-        {
-            "filename": "zombiedino1_idle1",
-            "frame": {
-                "w": 16,
-                "h": 16,
-                "x": 32,
                 "y": 16
             },
             "anchor": {
@@ -79,7 +79,7 @@
             }
         },
         {
-            "filename": "zombiedino1_idle2",
+            "filename": "zombiedino1_idle1",
             "frame": {
                 "w": 16,
                 "h": 16,
@@ -92,7 +92,7 @@
             }
         },
         {
-            "filename": "zombiedino1_idle3",
+            "filename": "zombiedino1_idle2",
             "frame": {
                 "w": 16,
                 "h": 16,
@@ -105,7 +105,7 @@
             }
         },
         {
-            "filename": "zombiedino1_walkleft1",
+            "filename": "zombiedino1_idle3",
             "frame": {
                 "w": 16,
                 "h": 16,
@@ -118,7 +118,7 @@
             }
         },
         {
-            "filename": "zombiedino1_walkleft2",
+            "filename": "zombiedino1_walkleft1",
             "frame": {
                 "w": 16,
                 "h": 16,
@@ -131,7 +131,7 @@
             }
         },
         {
-            "filename": "zombiedino1_walkleft3",
+            "filename": "zombiedino1_walkleft2",
             "frame": {
                 "w": 16,
                 "h": 16,
