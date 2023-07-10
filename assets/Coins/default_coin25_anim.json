@@ -1,0 +1,44 @@
+{
+    "anims": [
+        {
+            "key": "coin25shining",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 6,
+            "frames": [
+                {
+                    "key": "default_coin25",
+                    "frame": "coin25shine1"
+                },
+                {
+                    "key": "default_coin25",
+                    "frame": "coin25shine2"
+                },
+                {
+                    "key": "default_coin25",
+                    "frame": "coin25shine3"
+                },
+                {
+                    "key": "default_coin25",
+                    "frame": "coin25shine4"
+                },
+                {
+                    "key": "default_coin25",
+                    "frame": "coin25shine5"
+                },
+                {
+                    "key": "default_coin25",
+                    "frame": "coin25shine6"
+                },
+                {
+                    "key": "default_coin25",
+                    "frame": "coin25shine7"
+                },
+                {
+                    "key": "default_coin25",
+                    "frame": "coin25shine8"
+                }
+            ]
+        }
+    ]
+}

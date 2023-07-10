@@ -1,0 +1,44 @@
+{
+    "anims": [
+        {
+            "key": "coin75shining",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 6,
+            "frames": [
+                {
+                    "key": "default_coin75",
+                    "frame": "coin75shine1"
+                },
+                {
+                    "key": "default_coin75",
+                    "frame": "coin75shine2"
+                },
+                {
+                    "key": "default_coin75",
+                    "frame": "coin75shine3"
+                },
+                {
+                    "key": "default_coin75",
+                    "frame": "coin75shine4"
+                },
+                {
+                    "key": "default_coin75",
+                    "frame": "coin75shine5"
+                },
+                {
+                    "key": "default_coin75",
+                    "frame": "coin75shine6"
+                },
+                {
+                    "key": "default_coin75",
+                    "frame": "coin75shine7"
+                },
+                {
+                    "key": "default_coin75",
+                    "frame": "coin75shine8"
+                }
+            ]
+        }
+    ]
+}

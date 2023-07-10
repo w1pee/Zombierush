@@ -1,0 +1,112 @@
+{
+    "frames": [
+        {
+            "filename": "coin75shine7",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 0,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "coin75shine6",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 16,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "coin75shine8",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 0,
+                "y": 16
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "coin75shine1",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 16,
+                "y": 16
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "coin75shine2",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 32,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "coin75shine3",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 32,
+                "y": 16
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "coin75shine4",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 0,
+                "y": 32
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "coin75shine5",
+            "frame": {
+                "w": 16,
+                "h": 16,
+                "x": 16,
+                "y": 32
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        }
+    ],
+    "meta": {
+        "description": "Atlas generado con Atlas Packer Gamma V2",
+        "web": "https://gammafp.github.io/atlas-packer-phaser/"
+    }
+}

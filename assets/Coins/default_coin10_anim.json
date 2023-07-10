@@ -1,0 +1,44 @@
+{
+    "anims": [
+        {
+            "key": "coin10shining",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 6,
+            "frames": [
+                {
+                    "key": "default_coin10",
+                    "frame": "coin10shine1"
+                },
+                {
+                    "key": "default_coin10",
+                    "frame": "coin10shine2"
+                },
+                {
+                    "key": "default_coin10",
+                    "frame": "coin10shine3"
+                },
+                {
+                    "key": "default_coin10",
+                    "frame": "coin10shine4"
+                },
+                {
+                    "key": "default_coin10",
+                    "frame": "coin10shine5"
+                },
+                {
+                    "key": "default_coin10",
+                    "frame": "coin10shine6"
+                },
+                {
+                    "key": "default_coin10",
+                    "frame": "coin10shine7"
+                },
+                {
+                    "key": "default_coin10",
+                    "frame": "coin10shine8"
+                }
+            ]
+        }
+    ]
+}
