@@ -36,7 +36,8 @@ export default class MainScene extends Phaser.Scene {
         
     }
     create(){
-       
+        //test
+
          // start sound
          this.start = this.sound.add('start1', {loop:false});
          this.start.play();
