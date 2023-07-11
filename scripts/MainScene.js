@@ -249,6 +249,7 @@ export default class MainScene extends Phaser.Scene {
             if(Func.Distance(this.player,Coins[i]) < 25){
                 this.Score += Coins[i].value();
                 Coins[i].destroy();
+                this.coin.play();
             }
         }
     }
