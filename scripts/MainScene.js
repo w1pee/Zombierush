@@ -13,10 +13,10 @@ export default class MainScene extends Phaser.Scene {
     }
     preload(){
 
-         //play sound  
+        //play sound  
         this.load.audio('start1',['sounds/startclik.wav']);
         //wave
-         this.load.audio('wave1',['sounds/wavesound.wav']);
+        this.load.audio('wave1',['sounds/wavesound.wav']);
         //coin sound
         this.load.audio('coin1',['sounds/coin.wav']);
         //zombiedamage
@@ -49,9 +49,8 @@ export default class MainScene extends Phaser.Scene {
 
         this.start.play();
         //wave sound 
-        this.wave = this.sound.add('wave1', {loop:false});
+        this.wavesound = this.sound.add('wave1', {loop:false});
 
-        this.wave.play();
         //coindsound 
         this.coin = this.sound.add('coin1', {loop:false}); 
 
@@ -116,7 +115,6 @@ export default class MainScene extends Phaser.Scene {
         this.Spawnnum;
 
         this.Score = 0;
-        this.wave.play();
         //----------------------------------------------------------------
 
         //cursor
@@ -179,6 +177,7 @@ export default class MainScene extends Phaser.Scene {
         //then spawns them
         if((this.sys.displayList.list.length - 3) == 0){
             this.Wave += 1;
+            this.wavesound.play();
 
             //5 ℯ^(((1)/(5)) x)
 
