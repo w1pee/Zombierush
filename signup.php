@@ -1,5 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style3.css">
+</head>
+<body>
 <main>
-    <h1>Signup</h1>
+    <h2>Signup</h2>
         <?php
             //Error messages
             if(isset($_GET['error'])){
@@ -54,3 +64,5 @@
         <button type="submit" name="signup-submit">Submit</button>
     </form>
 </main>
+</body>
+</html>
