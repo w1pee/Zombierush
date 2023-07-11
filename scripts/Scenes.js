@@ -110,12 +110,6 @@ export class GameOver extends Phaser.Scene{
             name: 'rexDropShadowPostFx'
         });
         this.add.text(window.innerWidth/2,window.innerheight/2,'game over').setOrigin(0.5,0.5);
-        // goes to start Scene after 2seconds
-        this.time.delayedCall(2000, () => {
-            this.scene.launch('Start');
-            this.scene.stop(); 
-        });
-        //----------------------------------------------------------------
 
         //Highscore text
         this.add.text(
