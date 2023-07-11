@@ -8,7 +8,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         this.setFixedRotation();
 
         this.Health = 20;
-        this.Speed = ((Math.random()*1.25)+0.25);     //adds a little random to Speed
+        this.Speed = ((Math.random()*1.25)+0.5);     //adds a little random to Speed
         this.healthTxt = scene.add.text(this.x,this.y,this.Health ,{ font: '9px', fontFamily: 'CustomFont', color: '#ffffff',stroke: '#000000',strokeThickness:3});
         this.healthTxt.setOrigin(0.5,0.5)
 
@@ -139,17 +139,6 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         }
         new Coin({scene:this.scene,x:this.x,y:this.y,texture:value});
 
-        if(this.texture.key == '10'){
-            this.anims.play('coin10shining', true);
-        }
-        if(this.texture.key == '25'){
-            this.anims.play('coin25shining', true);
-        }
-        if(this.texture.key == '75'){
-            this.anims.play('coin75shining', true);
-        }
-
-
         //deleting Zombie
         this.healthTxt.destroy();
     }
@@ -174,6 +163,17 @@ export class Coin extends Phaser.Physics.Matter.Sprite{
         this.setScale(0.75);
         this.setOrigin(0.5,0.5);
         this.scene.EntityLayer.add([this]);
+
+        // if(this.texture.key == '10'){
+            // this.anims.play('coin10shining', true);
+        // }
+        // if(this.texture.key == '25'){
+            // this.anims.play('coin25shining', true);
+        // }
+        // if(this.texture.key == '75'){
+            // this.anims.play('coin75shining', true);
+        // }
+
 
         this.name = 'Coin';
     }

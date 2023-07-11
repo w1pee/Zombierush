@@ -34,10 +34,6 @@ if(isset($_POST['signup-submit'])){
                 header("Location: ../signup.php?error=weakpwd&usn=".$username."&mail=".$email);
                 exit();
         }
-        elseif(isset($_POST['headbacktogamefromsignup'])){
-                header("Location: ../index.php");
-                exit();
-        }
 
 
         $sql = "SELECT usnUsers FROM users WHERE usnUsers=?;";
@@ -71,6 +67,7 @@ if(isset($_POST['signup-submit'])){
                                 mysqli_stmt_bind_param($stmt, "ssss", $username, $email, $hashedPassword, $date);
                                 mysqli_stmt_execute($stmt);
                                 header("Location: ../signup.php?signup=success");
+                                header("Location: ../index.php");
                                 exit();
                         }
                 }
