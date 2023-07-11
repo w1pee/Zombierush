@@ -15,6 +15,8 @@ export default class MainScene extends Phaser.Scene {
 
          //play sound  
         this.load.audio('start1',['sounds/startclik.wav']);
+        //coin sound
+        this.load.audio('coin1',['sounds/coin.wav']);
 
         //preload of player + zombie class
         Player.preload(this);
@@ -40,8 +42,12 @@ export default class MainScene extends Phaser.Scene {
 
          // start sound
          this.start = this.sound.add('start1', {loop:false});
-         this.start.play();
 
+         this.start.play();
+         //coindsound 
+         this.coin = this.sound.add('coin1', {loop:false});
+
+         this.start.coin();
         //Generating the map
         this.GenerateMap();
 
