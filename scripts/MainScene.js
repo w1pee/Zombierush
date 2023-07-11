@@ -13,8 +13,14 @@ export default class MainScene extends Phaser.Scene {
     }
     preload(){
 
-         //play sound  
+        //play sound  
         this.load.audio('start1',['sounds/startclik.wav']);
+        //wave
+        this.load.audio('wave1',['sounds/wavesound.wav']);
+        //coin sound
+        this.load.audio('coin1',['sounds/coin.wav']);
+        //zombiedamage
+        this.load.audio('zdeath1',['sounds/zombiedeath.wav']);
 
         //preload of player + zombie class
         Player.preload(this);
@@ -36,11 +42,24 @@ export default class MainScene extends Phaser.Scene {
         
     }
     create(){
-       
-         // start sound
-         this.start = this.sound.add('start1', {loop:false});
-         this.start.play();
+        //test
 
+        // start sound
+        this.start = this.sound.add('start1', {loop:false});
+
+        this.start.play();
+        //wave sound 
+        this.wavesound = this.sound.add('wave1', {loop:false});
+
+        //coindsound 
+        this.coin = this.sound.add('coin1', {loop:false}); 
+
+        this.coin.play();
+
+        //zdeathsound
+        this.zdeath = this.sound.add('zdeath1', {loop:false});
+
+         
         //Generating the map
         this.GenerateMap();
 
@@ -121,6 +140,8 @@ export default class MainScene extends Phaser.Scene {
     update(){
         //here are all the collions the game listens for listed
         this.checkCollisions();
+        
+        
 
         // console.log(this.EntityLayer.list);
 
@@ -156,6 +177,7 @@ export default class MainScene extends Phaser.Scene {
         //then spawns them
         if((this.sys.displayList.list.length - 3) == 0){
             this.Wave += 1;
+            this.wavesound.play();
 
             //5 ℯ^(((1)/(5)) x)
 
@@ -198,6 +220,8 @@ export default class MainScene extends Phaser.Scene {
         let Bullets = [];
 
         for (let i = 0; i < this.EntityLayer.list.length; i++) {
+           
+            
             
             if(this.EntityLayer.list[i].name == "Zombie"){
                 Zombies.push(this.EntityLayer.list[i]);
@@ -209,7 +233,9 @@ export default class MainScene extends Phaser.Scene {
             }
             else if(this.EntityLayer.list[i].name == "Bullet"){
                 Bullets.push(this.EntityLayer.list[i]);
+             
             }
+           
         }
         //checking collision Player / Zombie
         for (let i = 0; i < Zombies.length; i++) {
@@ -220,6 +246,7 @@ export default class MainScene extends Phaser.Scene {
                 this.scene.launch('GameOver', { highscore: this.HighScore, score: this.Score});
                 this.scene.stop();
                 return;
+            
             }
         }
         //checking collision Zombies / Bullets
@@ -232,6 +259,7 @@ export default class MainScene extends Phaser.Scene {
                     if(Zombies[i].Health <= 0){
                         Zombies[i].kill();
                         Zombies[i].destroy();
+                       
                     }
                     return;
                 }
@@ -242,6 +270,7 @@ export default class MainScene extends Phaser.Scene {
             if(Func.Distance(this.player,Coins[i]) < 25){
                 this.Score += Coins[i].value();
                 Coins[i].destroy();
+                this.coin.play();
             }
         }
     }
