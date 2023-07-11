@@ -17,6 +17,8 @@ export default class MainScene extends Phaser.Scene {
         this.load.audio('start1',['sounds/startclik.wav']);
         //coin sound
         this.load.audio('coin1',['sounds/coin.wav']);
+        //zombiedamage
+        this.load.audio('zdeath1',['sounds/zombiedeath.wav']);
 
         //preload of player + zombie class
         Player.preload(this);
@@ -47,7 +49,12 @@ export default class MainScene extends Phaser.Scene {
          //coindsound 
          this.coin = this.sound.add('coin1', {loop:false}); 
 
-         this.start.play();
+         this.coin.play();
+
+         //zdeathsound
+         this.zdeath = this.sound.add('zdeath1', {loop:false});
+
+         
         //Generating the map
         this.GenerateMap();
 
@@ -128,6 +135,8 @@ export default class MainScene extends Phaser.Scene {
     update(){
         //here are all the collions the game listens for listed
         this.checkCollisions();
+        
+        
 
         // console.log(this.EntityLayer.list);
 
@@ -205,6 +214,8 @@ export default class MainScene extends Phaser.Scene {
         let Bullets = [];
 
         for (let i = 0; i < this.EntityLayer.list.length; i++) {
+           
+            
             
             if(this.EntityLayer.list[i].name == "Zombie"){
                 Zombies.push(this.EntityLayer.list[i]);
@@ -216,7 +227,9 @@ export default class MainScene extends Phaser.Scene {
             }
             else if(this.EntityLayer.list[i].name == "Bullet"){
                 Bullets.push(this.EntityLayer.list[i]);
+             
             }
+           
         }
         //checking collision Player / Zombie
         for (let i = 0; i < Zombies.length; i++) {
@@ -227,6 +240,7 @@ export default class MainScene extends Phaser.Scene {
                 this.scene.launch('GameOver', { highscore: this.HighScore, score: this.Score});
                 this.scene.stop();
                 return;
+            
             }
         }
         //checking collision Zombies / Bullets
@@ -239,6 +253,7 @@ export default class MainScene extends Phaser.Scene {
                     if(Zombies[i].Health <= 0){
                         Zombies[i].kill();
                         Zombies[i].destroy();
+                       
                     }
                     return;
                 }

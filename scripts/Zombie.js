@@ -89,7 +89,10 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
 
         this.scene.time.delayedCall(100, () => {
             this.clearTint();
+            this.scene.zdeath.play();
+            
         });
+       
     }
     //function for moving the Zombie
     Move(){
