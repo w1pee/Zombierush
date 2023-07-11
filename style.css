@@ -164,4 +164,8 @@ html {
     50%,100% {
       bottom: 100%;
     }
-  }
+}
+
+p{
+  color: white;
+}
