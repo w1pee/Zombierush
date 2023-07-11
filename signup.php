@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="style3.css">
 </head>
 <body>
 <main>
+<div class="login-box">
     <h2>Signup</h2>
         <?php
             //Error messages
@@ -44,25 +44,45 @@
     <form action="includes/signup.inc.php" method="POST">
         <?php
             //Saves specific inputs when sign up fails
+            echo '<div class="user-box">';
             if(isset($_GET['usn'])){
                 $usn = $_GET['usn'];
-                echo'<input type="text" name="usn" placeholder="Username" value="'.$usn.'">';
+                echo'<input id="usn" type="text" name="usn" placeholder="Username" value="'.$usn.'">';
             }   
             else{
-                echo'<input type="text" name="usn" placeholder="Username">';
+                echo'<input id="usn" type="text" name="usn" placeholder="Username">';
             }
+            echo '<label for="usn">Username</label>';
+            echo '</div>';
+
+            echo '<div class="user-box">';
             if(isset($_GET['mail'])){
                 $email = $_GET['mail'];
                 echo'<input type="email" name="email" placeholder="E-Mail" value="'.$email.'">';
             }
             else{
-                echo'<input type="email" name="email" placeholder="E-Mail">';
+                echo'<input id="email" type="email" name="email" placeholder="E-Mail">';
             }
+            echo '<label for="email">Username</label>';
+            echo '</div>';
         ?>
-        <input type="password" name="pwd" placeholder="password">
-        <input type="password" name="pwd-rep" placeholder="Repeat password">
-        <button type="submit" name="signup-submit">Submit</button>
+        <div class="user-box">
+        <input id="pwd" type="password" name="pwd" placeholder="password">
+        <label for="pwd">password</label>
+        </div>
+        <div class="user-box">
+        <input id="pwd-rep" type="password" name="pwd-rep" placeholder="Repeat password">
+            <label for="pwd-rep">Repeat password</label>
+        </div>
+        <button type="submit" name="login-submit">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            Submit
+          </button>
     </form>
+</div>
 </main>
 </body>
 </html>
