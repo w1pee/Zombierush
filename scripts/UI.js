@@ -51,7 +51,10 @@ export default class UIScene extends Phaser.Scene{
         //----------------------------------------------------------------
 
         //Zombie number
-        this.ZombieText = this.add.text(0,window.innerheight/2,'Zombies: ', {font: '50px', fontFamily: 'CustomFont', fill: '#000000'})
+        this.ZombieText = this.add.text(window.innerWidth,0,'Zombies', {font: '25px', fontFamily: 'CustomFont', fill: '#000000', backgroundColor :'#ffffff'});
+        this.ZombieText.setOrigin(1,0);
+        this.Zombie = this.add.text(window.innerWidth,25,0,{font: '50px', fontFamily: 'CustomFont', fill: '#ffffff', backgroundColor :'#000000'});
+        this.Zombie.setOrigin(1,0);
         const myGame = this.scene.get('MainScene');
         //----------------------------------------------------------------
 
@@ -107,7 +110,7 @@ export default class UIScene extends Phaser.Scene{
         //function that syncs the values from the MainScene to UI(here)
         myGame.events.on('setValues', function(zmb,score,Dash,Highscore)
         {
-            this.ZombieText.text = 'Zombies: ' + zmb;
+            this.Zombie.text = zmb;
             this.Score.text = score;
             this.Highscore.text = Highscore;
 

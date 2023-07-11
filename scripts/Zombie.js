@@ -8,7 +8,7 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
         this.setFixedRotation();
 
         this.Health = 20;
-        this.Speed = ((Math.random()*1.25)+0.25);     //adds a little random to Speed
+        this.Speed = ((Math.random()*1.25)+0.5);     //adds a little random to Speed
         this.healthTxt = scene.add.text(this.x,this.y,this.Health ,{ font: '9px', fontFamily: 'CustomFont', color: '#ffffff',stroke: '#000000',strokeThickness:3});
         this.healthTxt.setOrigin(0.5,0.5)
 
@@ -164,13 +164,27 @@ export class Coin extends Phaser.Physics.Matter.Sprite{
         this.setOrigin(0.5,0.5);
         this.scene.EntityLayer.add([this]);
 
+        // if(this.texture.key == '10'){
+            // this.anims.play('coin10shining', true);
+        // }
+        // if(this.texture.key == '25'){
+            // this.anims.play('coin25shining', true);
+        // }
+        // if(this.texture.key == '75'){
+            // this.anims.play('coin75shining', true);
+        // }
+
+
         this.name = 'Coin';
     }
 
     static preload(scene){
-        scene.load.image('10', 'assets/coin10.png');
-        scene.load.image('25', 'assets/coin25.png');
-        scene.load.image('75', 'assets/coin75.png');
+        scene.load.atlas('10', 'assets/Coins/default_coin10.png', 'assets/Coins/default_coin10_atlas.json');
+        scene.load.animation('default_coin10_anims', 'assets/Coins/default_coin10_anim.json');
+        scene.load.atlas('25', 'assets/Coins/default_coin25.png', 'assets/Coins/default_coin25_atlas.json');
+        scene.load.animation('default_coin25_anims', 'assets/Coins/default_coin25_anim.json');    
+        scene.load.atlas('75', 'assets/Coins/default_coin75.png', 'assets/Coins/default_coin75_atlas.json');
+        scene.load.animation('default_coin75_anims', 'assets/Coins/default_coin75_anim.json');        
     }
     //returning the value of the coin
     value(){
