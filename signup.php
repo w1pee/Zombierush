@@ -74,13 +74,13 @@
         <input id="pwd-rep" type="password" name="pwd-rep" placeholder="Repeat password">
             <label for="pwd-rep">Repeat password</label>
         </div>
-        <button type="submit" name="login-submit">
+        <button type="submit" name="signup-submit">
             <span></span>
             <span></span>
             <span></span>
             <span></span>
             Submit
-          </button>
+        </button>
     </form>
 </div>
 </main>
