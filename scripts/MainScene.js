@@ -45,9 +45,9 @@ export default class MainScene extends Phaser.Scene {
 
          this.start.play();
          //coindsound 
-         this.coin = this.sound.add('coin1', {loop:false});
+         this.coin = this.sound.add('coin1', {loop:false}); 
 
-         this.start.coin();
+         this.start.play();
         //Generating the map
         this.GenerateMap();
 
