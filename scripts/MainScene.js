@@ -57,7 +57,7 @@ export default class MainScene extends Phaser.Scene {
         this.coin.play();
 
         //zdeathsound
-        this.zdeath = this.sound.add('zdeath1', {loop:false});
+        this.zdeath = this.sound.add('zdeath1', {loop:false,volume: 0.15});
 
          
         //Generating the map
