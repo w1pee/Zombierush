@@ -44,21 +44,21 @@ export default class MainScene extends Phaser.Scene {
     create(){
         //test
 
-         // start sound
-         this.start = this.sound.add('start1', {loop:false});
+        // start sound
+        this.start = this.sound.add('start1', {loop:false});
 
-         this.start.play();
-         //wave sound 
-         this.wave = this.sound.add('wave1', {loop:false});
+        this.start.play();
+        //wave sound 
+        this.wave = this.sound.add('wave1', {loop:false});
 
-         this.wave.play();
-         //coindsound 
-         this.coin = this.sound.add('coin1', {loop:false}); 
+        this.wave.play();
+        //coindsound 
+        this.coin = this.sound.add('coin1', {loop:false}); 
 
-         this.coin.play();
+        this.coin.play();
 
-         //zdeathsound
-         this.zdeath = this.sound.add('zdeath1', {loop:false});
+        //zdeathsound
+        this.zdeath = this.sound.add('zdeath1', {loop:false});
 
          
         //Generating the map

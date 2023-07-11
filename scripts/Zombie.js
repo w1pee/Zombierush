@@ -84,13 +84,12 @@ export default class Zombie extends Phaser.Physics.Matter.Sprite {
     //function for the Zombie taking damage
     takeDamage(dmg){
         this.Health -= dmg;
+        this.scene.zdeath.play();
 
         this.tint =  0xfc2803;
 
         this.scene.time.delayedCall(100, () => {
             this.clearTint();
-            this.scene.zdeath.play();
-            
         });
        
     }
